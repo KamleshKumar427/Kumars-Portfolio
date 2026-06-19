@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Kamlesh Kumar — software engineer working on PCI DSS payment gateways, database internals, and distributed systems. MSc Computer Science, University of Helsinki."
+    />
+    <meta name="theme-color" content="#e8e6e2" />
+    <title>Kamlesh Kumar — Computer Scientist</title>
+    <script>
+      ;(function () {
+        var stored = localStorage.getItem('theme')
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored)
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

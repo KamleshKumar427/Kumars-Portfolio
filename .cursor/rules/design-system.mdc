@@ -1,0 +1,247 @@
+---
+description: Meniscus design system for the Kamlesh Kumar portfolio — aesthetic direction, color tokens, type system, motion language, spacing, and routing/layout architecture. Read and follow on every frontend task (UI, sections, pages, styles, motion).
+alwaysApply: false
+globs: ["**/*.tsx", "**/*.ts", "**/*.css"]
+---
+
+# Meniscus — Design System
+
+The whole site extends the hero (a glass sheet over deep, viscous water with
+slowly blooming ink). Every surface is a sheet of glass suspended over deep
+water; content surfaces *through* it (refraction, blur, hairline edges), it
+never sits flat *on* it. Instrument-grade, quiet, premium. Empty space is depth
+and pressure, not absence. The owner is an engineer of expensive systems
+(PCI-DSS payment gateways, database internals) — so the "clearing-house dossier"
+persona (mono coordinates, telemetry labels, ledger language) is kept and
+refined, not discarded.
+
+**Non-negotiables on every task:** restraint over decoration; 60fps; lazy-load
+3D; respect `prefers-reduced-motion`; graceful degradation on weak GPUs; fully
+responsive — the premium feel must survive on mobile. When unsure, do less but
+make it intentional.
+
+**Hard structural mandate — NOT a single-page scroller.** This is a multi-page
+*dossier* (a book / case-file), navigated chapter to chapter — never one long
+scroll of everything. The website is itself the work sample (judged by HRs,
+CTOs, and engineers), so every route, transition, and interaction is a
+deliberate demonstration of craft.
+
+## 0. Narrative — the dossier (read first)
+
+Three audiences, each answered without burying the others: **HR / hiring**
+(the person + credentials), **CTOs** (systems depth, scale, ownership), and
+**engineers** (technical craft + range).
+
+**Throughline — the spine of the whole site:** *Kamlesh builds software where
+being wrong is expensive — and owns it end to end — proven across three
+theaters: a fintech gateway at scale, a startup run solo, and database
+internals.*
+
+**The book — five chapters, each its own route/page with its own glass+water hero:**
+
+| #  | Chapter         | Route         | Answers      | Core content |
+|----|-----------------|---------------|--------------|--------------|
+| 00 | Index (cover)   | `/`           | the thesis   | fluid hero + statement + a dossier-style table of contents into the chapters |
+| 01 | Production      | `/experience` | CTO          | payment gateway (PCI-DSS L1, €100Ms, Google/Apple Pay, +11%) + Bitnine OSS DB internals |
+| 02 | Venture         | `/startup`    | "can he own it" | XSTRYV — sole engineer, 1,600+ users / 250+ companies, end-to-end ownership; + founder community (Slush, UN Millennium) |
+| 03 | Lab             | `/projects`   | engineers    | personal projects / technical range; home of the Fish companion (§8) |
+| 04 | Profile         | `/about`      | HR           | education (Helsinki MSc 5/5, NUST), skills matrix, certifications, contact |
+
+The landing (`/`) is a **cover + table of contents**, not a content dump — it
+sells the throughline and routes each audience to their chapter; chapter depth
+lives on the routes. Navigation behaves like **turning pages**: a persistent
+numbered chapter index in the header, and a "next chapter →" pager at the foot
+of every page. Route transitions (Motion dissolve, §4) are the page turns.
+
+**Content source of truth:** `Curriculum_Vitae_Md.md` (repo root). Reconcile all
+`src/data/*` to it — notably the **XSTRYV startup role is missing from the data**
+and must be added.
+
+## 1. Aesthetic direction — "Meniscus"
+
+The curved line where water climbs the wall of its glass — the boundary the hero
+lives on. Glass, water, depth, refraction, fluidity. The connective tissue
+across every section is **depth + refraction**: a single reusable glass surface
+treatment so no section ever looks like a different template.
+
+## 2. Color — strict, depth over variety
+
+One base family (deep-water neutrals) + exactly **two** accents drawn from the
+hero inks. Two more inks are **functional signal only** (status), never
+decoration. Brass is the only warm; Tide is the only cool; everything else is a
+neutral or a rare signal. Use color as punctuation.
+
+Dark-first (primary world). Light is a retained "frosted glass" alternate.
+
+```css
+/* Base — deep water neutrals (DARK) */
+--abyss:   #0a0d12;   /* page floor (hero water = #0c0f14) */
+--depth:   #11161d;   /* raised surface */
+--shoal:   #19212b;   /* glass panel fill */
+
+/* Ink — text (DARK) */
+--trace:   #dde3ea;   /* headings / primary */
+--text:    #9aa3ad;   /* body */
+--muted:   #6e7681;   /* captions, mono labels */
+
+/* Accents — from the hero inks */
+--brass:   #c89b6a;   /* PRIMARY warm — ink signature, primary buttons */
+--tide:    #4a86e8;   /* SECONDARY cool — links, data, focus rings */
+
+/* Reserved signal ONLY (never decoration) */
+--live:    #e0664a;   /* error / live state */
+--graph:   #4fae93;   /* success / positive delta */
+
+/* Glass + refraction */
+--glass-sheen: #cfe0ea;
+--edge:        rgba(221,227,234,0.10);  /* hairline border */
+--edge-strong: rgba(221,227,234,0.18);
+```
+
+Light ("frosted glass") counterpart: `--mist #eef1f5` (page, = hero light water),
+`--frost #ffffff`, `--haze #f4f2ee`; text `--trace #1a1d22` / `--text #4a5159`;
+accents `--brass #8a7048`, `--tide #3568b8`; edges use `rgba(26,29,34,*)`.
+
+Exposed via Tailwind v4 `@theme` → `bg-abyss`, `bg-shoal`, `text-trace`,
+`text-brass`, `border-edge`, etc. Theme switches on `[data-theme]` (existing
+mechanism in `src/lib/theme.ts` — keep it).
+
+## 3. Type system
+
+Three faces, already loaded — keep them: **Newsreader** (display serif),
+**IBM Plex Sans** (body), **IBM Plex Mono** (telemetry/labels). Confident, large,
+generous spacing.
+
+| Role            | Face            | Size                          | Detail |
+|-----------------|-----------------|-------------------------------|--------|
+| Display XL      | Newsreader 400  | `clamp(2.75rem, 7vw, 5rem)`   | `tracking -0.025em`, `lh 1.0` |
+| Display L       | Newsreader 400  | `clamp(2rem, 4.5vw, 3.25rem)` | italic available for emphasis |
+| H2 section      | Newsreader 400  | `clamp(1.75rem, 3.5vw, 2.35rem)` | `lh 1.15`, max `28ch` |
+| H3              | Plex Sans 500   | `1.25rem`                     | |
+| Lead            | Plex Sans 400   | `17px / 1.55`                 | max `65ch` |
+| Body            | Plex Sans 400   | `16px / 1.6`                  | |
+| Eyebrow / coords| Plex Mono 500   | `11–13px`                     | `tracking 0.06–0.1em`, lowercase |
+
+Paragraphs cap at `65ch`, headings at `28ch`. Italic Newsreader (+ `--brass`) for
+emphasis spans, as in the hero name.
+
+## 4. Motion language — slow, viscous, deliberate
+
+**One rule: Scroll position → GSAP. Interaction & state → Motion.**
+
+- **Lenis** — site-wide smooth scroll, the viscous glide (lerp ≈ `0.08`). Drives
+  ScrollTrigger from one rAF loop (`lenis.on('scroll', ScrollTrigger.update)`).
+- **GSAP + ScrollTrigger** — anything tied to scroll: section reveals, staggered
+  entrances, parallax depth layers, per-route hero transitions. Reveals fire
+  **once** (no replay/yo-yo).
+- **Motion (Framer Motion)** — anything tied to component state: route page
+  transitions (dissolve via `AnimatePresence`), hover/press micro-states, menu
+  and theme toggle, layout shifts.
+
+**Feel:**
+- Signature easing **`water` = `cubic-bezier(0.22, 1, 0.36, 1)`** (quick onset →
+  long deceleration). Enter variant **`settle` = `cubic-bezier(0.16, 1, 0.3, 1)`**.
+- **No bounce, no back, no elastic, no spring overshoot.** Springs critically damped.
+- Durations: hover `200–300ms`; reveals `0.9–1.2s`; route transitions `0.6–0.9s`;
+  parallax scrubbed to scroll.
+- **Signature reveal — "ink bloom":** `opacity 0→1`, `translateY 24→0`,
+  `blur 8px→0` (refraction sharpening), `scale 1.01→1`, stagger `80–120ms`.
+- **Depth parallax:** background/water layers drift slower than foreground (5–15%).
+- **`prefers-reduced-motion`:** Lenis off (native scroll), reveals become instant
+  opacity-only, no blur, no parallax. Always provide this path.
+
+## 5. Spacing & layout — it breathes
+
+- **8pt scale:** `4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128 · 160`.
+- **Section rhythm:** `clamp(120px, 16vh, 200px)` top & bottom. (Old 72px = too tight.)
+- **Container:** max `1200px`, gutters `clamp(20px, 5vw, 40px)`.
+- **Glass panels:** inner padding `40–56px` desktop; one idea per row; lots of
+  `--abyss` around everything.
+- **The unifier — reusable glass treatment** on every card/panel:
+  `backdrop-blur + saturate`, hairline top highlight, deep soft drop shadow,
+  faint inner glow. (Section-level version of the hero's `hero-panel`/`hero-frame`.)
+
+## 6. Routing & layout architecture
+
+Stack: React 19 + Vite + TypeScript, Tailwind v4 (`@theme`), shadcn/ui, GSAP +
+ScrollTrigger, Lenis, Framer Motion, React Three Fiber + drei,
+`react-router-dom`.
+
+Routes — the five chapters (§0). Each non-cover route gets its own hero in the
+same glass+water family:
+
+```
+/            00 · Index — cover: fluid hero + statement + chapter index
+/experience  01 · Production — work at scale       → own hero (PLACEHOLDER)
+/startup     02 · Venture — XSTRYV + founder        → own hero (PLACEHOLDER)
+/projects    03 · Lab — personal projects + Fish    → own hero (PLACEHOLDER)
+/about       04 · Profile — education, skills, contact
+```
+
+Layout tree:
+
+```
+main.tsx
+└─ <BrowserRouter>
+   └─ <SmoothScrollProvider>      // Lenis + ScrollTrigger wiring, reduced-motion aware
+      └─ <SiteLayout>             // Header (route-aware nav) + Footer
+         └─ <AnimatePresence>     // Motion route dissolve
+            ├─ "/"           → <Landing>
+            ├─ "/experience" → <ExperiencePage>
+            └─ "/startup"    → <StartupPage>
+```
+
+Shared primitives (build once, reuse everywhere):
+`<Container>`, `<Section>`, `<GlassPanel>`, `<Reveal>` (GSAP scroll wrapper),
+`<Eyebrow>` (mono label), a `<RouteHero>` family, plus two book primitives:
+`<ChapterIndex>` (the cover's table of contents) and `<ChapterPager>` (the
+"next chapter →" foot of each page). Landing uses the existing fluid hero
+(`src/hero/fluid`). `/experience`, `/startup`, and `/projects` use clearly-marked
+hero placeholders:
+
+```tsx
+{/* ════════════════════════════════════════════════════════════
+    PLACEHOLDER · /experience hero — same glass+water family.
+    Drop R3F scene here. Keep <RouteHero> wrapper for layout + scroll.
+   ════════════════════════════════════════════════════════════ */}
+```
+
+Landing (`/`) = **cover + table of contents only**: Hero → Index statement →
+`<ChapterIndex>` (the four chapters) → footer CTA. It is NOT a long scroll of
+every section — chapter depth lives on the routes above. Each chapter page ends
+with a `<ChapterPager>` to the next chapter.
+
+## 7. Performance & accessibility checklist (apply every task)
+
+- Lazy-load all 3D / R3F (`React.lazy` + `Suspense`); never block first paint.
+- Cap dye/sim resolution per device; provide a static fallback for weak GPUs and
+  WebGL-unavailable cases (see hero's `is-fallback`).
+- Honor `prefers-reduced-motion` everywhere (scroll, reveals, parallax, 3D).
+- Animate only `transform`/`opacity`/`filter`; avoid layout thrash; use
+  `will-change` sparingly; kill/cleanup ScrollTriggers and Lenis on unmount.
+- Every section must visibly belong to Meniscus (glass + depth + viscous motion).
+  If a section looks like it could be a different template, it's wrong.
+
+## 8. The Fish — ambient companion (reserved, build later)
+
+A small animated fish swims in the water layer *beneath the glass* — the living
+detail that rewards exploration. Mechanic: **"feed the fish to browse more"** —
+interacting with it (dropping food/ink) nudges the visitor onward and reveals
+more of the site, keeping the experience playful and interactive. Primary home:
+the Lab (`/projects`), but architected to swim in any water surface.
+
+Status: **the owner builds the animation later.** For now, reserve a clearly-
+marked, stable mount slot in the water layer (a `<FishCompanion>` placeholder,
+same pattern as the route-hero placeholders) so it drops in cleanly. Do NOT
+build the fish now — just leave the seam.
+
+## 9. Landing hero — interaction rules
+
+- **Ink swatch = hover, not click.** Moving the pointer over a swatch switches
+  the active ink immediately (`pointerenter`); previously-laid ink stays and
+  accumulates. Keep click/tap (touch has no hover) and keyboard focus as
+  equivalent selectors — never hover-only, or touch + keyboard users can't pick.
+- **Ink lingers longer before fading.** Lever: `densityDissipation` in
+  `src/hero/fluid/inkConfig.ts` (lower = lingers longer). Tune down from `0.1`
+  toward `~0.045`; do NOT reach `0` (muddy brown build-up + sim instability).
+  Keep it the single tunable for ink persistence.
