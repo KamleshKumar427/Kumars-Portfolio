@@ -4,6 +4,12 @@ import { useLocation } from 'react-router-dom'
 import { gsap, ScrollTrigger } from '@/lib/gsap'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 
+declare global {
+  interface Window {
+    __lenis?: Lenis
+  }
+}
+
 /**
  * Site-wide smooth scroll (Lenis) wired into GSAP's ticker so ScrollTrigger
  * stays in sync. The viscous glide is the scroll-level echo of the hero water.

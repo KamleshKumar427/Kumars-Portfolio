@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Header } from './Header'
+import { SiteFooter } from './SiteFooter'
 import { pageTransition } from '@/lib/motion'
 
-/** App shell: shared header + route-level page transitions (Motion dissolve). */
+/** App shell: shared header + route-level page transitions (Motion dissolve) + footer. */
 export function SiteLayout() {
   const location = useLocation()
 
@@ -21,6 +22,7 @@ export function SiteLayout() {
           <Outlet />
         </motion.main>
       </AnimatePresence>
+      <SiteFooter />
     </>
   )
 }

@@ -2,38 +2,64 @@ import { RouteHero } from '../components/RouteHero'
 import { Section } from '../components/ui/Section'
 import { Reveal } from '../components/ui/Reveal'
 import { Eyebrow } from '../components/ui/Eyebrow'
-import { GlassPanel } from '../components/ui/GlassPanel'
+import { RoleRecord } from '../components/RoleRecord'
+import { ChapterPager } from '../components/ChapterPager'
+import { experience } from '../data/experience'
+
+const productionRoles = experience.filter((role) => role.theater === 'production')
+
+const metrics = [
+  { value: 'PCI DSS L1', label: 'compliance' },
+  { value: '€100Ms+', label: 'processed' },
+  { value: '+11%', label: 'faster processing' },
+  { value: '20+', label: 'currencies' },
+]
 
 /**
- * /experience — dedicated work-experience route. Hero placeholder + a scaffold
- * body to be filled in a later pass. Structure only for now.
+ * Chapter 01 · Production (/experience) — built fully to Meniscus as the template
+ * for the rest. Payment-gateway + open-source database-internals work, in glass.
  */
 export function ExperiencePage() {
   return (
     <>
       <RouteHero
-        eyebrow="route · /experience"
+        eyebrow="01 · production"
         title={
           <>
-            Work, <span className="hero-name-family">in production</span>
+            Production, <span className="hero-name-family">at scale</span>
           </>
         }
-        lead="Payment gateways, database internals, and the systems where uptime is the product. Detailed case records land here."
+        lead="Where being wrong is expensive: a PCI-DSS Level 1 payment gateway moving hundreds of millions of euros, and database internals for an open-source graph engine."
       />
 
       <Section>
-        <Reveal className="mb-8">
-          <Eyebrow>experience · scaffold</Eyebrow>
+        <Reveal className="mn-lede">
+          <Eyebrow>01 · production — the brief</Eyebrow>
+          <p className="mn-lede-statement">
+            Two years on systems where downtime and inconsistency cost real money — owned end
+            to end, from merchant integrations to query paths under load.
+          </p>
         </Reveal>
-        <Reveal>
-          <GlassPanel className="p-10 sm:p-14">
-            <p className="mn-index-lead">
-              Placeholder body for the work-experience route. Case studies, deployment
-              records and impact metrics will be rebuilt here to the Meniscus system.
-            </p>
-          </GlassPanel>
+
+        <Reveal stagger className="mn-metrics">
+          {metrics.map((metric) => (
+            <div key={metric.label} className="mn-metric">
+              <span className="mn-metric-value">{metric.value}</span>
+              <span className="mn-metric-label">{metric.label}</span>
+            </div>
+          ))}
         </Reveal>
+
+        <div className="mn-roles">
+          {productionRoles.map((role) => (
+            <Reveal key={role.company}>
+              <RoleRecord role={role} />
+            </Reveal>
+          ))}
+        </div>
       </Section>
+
+      <ChapterPager from="/experience" />
     </>
   )
 }

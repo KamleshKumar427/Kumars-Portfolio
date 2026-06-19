@@ -1,25 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { ThemeToggle } from './ThemeToggle'
-import { scrollToId } from '@/lib/scroll'
-
-const sectionItems = [
-  { id: 'about', label: 'profile' },
-  { id: 'projects', label: 'projects' },
-  { id: 'skills', label: 'stack' },
-  { id: 'contact', label: 'contact' },
-]
-
-const routeItems = [
-  { to: '/experience', label: 'experience' },
-  { to: '/startup', label: 'startup' },
-]
+import { tocChapters } from '../data/chapters'
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -27,59 +13,32 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const goToSection = (id: string) => {
-    setMenuOpen(false)
-    if (location.pathname === '/') {
-      scrollToId(id)
-    } else {
-      navigate(`/#${id}`)
-    }
-  }
-
-  const goHome = () => {
-    setMenuOpen(false)
-    if (location.pathname === '/') {
-      scrollToId('hero', 0)
-    } else {
-      navigate('/')
-    }
-  }
-
   return (
     <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="header-inner">
-        <button type="button" className="header-id" onClick={goHome}>
+        <Link to="/" className="header-id" onClick={() => setMenuOpen(false)}>
           <span className="header-id-name">kkumar</span>
           <span className="header-id-sep">@</span>
           <span className="header-id-host">helsinki.fi</span>
-        </button>
+        </Link>
 
         <p className="header-status" aria-label="Current status">
           <span className="status-led" />
-          MSc CS · open to roles
+          the dossier · 5 chapters
         </p>
 
         <div className="header-end">
-          <nav className={`header-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Site navigation">
-            {sectionItems.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className="header-nav-link"
-                onClick={() => goToSection(item.id)}
-              >
-                {item.label}
-              </button>
-            ))}
-            {routeItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
+          <nav className={`header-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Chapters">
+            {tocChapters.map((chapter) => (
+              <NavLink
+                key={chapter.n}
+                to={chapter.route}
                 className="header-nav-link"
                 onClick={() => setMenuOpen(false)}
               >
-                {item.label}
-              </Link>
+                <span className="header-nav-n">{chapter.n}</span>
+                {chapter.slug}
+              </NavLink>
             ))}
           </nav>
 

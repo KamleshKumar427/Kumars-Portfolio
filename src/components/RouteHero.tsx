@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Container } from './ui/Container'
 import { Eyebrow } from './ui/Eyebrow'
+import { FishCompanion } from './FishCompanion'
 
 type RouteHeroProps = {
   /** Mono coordinate/telemetry label above the title. */
@@ -31,6 +32,9 @@ export function RouteHero({ eyebrow, title, lead, scene }: RouteHeroProps) {
           rely on it for layout, scrim and scroll.
          ════════════════════════════════════════════════════════════════ */}
       {scene ?? <div className="hero-fluid is-fallback" aria-hidden="true" />}
+
+      {/* The Fish swims here, in the water layer beneath the glass (§8). Reserved seam. */}
+      <FishCompanion surface="route-hero" />
 
       <div className="hero-frame" aria-hidden="true" />
 

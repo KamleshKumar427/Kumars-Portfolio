@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { profile } from '../data/profile'
 import { inkConfig } from '../hero/fluid/inkConfig'
 import { useIsDark } from '../hooks/useIsDark'
@@ -45,9 +46,9 @@ export function Hero() {
           <p className="hero-lead">{profile.tagline}</p>
 
           <div className="hero-actions">
-            <a href="#projects" className="btn btn-primary">
-              See projects
-            </a>
+            <Link to="/experience" className="btn btn-primary">
+              Read the dossier
+            </Link>
             <a href={`mailto:${profile.email}`} className="btn btn-secondary">
               Send email
             </a>
