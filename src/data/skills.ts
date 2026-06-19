@@ -6,49 +6,55 @@ export type SkillGroup = {
 export const skills: SkillGroup[] = [
   {
     category: 'Languages',
-    items: [
-      'Python',
-      'JavaScript',
-      'TypeScript',
-      'Java',
-      'C/C++',
-      'SQL',
-      'Shell',
-      'x86/RISC-V Assembly',
-      'PostgreSQL internals',
-    ],
+    items: ['JavaScript', 'TypeScript', 'Python', 'Java', 'C/C++', 'SQL', 'Shell', 'x86 Assembly'],
   },
   {
-    category: 'Frameworks',
-    items: ['Spring Boot', '.NET', 'React', 'Node.js', 'FastAPI'],
+    category: 'Frameworks & Libraries',
+    items: ['React', 'Next.js', 'Node.js', 'Spring Boot', '.NET', 'FastAPI', 'Three.js'],
+  },
+  {
+    category: 'Databases',
+    items: ['PostgreSQL', 'MSSQL', 'MongoDB', 'YugabyteDB', 'Supabase'],
   },
   {
     category: 'Cloud & DevOps',
     items: [
-      'CI/CD',
-      'Linux',
-      'Git/GitHub',
-      'Azure',
       'Docker',
       'Docker Compose',
-      'VMs',
+      'CI/CD',
+      'GitHub Actions',
       'Jenkins',
+      'Azure',
+      'Linux',
+      'Git',
       'PM2',
+      'Virtual Machines',
     ],
   },
   {
-    category: 'Collaboration',
+    category: 'Practices & Tools',
     items: [
-      'Cross-cultural teams (IE/CY/PK)',
+      'REST APIs',
+      'JWT',
+      'OAuth 2.0',
+      'Microservices',
+      'System Design',
+      'Agile',
+      'CRON Jobs',
       'Jira',
-      'Customer-facing issue resolution',
-      'Documentation',
-      'Ownership',
+      'AI-assisted dev (Cursor, Claude, Copilot)',
     ],
   },
 ]
 
-export const certifications = [
+export type Certification = {
+  title: string
+  issuer: string
+  year: string
+  topics: string
+}
+
+export const certifications: Certification[] = [
   {
     title: 'DevOps with Docker',
     issuer: 'University of Helsinki MOOC',
@@ -57,26 +63,20 @@ export const certifications = [
   },
   {
     title: 'Java Spring Framework 6 with Spring Boot 3',
-    issuer: 'Udemy — Navin Reddy',
+    issuer: 'Udemy',
     year: '2024',
-    topics: 'Spring 6, Boot 3, JDBC, Microservices, JPA, Security, Docker',
+    topics: 'Spring 6, Boot 3, JDBC, JPA, Security, Docker, Microservices',
   },
   {
-    title: 'PostgreSQL Indexes Deep Dive',
-    issuer: 'Percona University — Ibrar Ahmed',
+    title: 'PostgreSQL Indexes',
+    issuer: 'Percona University',
     year: '2023',
-    topics: 'PostgreSQL index internals and optimization',
+    topics: 'Deep dive into PostgreSQL index internals and optimization',
   },
   {
-    title: 'Neural Networks and Deep Learning',
+    title: 'Deep Learning Specialization',
     issuer: 'Coursera — Andrew Ng',
     year: '2023',
-    topics: 'Deep Learning Specialization',
-  },
-  {
-    title: 'Finetuning Large Language Models',
-    issuer: 'DeepLearning.ai — Sharon Zhou',
-    year: '2023',
-    topics: 'LLM fine-tuning and deployment',
+    topics: 'Neural Networks and Deep Learning',
   },
 ]

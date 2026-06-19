@@ -6,62 +6,42 @@ export type Project = {
   featured?: boolean
 }
 
+// Personal projects / technical range (Lab · chapter 03). Work projects live in
+// the Production chapter; this list tracks the CV's personal + final-year work.
 export const projects: Project[] = [
-  {
-    title: 'Payment Gateway Integrations',
-    description:
-      'Google Pay and Apple Pay integrations on a PCI DSS Level 1 gateway processing hundreds of millions of euros — merchant onboarding, webhooks, and mobile APIs.',
-    tools: ['Java', 'Spring Boot', 'React', 'JWT', 'MSSQL', 'Azure'],
-    featured: true,
-  },
-  {
-    title: 'Agedb-Cloud (DBaaS)',
-    description:
-      'Database-as-a-Service for Apache AGE graph database — hosted on DigitalOcean with a web interface for collaborative use without local setup.',
-    tools: ['React', 'Node.js', 'MongoDB', 'PM2', 'Apache AGE'],
-    github: 'https://github.com/AGEDB-INC/Cloud-Express',
-    featured: true,
-  },
   {
     title: 'VR Metaverse Classroom',
     description:
-      'Final year project: WebXR classroom on Meta Quest 2 with fine-tuned LLaMA-2 7B for teacher interaction and live student evaluation.',
-    tools: ['WebXR', 'Three.js', 'LLaMA-2', 'Python'],
+      'Final-year project: a WebXR classroom on Meta Quest 2 with a fine-tuned LLaMA-2 7B model for live teacher interaction and student evaluation.',
+    tools: ['WebXR', 'Three.js', 'LLaMA-2 7B', 'Python'],
     featured: true,
-  },
-  {
-    title: 'Assessment & Feedback with LLMs',
-    description:
-      'System for generating automatic assessments and post-result feedback using LLaMA-2 7B and LangChain to enhance the educational process.',
-    tools: ['LangChain', 'Python', 'PyTorch', 'LLaMA-2'],
-    github:
-      'https://github.com/KamleshKumar427/Assessment-Generation-and-Realtime-Feedback-System-using-Large-Language-Models',
-  },
-  {
-    title: 'DistilGPT-2 Fine-tuning',
-    description:
-      'Fine-tuned DistilGPT-2 on 273K writing prompts for coherent, creative story generation from given prompts.',
-    tools: ['DistilGPT-2', 'Python', 'PyTorch', 'Hugging Face'],
-    github: 'https://github.com/KamleshKumar427/DistilGpt2_fineTunning',
   },
   {
     title: 'JSON Files Search Engine',
     description:
-      'Search engine inspired by Google’s original paper — queries 6 GB of JSON data for multi-word searches in under 1 second.',
+      'Search engine inspired by Google’s paper “The Anatomy of a Large-Scale Hypertextual Web Search Engine” — queries 6 GB of JSON data for multi-word searches in under 1 second.',
     tools: ['Python', 'NLTK'],
     github: 'https://github.com/KamleshKumar427/JsonFilesSearchEngine',
+    featured: true,
   },
   {
-    title: 'Snake Game in x86 Assembly',
+    title: 'DistilGPT-2 Fine-tuning for Writing Prompts',
     description:
-      'Team-led Snake game in assembly with dynamic movement, collision detection, and reward generation; optimized memory via manual stack and heap allocation.',
-    tools: ['x86 Assembly', 'MASM/TASM'],
+      'Fine-tuned DistilGPT-2 on a 273K-example writingprompts dataset to generate coherent, creative stories from given prompts.',
+    tools: ['Python', 'PyTorch', 'Transformers', 'Hugging Face'],
+    github: 'https://github.com/KamleshKumar427/DistilGpt2_fineTunning',
   },
   {
     title: 'National ID Card Detector',
     description:
-      'OpenCV application detecting Pakistan’s National ID cards with 95% accuracy across angles, dimensions, and environments.',
+      'OpenCV application detecting ID cards with 95% accuracy across varying angles, dimensions, and environments; initially tailored for Pakistan’s National ID.',
     tools: ['Python', 'OpenCV'],
     github: 'https://github.com/KamleshKumar427/National_ID_Card_detection-',
+  },
+  {
+    title: 'Snake Game in x86 Assembly',
+    description:
+      'Led a team of three to build Snake in assembly — dynamic movement, collision detection, and reward generation with manual stack/heap memory management.',
+    tools: ['x86 Assembly', 'MASM/TASM'],
   },
 ]

@@ -1,11 +1,11 @@
 export const profile = {
   name: 'Kamlesh Kumar',
-  title: 'Computer Scientist',
-  headline: 'Payment systems, database internals, distributed backends.',
+  title: 'Full-Stack Software Engineer',
+  headline: 'Payment systems at scale, a solo-built startup, and database internals.',
   tagline:
-    'Full-stack engineer on PCI DSS Level 1 gateways and Apache AGE graph database work. MSc Computer Science at the University of Helsinki — grade 5/5.',
+    'Sole engineer on a live recruitment platform (1,600+ users, 250+ companies) and full-stack engineer on a PCI DSS Level 1 payment gateway handling hundreds of millions of euros. MSc Computer Science at the University of Helsinki — grade 5/5.',
   summary:
-    'I build and operate software where failure is expensive: payment gateways processing hundreds of millions of euros, graph database infrastructure, and high-volume transaction paths across remote teams in Ireland, Cyprus, and Pakistan.',
+    'Full-Stack Software Engineer and MSc Computer Science student at the University of Helsinki, with 2+ years building production systems end-to-end. Sole engineer on a live startup recruitment platform (1,600+ users, 250+ companies) and full-stack engineer on a PCI DSS Level 1 payment gateway handling hundreds of millions of euros. I tend toward problems where being wrong is expensive: payment routing, PCI-compliant APIs, and graph database internals.',
   location: 'Helsinki, Finland',
   email: 'kamlesh.kumar@helsinki.fi',
   phone: '+358 44 939 3428',
@@ -16,7 +16,7 @@ export const profile = {
   },
   metrics: [
     { value: 'PCI DSS L1', label: 'payment gateway' },
-    { value: '11%', label: 'throughput gain' },
-    { value: '5/5', label: 'MSc GPA' },
+    { value: '1,600+', label: 'xstryv users' },
+    { value: '5/5', label: 'msc · helsinki' },
   ],
 } as const
