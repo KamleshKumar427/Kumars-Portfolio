@@ -75,6 +75,10 @@ export function Hero() {
                 type="button"
                 className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
                 style={{ background: s.hex }}
+                // Hover (fine pointers) and keyboard focus switch ink with no click.
+                onPointerEnter={() => setActiveId(s.id)}
+                onFocus={() => setActiveId(s.id)}
+                // Tap/click kept as equivalent selectors (touch has no hover; a11y).
                 onClick={() => setActiveId(s.id)}
                 aria-pressed={s.id === activeId}
                 aria-label={`${s.name} ink`}

@@ -27,7 +27,9 @@ export const inkConfig = {
   // — Fluid feel —
   // densityDissipation: how slowly ink fades. 0 = never fades (pure accumulation),
   // higher = fades faster. Kept very low so colors persist, accumulate and blend.
-  densityDissipation: 0.1,
+  // Single tunable for ink persistence; ~0.045 lets ink linger noticeably longer.
+  // Do NOT reach 0 — muddy brown build-up + sim instability.
+  densityDissipation: 0.045,
   // velocityDissipation: how fast motion settles to stillness.
   // Higher = ink comes to rest sooner (calmer).
   velocityDissipation: 1.1,
