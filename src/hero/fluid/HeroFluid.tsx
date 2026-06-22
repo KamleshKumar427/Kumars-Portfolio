@@ -36,6 +36,7 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
     try {
       sim = new FluidSim(canvas)
     } catch {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- WebGL capability probe
       setUnsupported(true)
       return
     }

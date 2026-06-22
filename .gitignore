@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Heavy source 3D asset originals — only the optimized public/pond/*.glb ship
+_assets-src/

@@ -1,5 +1,4 @@
 import { lazy, Suspense, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { profile } from '../data/profile'
 import { inkConfig } from '../hero/fluid/inkConfig'
 import { useIsDark } from '../hooks/useIsDark'
@@ -11,7 +10,6 @@ const HeroFluid = lazy(() =>
 )
 
 export function Hero() {
-  const [, ...lastNameParts] = profile.name.split(' ')
   const isDark = useIsDark()
   const reduced = useReducedMotion()
   const [activeId, setActiveId] = useState(inkConfig.swatches[0].id)
@@ -30,67 +28,40 @@ export function Hero() {
       )}
       <div className="hero-frame" aria-hidden="true" />
 
-      <div className="hero-overlay">
-        <div className="hero-panel">
-          <p className="hero-coords">
+      {/* Stylish white corner title — intuitive, no CV dump (the dossier is below). */}
+      <div className="scene-overlay">
+        <div className="scene-titleblock">
+          <span className="scene-eyebrow">
             <span className="status-led" />
-            {profile.location}
-          </p>
-
-          <h1 className="hero-name">
-            {profile.name.split(' ')[0]}{' '}
-            <span className="hero-name-family">{lastNameParts.join(' ')}</span>
+            {profile.location} · open to roles
+          </span>
+          <h1 className="scene-title">
+            Drip ink into <em>deep water</em>
           </h1>
+          <p className="scene-cue">drag across the glass — pick a color</p>
 
-          <p className="hero-headline">{profile.headline}</p>
-          <p className="hero-lead">{profile.tagline}</p>
-
-          <div className="hero-actions">
-            <Link to="/experience" className="btn btn-primary">
-              Read the dossier
-            </Link>
-            <a href={`mailto:${profile.email}`} className="btn btn-secondary">
-              Send email
-            </a>
-          </div>
-
-          <div className="hero-links">
-            <a href={profile.links.github} target="_blank" rel="noreferrer">
-              github
-            </a>
-            <a href={profile.links.linkedin} target="_blank" rel="noreferrer">
-              linkedin
-            </a>
-            <a href={profile.links.stackoverflow} target="_blank" rel="noreferrer">
-              stackoverflow
-            </a>
+          <div className="ink-dock" role="group" aria-label="Ink color">
+            <div className="ink-swatches">
+              {inkConfig.swatches.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
+                  style={{ background: s.hex }}
+                  // Hover (fine pointers) and keyboard focus switch ink with no click.
+                  onPointerEnter={() => setActiveId(s.id)}
+                  onFocus={() => setActiveId(s.id)}
+                  // Tap/click kept as equivalent selectors (touch has no hover; a11y).
+                  onClick={() => setActiveId(s.id)}
+                  aria-pressed={s.id === activeId}
+                  aria-label={`${s.name} ink`}
+                  title={s.name}
+                />
+              ))}
+            </div>
+            <span className="ink-dock-name">{active.name.toLowerCase()}</span>
           </div>
         </div>
-
-        <div className="ink-dock" role="group" aria-label="Ink color">
-          <span className="ink-dock-label">ink</span>
-          <div className="ink-swatches">
-            {inkConfig.swatches.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
-                style={{ background: s.hex }}
-                // Hover (fine pointers) and keyboard focus switch ink with no click.
-                onPointerEnter={() => setActiveId(s.id)}
-                onFocus={() => setActiveId(s.id)}
-                // Tap/click kept as equivalent selectors (touch has no hover; a11y).
-                onClick={() => setActiveId(s.id)}
-                aria-pressed={s.id === activeId}
-                aria-label={`${s.name} ink`}
-                title={s.name}
-              />
-            ))}
-          </div>
-          <span className="ink-dock-name">{active.name.toLowerCase()}</span>
-        </div>
-
-        <p className="hero-hint">move across the glass to release ink</p>
       </div>
     </section>
   )

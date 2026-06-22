@@ -1322,6 +1322,137 @@ a.mn-toc-row:hover .mn-toc-arrow {
   color: var(--trace);
 }
 
+/* ════════════════════════════════════════════════════════════════
+   KOI POND · "Feed my pet" — Lab chapter centerpiece (§8 Fish).
+   Same deep-water world as the hero; full-bleed, glass-framed.
+   ════════════════════════════════════════════════════════════════ */
+.koi-section {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  /* Soft pond tones (never the near-black page floor) in case the canvas is
+     mid-load or letterboxed — the water should always read as water. */
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 42%, #7fcdd8, transparent 70%),
+    linear-gradient(180deg, #cfe9ea 0%, #3aa6b6 55%, #1c6f7e 100%);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.koi-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.koi-fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 50% at 50% 45%, rgba(110, 196, 212, 0.35), transparent 68%),
+    radial-gradient(circle at 50% 55%, #3d9aaa, #1a5c68 72%);
+}
+
+/* Soft glass framing — lighter than before so water reads as pond, not void. */
+.koi-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(ellipse 88% 84% at 50% 48%, transparent 62%, rgba(42, 122, 136, 0.18));
+  box-shadow:
+    inset 0 0 80px 16px rgba(74, 152, 168, 0.15),
+    inset 0 1px 0 0 rgba(240, 250, 252, 0.18);
+}
+
+.koi-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.koi-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 252, 245, 0.92);
+  padding: 12px 20px;
+  background: rgba(26, 92, 104, 0.38);
+  border: 1px solid rgba(232, 244, 248, 0.22);
+  border-radius: var(--radius);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 1.1s var(--ease-water),
+    transform 1.1s var(--ease-water);
+}
+
+.koi-prompt.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.koi-prompt-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--graph);
+  box-shadow: 0 0 8px var(--graph);
+}
+
+.koi-scrollcue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 4vh, 40px);
+  transform: translateX(-50%);
+  z-index: 3;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 252, 245, 0.65);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.koi-scrollcue-arrow {
+  display: inline-block;
+  animation: koi-bob 2.4s var(--ease-water) infinite;
+}
+
+@keyframes koi-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .koi-scrollcue-arrow {
+    animation: none;
+  }
+  .koi-prompt {
+    transition: none;
+  }
+}
+
 /* ── Responsive (Meniscus components) ── */
 @media (max-width: 640px) {
   .mn-toc-row {
@@ -1347,5 +1478,220 @@ a.mn-toc-row:hover .mn-toc-arrow {
   .mn-footer-inner {
     flex-direction: column;
     text-align: center;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Chapter content — sub-section heads, card grids, skills matrix
+   ════════════════════════════════════════════════════════════════ */
+
+/* A heading that opens a sub-section within a chapter. */
+.mn-subhead {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: clamp(72px, 11vh, 128px);
+}
+
+.mn-subhead-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--trace);
+}
+
+/* Card grid — projects, certifications. */
+.mn-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.mn-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(24px, 3vw, 34px);
+}
+
+.mn-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.mn-card-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  color: var(--trace);
+}
+
+.mn-card-year {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--brass);
+}
+
+.mn-card-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.mn-card-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.mn-card-link {
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--tide);
+  text-decoration: none;
+}
+
+.mn-card-link:hover {
+  color: var(--brass);
+}
+
+/* Skills matrix — category blocks in the dossier's hairline grid. */
+.mn-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px;
+  margin-top: 40px;
+  background: var(--edge);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.mn-matrix-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 26px 24px;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  backdrop-filter: blur(10px) saturate(1.2);
+}
+
+.mn-matrix-cat {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--brass);
+}
+
+.mn-cta-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Scene overlay — stylish white corner title over the hero & the pond.
+   Same format in both: mono eyebrow · large white serif · mono cue.
+   ════════════════════════════════════════════════════════════════ */
+.scene-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none; /* drags/taps fall through to the canvas beneath */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: clamp(76px, 13vh, 148px) clamp(24px, 5vw, 78px) clamp(28px, 6vh, 64px);
+}
+
+.scene-titleblock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: min(92vw, 640px);
+  animation: hero-enter 0.9s ease both;
+}
+
+.scene-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: lowercase;
+  color: rgba(255, 255, 255, 0.84);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+}
+
+.scene-eyebrow .status-led {
+  box-shadow: 0 0 10px var(--brass);
+}
+
+.scene-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6.4vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: #fff;
+  text-shadow: 0 2px 34px rgba(0, 0, 0, 0.34), 0 1px 3px rgba(0, 0, 0, 0.32);
+}
+
+.scene-title em {
+  font-style: italic;
+}
+
+.scene-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: rgba(255, 255, 255, 0.82);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* The pond cue fades with the prompt timer; the hero cue stays steady. */
+.scene-cue.is-fade {
+  opacity: 0;
+  transition: opacity 1.1s var(--ease-water);
+}
+
+.scene-cue.is-fade.is-visible {
+  opacity: 1;
+}
+
+.scene-cue-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--graph);
+  box-shadow: 0 0 10px var(--graph);
+}
+
+/* Ink swatches live under the hero title — left-aligned and clickable. */
+.scene-titleblock .ink-dock {
+  margin-top: 8px;
+  align-items: flex-start;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-titleblock {
+    animation: none;
   }
 }
