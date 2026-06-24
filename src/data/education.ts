@@ -1,32 +1,24 @@
 export type Education = {
   degree: string
   school: string
-  location: string
   period: string
-  highlight?: string
-  details: string[]
+  note?: string
 }
 
 export const education: Education[] = [
   {
-    degree: 'Master of Science in Computer Science',
-    school: 'University of Helsinki',
-    location: 'Helsinki, Finland',
-    period: 'Sep 2025 – Present',
-    highlight: 'Grade: 5/5',
-    details: [
-      'Focus: Software engineering, backend, system design, scalable architectures, modern practices.',
-      'Coursework: Distributed Systems, DevOps, Full-Stack Development (JavaScript, React, TypeScript, Node.js, databases) with focus on scalable apps.',
-    ],
+    degree: 'MSc Computer Science',
+    school: 'University of Helsinki · Grade 4.9/5',
+    period: 'Sep 2025 —  May 2027',
+    note: 'Intro to Machine Learning, Engineering of Machine Learning, Docker, Kubernetes, distributed systems, scalable architecture.',
   },
   {
-    degree: 'Bachelor of Science in Computer Science',
-    school: 'National University of Sciences and Technology (NUST)',
-    location: 'Islamabad, Pakistan',
-    period: 'Sep 2020 – Jun 2024',
-    details: [
-      'Final Year Project: Led a VR metaverse classroom (WebXR, Three.js) using fine-tuned LLaMA-2 7B; ran on Meta Quest 2 for teacher interaction and live evaluation.',
-      'Core courses: Databases, Distributed Computing, Operating Systems, OOP, Networks, DSA.',
-    ],
+    degree: 'BSc Computer Science',
+    school: 'NUST, Islamabad',
+    period: 'Sep 2020 — Jun 2024',
   },
 ]
+
+/** A short line of standout extracurriculars for the Path section. */
+export const recognition =
+  'Slush 2025 volunteer · UN Millennium Fellow — top 9% of 44,000, appointed Campus Director.'

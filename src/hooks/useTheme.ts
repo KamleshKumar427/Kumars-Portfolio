@@ -13,14 +13,6 @@ export function useTheme() {
 
   useEffect(() => {
     applyTheme(preference)
-
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const onSystemChange = () => {
-      if (getStoredTheme() === 'system') applyTheme('system')
-    }
-
-    media.addEventListener('change', onSystemChange)
-    return () => media.removeEventListener('change', onSystemChange)
   }, [preference])
 
   const toggle = useCallback(() => {
@@ -33,6 +25,7 @@ export function useTheme() {
 
   return {
     preference,
+    isDark: preference === 'dark',
     label: themeLabel(preference),
     toggle,
   }

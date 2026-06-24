@@ -4,7 +4,6 @@ import { inkConfig } from '../hero/fluid/inkConfig'
 import { useIsDark } from '../hooks/useIsDark'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
-// Lazy-load the WebGL fluid so Three.js stays out of the initial bundle (perf mandate).
 const HeroFluid = lazy(() =>
   import('../hero/fluid/HeroFluid').then((m) => ({ default: m.HeroFluid })),
 )
@@ -13,9 +12,7 @@ export function Hero() {
   const isDark = useIsDark()
   const reduced = useReducedMotion()
   const [activeId, setActiveId] = useState(inkConfig.swatches[0].id)
-
-  const active =
-    inkConfig.swatches.find((s) => s.id === activeId) ?? inkConfig.swatches[0]
+  const active = inkConfig.swatches.find((s) => s.id === activeId) ?? inkConfig.swatches[0]
 
   return (
     <section id="hero" className="hero">
@@ -27,20 +24,25 @@ export function Hero() {
         </Suspense>
       )}
       <div className="hero-frame" aria-hidden="true" />
+      <div className="hero-watermark" aria-hidden="true">
+        墨と水
+      </div>
 
-      {/* Stylish white corner title — intuitive, no CV dump (the dossier is below). */}
       <div className="scene-overlay">
-        <div className="scene-titleblock">
+        <div className="hero-id">
           <span className="scene-eyebrow">
             <span className="status-led" />
             {profile.location} · open to roles
           </span>
-          <h1 className="scene-title">
-            Drip ink into <em>deep water</em>
+          <h1 className="hero-name">
+            Kamlesh <em>Kumar</em>
           </h1>
-          <p className="scene-cue">drag across the glass — pick a color</p>
+          <p className="hero-role">AI Full-Stack Engineer</p>
+        </div>
 
+        <div className="hero-bottom">
           <div className="ink-dock" role="group" aria-label="Ink color">
+            <span className="ink-dock-label">墨 — drag the water · pick an ink</span>
             <div className="ink-swatches">
               {inkConfig.swatches.map((s) => (
                 <button
@@ -48,10 +50,8 @@ export function Hero() {
                   type="button"
                   className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
                   style={{ background: s.hex }}
-                  // Hover (fine pointers) and keyboard focus switch ink with no click.
                   onPointerEnter={() => setActiveId(s.id)}
                   onFocus={() => setActiveId(s.id)}
-                  // Tap/click kept as equivalent selectors (touch has no hover; a11y).
                   onClick={() => setActiveId(s.id)}
                   aria-pressed={s.id === activeId}
                   aria-label={`${s.name} ink`}
@@ -59,8 +59,12 @@ export function Hero() {
                 />
               ))}
             </div>
-            <span className="ink-dock-name">{active.name.toLowerCase()}</span>
           </div>
+
+          <a className="hero-scroll" href="#experience" aria-label="Scroll to experience">
+            <span className="hero-scroll-label">scroll</span>
+            <span className="hero-scroll-line" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>

@@ -1,0 +1,72 @@
+[
+    {
+      "title": "JSON Files Search Engine",
+      "description": "Built a search engine inspired by Google's research paper 'The Anatomy of a Large-Scale Hypertextual Web Search Engine,' querying 6 GB of JSON data for multi-word searches in under 1 second.",
+      "tech_stack": ["Python", "NLTK"],
+      "github": "https://github.com/KamleshKumar427/JsonFilesSearchEngine",
+      "order": 1,
+      "category": "GENERAL",
+      "feature_in_ai_section": false,
+      "feature_in_general_section": true
+    },
+    {
+      "title": "National ID Card Detector",
+      "description": "Developed an OpenCV application detecting ID cards with 95% accuracy across varying angles, dimensions, and environments; initially tailored for Pakistan's National ID.",
+      "tech_stack": ["Python", "OpenCV"],
+      "github": "https://github.com/KamleshKumar427/National_ID_CARD_detection-",
+      "order": 2,
+      "category": "GENERAL",
+      "feature_in_ai_section": false,
+      "feature_in_general_section": true
+    },
+    {
+      "title": "Snake Game in x86 Assembly",
+      "description": "Led a team of three to build a Snake game in assembly, featuring dynamic movement, collision detection, and reward generation with manual stack/heap memory management.",
+      "tech_stack": ["x86 Assembly", "MASM/TASM"],
+      "github": "https://github.com/KamleshKumar427/Snake_game_Assembly_Language",
+      "order": 3,
+      "category": "GENERAL",
+      "feature_in_ai_section": false,
+      "feature_in_general_section": true
+    },
+    {
+      "title": "VR Metaverse Classroom",
+      "description": "Built a VR metaverse classroom (WebXR, Three.js) with a fine-tuned LLaMA-2 7B model on Meta Quest 2 for live teacher interaction.",
+      "tech_stack": ["WebXR", "Three.js", "Python", "PyTorch", "LLaMA-2 7B"],
+      "github": null,
+      "order": 1,
+      "category": "AI",
+      "feature_in_ai_section": true,
+      "feature_in_general_section": false
+    },
+    {
+      "title": "Fine-tuning DistilGPT-2 for Writing Prompts",
+      "description": "Fine-tuned DistilGPT-2 on a 273K-example writingprompts dataset to generate coherent, creative stories from prompts.",
+      "tech_stack": ["Python", "PyTorch", "Transformers", "Hugging Face"],
+      "github": "https://github.com/KamleshKumar427/DistilGpt2_fineTunning",
+      "order": 4,
+      "category": "AI",
+      "feature_in_ai_section": false,
+      "feature_in_general_section": false
+    },
+    {
+      "title": "Automatic Assessments and Feedback System using LLMs",
+      "description": "Created an innovative system for generating automatic assessments and providing feedback post-results utilizing the capabilities of LLaMA-2 7B and LangChain, aimed at enhancing the educational process for teachers and students.",
+      "tech_stack": ["LangChain", "Python", "PyTorch", "LLaMA-2 7B"],
+      "github": null,
+      "order": 3,
+      "category": "AI",
+      "feature_in_ai_section": true,
+      "feature_in_general_section": false
+    },
+    {
+      "title": "Atmospheric Event Classification",
+      "description": "Developed a two-stage ML pipeline to classify daily atmospheric conditions into new particle formation (NPF) event types (Ia, Ib, II) or nonevent using meteorological data from the SMEAR II station in Hyytiälä, Finland. Used calibrated Logistic Regression for binary event detection and Random Forest for multi-class classification, achieving a Kaggle leaderboard score of 0.76139.",
+      "tech_stack": ["Python", "scikit-learn", "XGBoost", "Random Forest", "Logistic Regression"],
+      "github": null,
+      "order": 2,
+      "category": "AI",
+      "feature_in_ai_section": true,
+      "feature_in_general_section": false
+    }
+  ]

@@ -14,6 +14,11 @@ export const profile = {
     github: 'https://github.com/KamleshKumar427',
     stackoverflow: 'https://stackoverflow.com/users/15808441/kamlesh-kumar',
   },
+  cv: {
+    /** Served from public/downloads/ — copied to dist root on build (GitHub Pages). */
+    path: '/downloads/Kamlesh_Kumar_CV.pdf',
+    filename: 'Kamlesh_Kumar_CV.pdf',
+  },
   metrics: [
     { value: 'PCI DSS L1', label: 'payment gateway' },
     { value: '1,600+', label: 'xstryv users' },

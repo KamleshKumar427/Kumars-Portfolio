@@ -1,55 +1,57 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { CvMenu } from './CvMenu'
 import { ThemeToggle } from './ThemeToggle'
-import { tocChapters } from '../data/chapters'
+
+const LINKS = [
+  { href: '#experience', label: 'Experience' },
+  { href: '#education', label: 'Education' },
+  { href: '#lab', label: 'Lab' },
+  { href: '#contact', label: 'Contact' },
+]
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => setScrolled(window.scrollY > 16)
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
-      <div className="header-inner">
-        <Link to="/" className="header-id" onClick={() => setMenuOpen(false)}>
-          <span className="header-id-name">kkumar</span>
-          <span className="header-id-sep">@</span>
-          <span className="header-id-host">helsinki.fi</span>
-        </Link>
+    <header className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
+      <div className="nav-inner">
+        <a className="nav-brand" href="#top" aria-label="Kamlesh Kumar — top" onClick={() => setOpen(false)}>
+          <span className="nav-seal" aria-hidden="true">
+            墨
+          </span>
+          <span className="nav-name">
+            Kamlesh
+            <br />
+            Kumar
+          </span>
+        </a>
 
-        <p className="header-status" aria-label="Current status">
-          <span className="status-led" />
-          the dossier · 5 chapters
-        </p>
-
-        <div className="header-end">
-          <nav className={`header-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Chapters">
-            {tocChapters.map((chapter) => (
-              <NavLink
-                key={chapter.n}
-                to={chapter.route}
-                className="header-nav-link"
-                onClick={() => setMenuOpen(false)}
-              >
-                <span className="header-nav-n">{chapter.n}</span>
-                {chapter.slug}
-              </NavLink>
+        <div className="nav-end">
+          <nav className={`nav-links ${open ? 'is-open' : ''}`} aria-label="Sections">
+            {LINKS.map((link) => (
+              <a key={link.href} href={link.href} className="nav-link" onClick={() => setOpen(false)}>
+                {link.label}
+              </a>
             ))}
+            <CvMenu />
           </nav>
 
           <ThemeToggle />
 
           <button
             type="button"
-            className="header-menu"
-            aria-expanded={menuOpen}
-            aria-label="Open navigation"
-            onClick={() => setMenuOpen((open) => !open)}
+            className="nav-menu"
+            aria-expanded={open}
+            aria-label="Toggle navigation"
+            onClick={() => setOpen((v) => !v)}
           >
             <span />
             <span />

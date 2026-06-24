@@ -1,34 +1,22 @@
-export type ThemePreference = 'system' | 'light' | 'dark'
+export type ThemePreference = 'light' | 'dark'
 
 const STORAGE_KEY = 'theme'
 
 export function getStoredTheme(): ThemePreference {
   const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
-  return 'system'
+  if (stored === 'light' || stored === 'dark') return stored
+  // First visit or legacy "system" — honour OS once, no system toggle in UI.
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
 export function applyTheme(preference: ThemePreference) {
   const root = document.documentElement
-
-  if (preference === 'system') {
-    root.removeAttribute('data-theme')
-  } else {
-    root.setAttribute('data-theme', preference)
-  }
-
-  const resolved =
-    preference === 'system'
-      ? window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : preference
-
-  root.style.colorScheme = resolved
+  root.setAttribute('data-theme', preference)
+  root.style.colorScheme = preference
 
   const meta = document.querySelector('meta[name="theme-color"]')
   if (meta) {
-    meta.setAttribute('content', resolved === 'dark' ? '#0c0e12' : '#e8e6e2')
+    meta.setAttribute('content', preference === 'dark' ? '#0c0e12' : '#e8e6e2')
   }
 }
 
@@ -38,9 +26,7 @@ export function storeTheme(preference: ThemePreference) {
 }
 
 export function cycleTheme(current: ThemePreference): ThemePreference {
-  if (current === 'system') return 'light'
-  if (current === 'light') return 'dark'
-  return 'system'
+  return current === 'light' ? 'dark' : 'light'
 }
 
 export function resolveIsDark(): boolean {
@@ -51,7 +37,5 @@ export function resolveIsDark(): boolean {
 }
 
 export function themeLabel(preference: ThemePreference): string {
-  if (preference === 'system') return 'Use system theme'
-  if (preference === 'light') return 'Light theme'
-  return 'Dark theme'
+  return preference === 'light' ? 'Switch to dark mode' : 'Switch to light mode'
 }

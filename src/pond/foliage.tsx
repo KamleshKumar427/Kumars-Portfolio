@@ -23,16 +23,18 @@ export function PondFoliage({ cfg }: { cfg: KoiConfig }) {
     return { footprint: Math.max(size.x, size.z, 0.0001), minY: box.min.y }
   }, [lotus])
 
-  // Exactly three lotus: two back "corners" (wide left + right) and one centre,
-  // spread across the full-width pond.
+  // Two lotus as a paired cluster — upper-left of the frame, beside the title
+  // overlay. Camera-projected: x ≈ −4, z ≈ −1.4 lands in view (the prior
+  // x ≈ −8 / z ≈ −0.8 spot was outside the frustum).
   const lilies = useMemo(() => {
     const base = cfg.lotusScale / footprint
     const hw = cfg.swimHalfWidth
     const hd = cfg.swimHalfDepth
+    const cx = -hw * 0.44
+    const cz = hd * 0.16
     const spots = [
-      { x: -hw * 0.85, z: -hd * 0.62, rot: 0.6, s: base * 1.0 }, // back-left accent
-      { x: -hw * 0.42, z: -hd * 0.3, rot: 0.3, s: base * 1.0 }, // mid-left accent
-      { x: hw * 0.72, z: hd * 0.95, rot: -0.5, s: base * 1.85 }, // prominent → bottom-right foreground
+      { x: cx - 0.4, z: cz - 0.08, rot: 0.38, s: base * 1.2 },
+      { x: cx + 0.36, z: cz + 0.14, rot: -0.3, s: base * 1.08 },
     ]
     return spots.map((p) => ({ ...p, y: 0.04 - minY * p.s }))
   }, [cfg, footprint, minY])

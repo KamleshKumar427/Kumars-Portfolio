@@ -80,10 +80,11 @@ export const koiConfig: KoiConfig = {
   swimSpeed: 0.62,
   fedSpeedBoost: 1.9,
   foodAttraction: 1.85,
-  foodLifespanMs: 16000,
-  eatRatePerSec: 0.42,
+  /** ms after a fish reaches the food before uneaten pellets fade (was ~13s). */
+  foodLifespanMs: 4300,
+  eatRatePerSec: 1.85,
   rippleIntensity: 1.6,
-  pelletsPerClick: 9,
+  pelletsPerClick: 7,
 
   useModels: true,
   koiLength: 1.5, // bigger so the koi read clearly as fish in the wide pond
@@ -110,7 +111,7 @@ export const koiConfig: KoiConfig = {
   waterSegments: [128, 72],
   swimHalfWidth: 11,
   swimHalfDepth: 4.5,
-  pelletSize: 0.18, // food clearly visible on the water
+  pelletSize: 0.052, // small granules — subtle on the water
   cameraAngle: 'angled',
   caustics: true,
 

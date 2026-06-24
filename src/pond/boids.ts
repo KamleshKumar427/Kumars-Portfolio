@@ -27,12 +27,17 @@ export type Boid = {
   wanderAngle: number
   size: number
   colorIndex: number
+  /** Locked food id — fish stay on this pile until it is gone. */
+  foodLock: number | null
 }
 
 export type FoodPoint = {
+  id: number
   pos: THREE.Vector3
   amount: number
   bornAt: number
+  /** Set when the first fish arrives; uneaten food fades after foodLifespanMs. */
+  decayAt: number | null
 }
 
 const MAX_FORCE = 1.4
@@ -73,21 +78,26 @@ export function createBoids(cfg: KoiConfig): Boid[] {
       wanderAngle: heading,
       size: 0.85 + Math.random() * 0.4,
       colorIndex: i % cfg.koiColors.length,
+      foodLock: null,
     })
   }
   return boids
 }
 
-/** Pick the most "attractive" active food: nearest, scaled by remaining amount. */
+function foodById(food: FoodPoint[], id: number | null): FoodPoint | null {
+  if (id === null) return null
+  return food.find((f) => f.id === id && f.amount > 0.02) ?? null
+}
+
+/** Pick the nearest active pile (used only when a fish has no lock). */
 function bestFood(boid: Boid, food: FoodPoint[]): FoodPoint | null {
   let best: FoodPoint | null = null
-  let bestScore = -Infinity
+  let bestDist = Infinity
   for (const f of food) {
-    if (f.amount <= 0) continue
-    const dist = boid.pos.distanceTo(f.pos) + 0.001
-    const score = f.amount / dist
-    if (score > bestScore) {
-      bestScore = score
+    if (f.amount <= 0.02) continue
+    const dist = boid.pos.distanceTo(f.pos)
+    if (dist < bestDist) {
+      bestDist = dist
       best = f
     }
   }
@@ -100,6 +110,7 @@ export function stepBoids(
   food: FoodPoint[],
   dt: number,
   cfg: KoiConfig,
+  now: number,
 ) {
   const { weights: w, radii: r } = cfg
 
@@ -151,18 +162,27 @@ export function stepBoids(
       bnd.copy(center).multiplyScalar((e - 0.82) / 0.18)
     }
 
-    // Seek + arrival toward food (the "fed" drive).
+    // Seek + arrival toward food. Each fish locks onto one pile until it is gone —
+    // a new click elsewhere does not steal fish mid-meal.
     seek.set(0, 0, 0)
-    const target = bestFood(b, food)
+    let target = foodById(food, b.foodLock)
+    if (!target) {
+      target = bestFood(b, food)
+      b.foodLock = target?.id ?? null
+    }
     const fed = target !== null
     if (target) {
       diff.copy(target.pos).sub(b.pos)
       diff.y = 0
       const d = diff.length()
+      if (d < r.arrive && target.decayAt === null) {
+        target.decayAt = now + cfg.foodLifespanMs
+      }
       diff.normalize()
-      // Arrival: ease the pull within arrive radius so they crowd, not overshoot.
       const arriveScale = d < r.arrive ? Math.max(d / r.arrive, 0.25) : 1
       seek.copy(diff).multiplyScalar(arriveScale)
+    } else {
+      b.foodLock = null
     }
 
     // Weighted blend. When fed, wander/cohesion relax so the school converges.

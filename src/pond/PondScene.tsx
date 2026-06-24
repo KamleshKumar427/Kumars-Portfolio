@@ -45,15 +45,15 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
   // Food pellet geometry + material as real objects passed via args — the same
   // pattern the (rendering) fish and ripples use. The undefined-args + JSX-child
   // form did not render reliably for this InstancedMesh.
-  const pelletGeo = useMemo(() => new THREE.SphereGeometry(1, 14, 12), [])
+  const pelletGeo = useMemo(() => new THREE.SphereGeometry(1, 10, 8), [])
   const pelletMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#ffd24a',
-        roughness: 0.4,
-        emissive: '#e8920f',
-        emissiveIntensity: 0.65,
-        toneMapped: false, // keep the food vivid against the teal water
+        color: '#b87838',
+        roughness: 0.78,
+        metalness: 0,
+        emissive: '#6b4518',
+        emissiveIntensity: 0.08,
       }),
     [],
   )
@@ -136,6 +136,7 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
 
   const boids = useMemo(() => createBoids(cfg), [cfg])
   const food = useRef<FoodPoint[]>([])
+  const foodId = useRef(0)
 
   const pellets = useMemo(() => {
     const n = cfg.limits.maxPellets
@@ -147,6 +148,7 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
       // mass: 1 when fresh, drains toward 0 only while a fish is nibbling it.
       mass: new Float32Array(n),
       landedAt: new Float32Array(n),
+      expireAt: new Float32Array(n),
       spawnAt: new Float32Array(n),
       next: 0,
     }
@@ -218,9 +220,11 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
     const now = performance.now()
     if (food.current.length >= cfg.limits.maxFoodPoints) food.current.shift()
     food.current.push({
+      id: ++foodId.current,
       pos: new THREE.Vector3(x, 0, z),
       amount: 1,
       bornAt: now,
+      decayAt: null,
     })
 
     const count = Math.min(cfg.pelletsPerClick, cfg.limits.maxPellets)
@@ -236,6 +240,7 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
       pellets.mass[idx] = 1
       pellets.spawnAt[idx] = now
       pellets.landedAt[idx] = 0
+      pellets.expireAt[idx] = 0
     }
     spawnRipple(x, z)
     onFeed?.()
@@ -249,19 +254,18 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
   // An attractor lives as long as edible pellet *mass* remains near it; its
   // pull weakens as the food is eaten. Proximity alone never depletes it.
   function syncFoodAttractors(now: number) {
-    const fl = cfg.foodLifespanMs
     food.current = food.current.filter((f) => {
       let massHere = 0
       for (let i = 0; i < cfg.limits.maxPellets; i++) {
         if (!pellets.active[i]) continue
-        // Horizontal (x/z) distance only — airborne pellets still falling above
-        // the food point must count, or the attractor is culled before they land.
         const dx = pellets.pos[i].x - f.pos.x
         const dz = pellets.pos[i].z - f.pos.z
         if (dx * dx + dz * dz < 0.7 * 0.7) massHere += pellets.mass[i]
       }
       f.amount = massHere
-      return massHere > 0.02 && now - f.bornAt <= fl
+      if (massHere <= 0.02) return false
+      if (f.decayAt !== null && now > f.decayAt) return false
+      return true
     })
   }
 
@@ -273,7 +277,20 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
 
     syncFoodAttractors(now)
 
-    stepBoids(boids, food.current, reduced ? dt * 0.5 : dt, cfg)
+    stepBoids(boids, food.current, reduced ? dt * 0.5 : dt, cfg, now)
+
+    // Once fish reach a pile, sync the fade deadline to its pellets too.
+    for (const f of food.current) {
+      if (f.decayAt === null) continue
+      for (let i = 0; i < cfg.limits.maxPellets; i++) {
+        if (!pellets.active[i] || !pellets.landed[i]) continue
+        const dx = pellets.pos[i].x - f.pos.x
+        const dz = pellets.pos[i].z - f.pos.z
+        if (dx * dx + dz * dz < 0.49 && pellets.expireAt[i] === 0) {
+          pellets.expireAt[i] = f.decayAt
+        }
+      }
+    }
 
     const fish = fishRef.current
     if (fish) {
@@ -293,7 +310,6 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
 
     const pm = pelletRef.current
     if (pm) {
-      const maxFloatMs = cfg.foodLifespanMs
       for (let i = 0; i < cfg.limits.maxPellets; i++) {
         if (!pellets.active[i]) {
           dummy.position.set(0, -100, 0)
@@ -324,6 +340,9 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
             if (boids[fi].pos.distanceTo(p) <= cfg.radii.eat) nibblers++
           }
           if (nibblers > 0) {
+            if (pellets.expireAt[i] === 0) {
+              pellets.expireAt[i] = now + cfg.foodLifespanMs
+            }
             pellets.mass[i] -= cfg.eatRatePerSec * (1 + 0.6 * (nibblers - 1)) * dt
             if (pellets.mass[i] <= 0) {
               pellets.mass[i] = 0
@@ -331,15 +350,15 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
               spawnRipple(p.x, p.z)
             }
           }
-          if (now - pellets.landedAt[i] > maxFloatMs) pellets.active[i] = 0
+          if (pellets.expireAt[i] > 0 && now > pellets.expireAt[i]) pellets.active[i] = 0
         }
 
-        // Visible shrink as it is eaten; full size while drifting unbothered.
-        const bite = pellets.landed[i] ? 0.35 + 0.65 * pellets.mass[i] : 1
-        const scale = (pellets.landed[i] ? cfg.pelletSize : cfg.pelletSize * 0.82) * bite
+        const bite = pellets.landed[i] ? 0.4 + 0.6 * pellets.mass[i] : 1
+        const base = pellets.landed[i] ? cfg.pelletSize : cfg.pelletSize * 0.75
+        const scale = base * bite
         dummy.position.copy(p)
-        dummy.rotation.set(0, 0, 0)
-        dummy.scale.setScalar(Math.max(scale, 0.0001))
+        dummy.rotation.set((i % 7) * 0.31, (i * 1.7) % (Math.PI * 2), (i % 5) * 0.22)
+        dummy.scale.set(Math.max(scale * 1.05, 0.0001), Math.max(scale * 0.72, 0.0001), Math.max(scale, 0.0001))
         dummy.updateMatrix()
         pm.setMatrixAt(i, dummy.matrix)
       }

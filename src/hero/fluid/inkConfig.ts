@@ -54,19 +54,19 @@ export const inkConfig = {
     refraction: 0.55, // how much ink bends light beneath the glass
   },
 
-  // — Per-theme water + glass tints —
+  // — Per-theme water + glass tints (washi paper / sumi ink moods) —
   tints: {
-    dark: { water: '#0c0f14', glass: '#cfe0ea' } as ThemeTint,
-    light: { water: '#eef1f5', glass: '#ffffff' } as ThemeTint,
+    dark: { water: '#0e1014', glass: '#cfdde4' } as ThemeTint,
+    light: { water: '#ece3d0', glass: '#fbf4e6' } as ThemeTint,
   },
 
-  // — The 5 selectable ink colors (site brand palette) —
+  // — The 5 selectable inks — traditional Japanese pigments —
   swatches: [
-    { id: 'brass', name: 'Brass', hex: '#c89b6a' },
-    { id: 'wire', name: 'Wire', hex: '#4a86e8' },
-    { id: 'live', name: 'Live', hex: '#e0664a' },
-    { id: 'graph', name: 'Graph', hex: '#4fae93' },
-    { id: 'ledger', name: 'Ledger', hex: '#aab3c0' },
+    { id: 'beni', name: 'Beni', hex: '#b23a2e' },
+    { id: 'sumi', name: 'Sumi', hex: '#3a3530' },
+    { id: 'ai', name: 'Ai', hex: '#2c4a60' },
+    { id: 'rokusho', name: 'Rokushō', hex: '#5e7b58' },
+    { id: 'kincha', name: 'Kincha', hex: '#a97b30' },
   ] as Swatch[],
 } as const
 
