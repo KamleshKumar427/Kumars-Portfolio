@@ -9,14 +9,25 @@ export function PathSection() {
         <div className="path-grid">
           <Reveal>
             <div className="section-kicker">道 — Education</div>
-            <h2 className="path-col-title">Education</h2>
+            <h2 className="path-col-title">Degrees &amp; recognition</h2>
             {education.map((edu) => (
               <div className="edu-item" key={edu.degree}>
                 <div className="edu-head">
                   <h3 className="edu-degree">{edu.degree}</h3>
                   <span className="edu-period">{edu.period}</span>
                 </div>
-                <div className="edu-school">{edu.school}</div>
+                <div className="edu-school">
+                  {edu.logo ? (
+                    <img
+                      className={`edu-logo ${edu.logoTheme === 'mono' ? 'edu-logo--mono' : ''}`}
+                      src={edu.logo}
+                      alt=""
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <span>{edu.school}</span>
+                  {edu.grade ? <span className="edu-grade">{edu.grade}</span> : null}
+                </div>
                 {edu.note ? <p className="edu-note">{edu.note}</p> : null}
               </div>
             ))}

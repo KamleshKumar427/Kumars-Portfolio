@@ -11,7 +11,7 @@ export function ContactSection() {
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="contact-title">
-            Let’s Build Great Products <em>  Together</em> .
+            Open to roles where <em>ownership</em> matters.
           </h2>
         </Reveal>
         <Reveal delay={0.1}>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { CvMenu } from './CvMenu'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -41,6 +42,9 @@ export function Header() {
                 {link.label}
               </a>
             ))}
+            <Link to="/startups" className="nav-link nav-link--accent" onClick={() => setOpen(false)}>
+              Startups ↗
+            </Link>
             <CvMenu />
           </nav>
 

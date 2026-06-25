@@ -11,7 +11,7 @@ export const skills: SkillGroup[] = [
   },
   {
     label: 'Frameworks',
-    items: ['React', 'Next.js', 'Node.js', 'Spring Boot', '.NET', 'FastAPI', 'Three.js'],
+    items: ['React', 'Next.js', 'Node.js', 'Spring Boot', 'FastAPI', 'Three.js'],
   },
   {
     label: 'Data · Cloud · DevOps',

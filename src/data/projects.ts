@@ -7,6 +7,8 @@ export type Project = {
   description: string
   tech: string[]
   github: string | null
+  /** Optional screenshots under public/images/projects/ */
+  images?: string[]
   /** rank within its category (1 = most important) */
   order: number
   category: ProjectCategory
@@ -21,6 +23,7 @@ export const projects: Project[] = [
       'A WebXR classroom on Meta Quest 2 with a fine-tuned LLaMA-2 7B model for live teacher interaction and student evaluation.',
     tech: ['WebXR', 'Three.js', 'Python', 'PyTorch', 'LLaMA-2 7B'],
     github: 'https://github.com/KamleshKumar427/AI-based-conversational-bot-in-Metaverse',
+    images: ['/images/projects/VR-metaverse1.png', '/images/projects/VR-metaverse2.png'],
     order: 1,
     category: 'AI',
     featureInAi: true,

@@ -42,8 +42,16 @@ function RowBody({ role }: { role: Experience }) {
 function WorkRow({ role }: { role: Experience }): ReactNode {
   if (role.href) {
     return (
-      <a className="work-row" href={role.href} target="_blank" rel="noopener noreferrer">
+      <a
+        className="work-row work-row--link"
+        href={role.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <RowBody role={role} />
+        <span className="work-row-arrow" aria-hidden="true">
+          ↗
+        </span>
       </a>
     )
   }
@@ -62,11 +70,11 @@ export function WorkSection() {
           <div className="section-head">
             <div>
               <div className="section-kicker">選 — Experience</div>
-              <h2 className="section-title">Experience in production</h2>
+              <h2 className="section-title">Owned in production</h2>
             </div>
             <p className="section-lead">
-              Three teams, three scales of consequence — a fintech gateway, a solo startup, and
-              open-source database internals.
+              Three places I was trusted to own the real thing — a payment gateway at scale, a
+              startup run as its only engineer, and open-source database internals. 
             </p>
           </div>
         </Reveal>

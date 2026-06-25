@@ -26,5 +26,7 @@ dist-ssr
 # Heavy source 3D asset originals — only the optimized public/pond/*.glb ship
 _assets-src/
 
-# Design handoff bundle (reference only — vendored libs, not app source)
+# Design handoff bundles (reference only — vendored libs, not app source)
 FirstPageDesignInspiration/
+startupPage/
+startupPage.zip

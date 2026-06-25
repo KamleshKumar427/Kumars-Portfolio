@@ -59,7 +59,13 @@ export type KoiConfig = {
     maxFoodPoints: number
   }
 
-  koiColors: string[]
+  /**
+   * Per-fish tints that multiply the GLB koi's gold livery. `hex` of '#ffffff'
+   * keeps a koi native gold; a darker hex repaints it (e.g. red). Multiply can
+   * only darken, so `gain` (>1) brightens the tint past the gold to reach pale
+   * colors like a white koi.
+   */
+  koiColors: { hex: string; gain?: number }[]
 
   palette: {
     deep: string
@@ -121,7 +127,16 @@ export const koiConfig: KoiConfig = {
     maxFoodPoints: 6,
   },
 
-  koiColors: ['#d4a574', '#f5f0e8', '#e8925a', '#9aa8b8', '#5b8fd4'],
+  // 5 fish → 2 gold, 2 red, 1 white. Ordered gold/red/white so even the 4-fish
+  // lite tier still shows all three colors. The white koi brightens past the
+  // gold livery (gain) since multiply alone can't lighten.
+  koiColors: [
+    { hex: '#ffffff' },
+    { hex: '#e8402c' },
+    { hex: '#ffffff', gain: 3.2 },
+    { hex: '#ffffff' },
+    { hex: '#e8402c' },
+  ],
 
   palette: {
     deep: '#1c6f7e', // deep teal-green, never black

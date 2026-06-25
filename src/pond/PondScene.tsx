@@ -180,10 +180,13 @@ export function PondScene({ cfg, reduced = false, onFeed }: Props) {
 
   useEffect(() => {
     const fish = fishRef.current
-    // Per-fish tints only for the procedural koi; the GLB carries its own livery.
-    if (fish && !cfg.useModels) {
+    // Per-fish tints. For the GLB these multiply its baked livery, so a white
+    // entry keeps a koi its native gold and a colored entry repaints it.
+    if (fish) {
       for (let i = 0; i < boids.length; i++) {
-        tmpColor.set(cfg.koiColors[boids[i].colorIndex % cfg.koiColors.length])
+        const tint = cfg.koiColors[boids[i].colorIndex % cfg.koiColors.length]
+        tmpColor.set(tint.hex)
+        if (tint.gain) tmpColor.multiplyScalar(tint.gain) // brighten past the gold livery
         fish.setColorAt(i, tmpColor)
       }
       if (fish.instanceColor) fish.instanceColor.needsUpdate = true

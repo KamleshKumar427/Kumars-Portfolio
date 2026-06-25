@@ -1,11 +1,11 @@
 export const profile = {
   name: 'Kamlesh Kumar',
   title: 'Full-Stack Software Engineer',
-  headline: 'Payment systems at scale, a solo-built startup, and database internals.',
+  headline: 'Hand me the part that has to work. I’ll own it end to end.',
   tagline:
-    'Sole engineer on a live recruitment platform (1,600+ users, 250+ companies) and full-stack engineer on a PCI DSS Level 1 payment gateway handling hundreds of millions of euros. MSc Computer Science at the University of Helsinki — grade 5/5.',
+    'Full-stack engineer on a PCI DSS Level 1 payment gateway, and the only engineer on a live recruitment platform (1,600+ users, 250+ companies). MSc Computer Science, University of Helsinki.',
   summary:
-    'Full-Stack Software Engineer and MSc Computer Science student at the University of Helsinki, with 2+ years building production systems end-to-end. Sole engineer on a live startup recruitment platform (1,600+ users, 250+ companies) and full-stack engineer on a PCI DSS Level 1 payment gateway handling hundreds of millions of euros. I tend toward problems where being wrong is expensive: payment routing, PCI-compliant APIs, and graph database internals.',
+    'Full-Stack Software Engineer and MSc Computer Science student at the University of Helsinki, with 2+ years owning production systems end to end. I take on the work most people would rather not touch — payment routing, PCI-compliant APIs, database internals — and I see it through: from a fintech gateway moving hundreds of millions of euros to a recruitment platform I ran as its only engineer.',
   location: 'Helsinki, Finland',
   email: 'kamlesh.kumar@helsinki.fi',
   phone: '+358 44 939 3428',

@@ -2,12 +2,57 @@ import { useState } from 'react'
 import { Reveal } from '../components/ui/Reveal'
 import { projectsByCategory, type Project, type ProjectCategory } from '../data/projects'
 
-function FeaturedCard({ project }: { project: Project }) {
-  const inner = (
-    <>
+function LabCardMedia({ project }: { project: Project }) {
+  const images = project.images
+
+  if (!images?.length) {
+    return (
       <div className="lab-card-media" aria-hidden="true">
         <span>{project.tech[0]} →</span>
       </div>
+    )
+  }
+
+  const alt = `${project.title} screenshot`
+
+  if (images.length === 1) {
+    return (
+      <div className="lab-card-media lab-card-media--photos">
+        <img className="lab-card-photo" src={images[0]} alt={alt} loading="lazy" />
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className="lab-card-media lab-card-media--slider"
+      aria-label={`${project.title} previews — hover to browse`}
+    >
+      {images.map((src, index) => (
+        <img
+          key={src}
+          className="lab-card-photo"
+          src={src}
+          alt={`${alt} ${index + 1} of ${images.length}`}
+          loading={index === 0 ? 'eager' : 'lazy'}
+        />
+      ))}
+      <div className="lab-card-slider-ui" aria-hidden="true">
+        <span className="lab-card-slider-hint">hover to browse</span>
+        <div className="lab-card-slider-dots">
+          {images.map((src, index) => (
+            <span key={src} className={`lab-card-slider-dot ${index === 0 ? 'is-active' : ''}`} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FeaturedCard({ project }: { project: Project }) {
+  const inner = (
+    <>
+      <LabCardMedia project={project} />
       <div className="lab-badges">
         <span className="lab-badge">Featured</span>
         <span className="lab-badge lab-badge--muted">
@@ -37,6 +82,7 @@ function FeaturedCard({ project }: { project: Project }) {
 function ProjectCard({ project }: { project: Project }) {
   const inner = (
     <>
+      {project.images?.length ? <LabCardMedia project={project} /> : null}
       <div className="lab-card-row">
         <h3 className="lab-card-title">{project.title}</h3>
         {project.github ? <span className="lab-card-arrow">↗</span> : null}
@@ -75,7 +121,8 @@ export function LabSection() {
               <h2 className="section-title">Studies &amp; experiments</h2>
             </div>
             <p className="section-lead">
-              Personal projects across machine learning, search, computer vision, and the metal.
+              Things I built because I wanted to understand them — machine learning, search, computer
+              vision, low-level systems. Nobody asked for these; I shipped them anyway.
             </p>
           </div>
         </Reveal>

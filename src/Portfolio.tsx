@@ -7,7 +7,7 @@ import { PathSection } from './sections/PathSection'
 import { ContactSection } from './sections/ContactSection'
 import { KoiPondSection } from './pond/KoiPondSection'
 
-/** Single-page sumi-e portfolio: hero → work → lab → pond → path → contact. */
+/** Single-page sumi-e portfolio: hero → work → pond → path → lab → contact. */
 export function Portfolio() {
   return (
     <>
@@ -15,8 +15,8 @@ export function Portfolio() {
       <main id="top">
         <Hero />
         <WorkSection />
-        <PathSection />
         <KoiPondSection />
+        <PathSection />
         <LabSection />
         <ContactSection />
       </main>

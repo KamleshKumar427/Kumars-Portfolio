@@ -139,7 +139,7 @@ export function KoiPondSection() {
         <div className="scene-titleblock">
           <span className="scene-eyebrow">鯉 — a moment at the pond</span>
           <h2 className="scene-title">
-            Feed the <em>koi</em>
+            Feed my <em>pets</em>, koi!
           </h2>
           <p className="scene-cue">
             <span className="scene-cue-dot" />

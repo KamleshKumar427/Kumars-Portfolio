@@ -37,7 +37,8 @@ export function Hero() {
           <h1 className="hero-name">
             Kamlesh <em>Kumar</em>
           </h1>
-          <p className="hero-role">AI Full-Stack Engineer</p>
+          <p className="hero-role">{profile.title}</p>
+          <p className="hero-tagline">{profile.headline}</p>
         </div>
 
         <div className="hero-bottom">
