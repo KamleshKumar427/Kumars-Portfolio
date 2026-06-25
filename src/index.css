@@ -1395,12 +1395,30 @@ a.lab-card:hover {
   letter-spacing: -0.01em;
   color: var(--ink);
 }
-.startup-hero-lead {
+.startup-hero-points {
+  list-style: none;
   margin: 20px 0 0;
-  font-size: clamp(0.96rem, 1.7vw, 1.12rem);
-  line-height: 1.6;
-  color: var(--ink2);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   max-width: 58ch;
+}
+.startup-hero-point {
+  display: flex;
+  gap: 12px;
+  font-size: clamp(0.96rem, 1.7vw, 1.12rem);
+  line-height: 1.55;
+  color: var(--ink2);
+}
+.startup-hero-point::before {
+  content: '◇';
+  color: var(--seal);
+  flex-shrink: 0;
+}
+.startup-hero-point strong {
+  color: var(--seal);
+  font-weight: 600;
 }
 .startup-hero-hint {
   display: flex;
@@ -1753,13 +1771,24 @@ button.img-slot {
   border-radius: 12px;
   box-shadow: 0 50px 130px -40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--line);
 }
-.lightbox-pdf {
-  width: min(940px, 92vw);
-  height: 84vh;
-  border: 0;
+/* frame matches the PDF page's aspect ratio → whole page fits, no scroll/reflow */
+.lightbox-pdf-wrap {
+  position: relative;
+  width: min(92vw, calc(86vh * var(--lb-aspect, 0.707)));
+  aspect-ratio: var(--lb-aspect, 0.707);
+  max-height: 86vh;
+  overflow: hidden;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0 50px 130px -40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--line);
+}
+.lightbox-pdf {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
 .lightbox-caption {
   font-family: var(--font-mono);

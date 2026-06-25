@@ -92,7 +92,26 @@ export function KoiPondSection() {
     fadeAndRelease()
   }, [fadeAndRelease])
 
-  // Lazy-mount the canvas as the section nears the viewport.
+  // Warm the pond chunk + GLB models during idle, well before the visitor
+  // scrolls down. Importing PondCanvas also runs its useGLTF.preload() calls,
+  // so the koi/lotus meshes are cached and the school is already swimming by
+  // the time the section comes into view — no blue "loading" gap.
+  useEffect(() => {
+    if (tier === 'none') return
+    const warm = () => {
+      void import('./PondCanvas')
+    }
+    const ric = window.requestIdleCallback
+    if (ric) {
+      const id = ric(warm, { timeout: 2500 })
+      return () => window.cancelIdleCallback?.(id)
+    }
+    const id = window.setTimeout(warm, 1200)
+    return () => window.clearTimeout(id)
+  }, [tier])
+
+  // Mount the canvas a full screen early so it has rendered its first animated
+  // frame (against the now-cached models) before it scrolls into view.
   useEffect(() => {
     const el = sectionRef.current
     if (!el) return
@@ -111,7 +130,7 @@ export function KoiPondSection() {
           }
         }
       },
-      { rootMargin: '200px' },
+      { rootMargin: '1200px 0px' },
     )
     io.observe(el)
     return () => io.disconnect()

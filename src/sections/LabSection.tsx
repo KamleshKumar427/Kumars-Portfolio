@@ -122,7 +122,7 @@ export function LabSection() {
             </div>
             <p className="section-lead">
               Things I built because I wanted to understand them — machine learning, search, computer
-              vision, low-level systems. Nobody asked for these; I shipped them anyway.
+              vision, low-level systems.
             </p>
           </div>
         </Reveal>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 
@@ -6,6 +6,9 @@ export type LightboxMedia = {
   src: string
   alt: string
   caption?: string
+  /** PDF page aspect ratio (width / height) so the frame matches it exactly — the
+   *  whole page fits with no scrolling, no letterbox, and no on-load re-flow. */
+  aspect?: number
 }
 
 function isPdf(src: string) {
@@ -56,11 +59,16 @@ export function Lightbox({ media, onClose }: { media: LightboxMedia | null; onCl
 
       <figure className="lightbox-figure" onClick={(e) => e.stopPropagation()}>
         {isPdf(media.src) ? (
-          <iframe
-            className="lightbox-pdf"
-            src={`${media.src.split('#')[0]}#toolbar=0&navpanes=0&view=FitH`}
-            title={media.alt}
-          />
+          <div
+            className="lightbox-pdf-wrap"
+            style={{ '--lb-aspect': media.aspect ?? 0.707 } as CSSProperties}
+          >
+            <iframe
+              className="lightbox-pdf"
+              src={`${media.src.split('#')[0]}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`}
+              title={media.alt}
+            />
+          </div>
         ) : (
           <img className="lightbox-img" src={media.src} alt={media.alt} />
         )}

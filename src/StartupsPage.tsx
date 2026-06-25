@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from './components/ThemeToggle'
 import { ImageSlot } from './components/ImageSlot'
@@ -99,6 +99,19 @@ const STARTUP_MEDIA = {
   slushFloor: '/images/startups/slush-floor.jpeg',
 } as const
 
+const STARTUP_HERO_POINTS: { key: string; content: ReactNode }[] = [
+  { key: 'xstryv', content: 'Sole engineer on a live recruitment platform' },
+  { key: 'pathways', content: 'Alum of Helsinki’s Pathways pre-incubator' },
+  {
+    key: 'slush',
+    content: (
+      <>
+        Volunteer at <strong>Slush</strong> — Europe’s largest startup event
+      </>
+    ),
+  },
+]
+
 export function StartupsPage() {
   const isDark = useIsDark()
   const reduced = useReducedMotion()
@@ -129,10 +142,13 @@ export function StartupsPage() {
             <div className="startup-hero-copy">
               <div className="section-kicker">起業 — Startups &amp; Ventures</div>
               <h1 className="startup-hero-title">The founder side of an engineer</h1>
-              <p className="startup-hero-lead">
-                Sole engineer on a live recruitment platform, an alum of Helsinki’s Pathways
-                pre-incubator, and a volunteer @SLUSH - Europe’s largest startup event.
-              </p>
+              <ul className="startup-hero-points">
+                {STARTUP_HERO_POINTS.map(({ key, content }) => (
+                  <li className="startup-hero-point" key={key}>
+                    {content}
+                  </li>
+                ))}
+              </ul>
               <div className="startup-hero-hint">
                 <span>drag the ink ↑</span>
                 <span className="startup-hero-rule" aria-hidden="true" />
@@ -278,7 +294,7 @@ export function StartupsPage() {
                     label="Pathways certificate"
                     fit="contain"
                     className="startup-fig-img startup-fig-img--cert"
-                    onExpand={(m) => setLightbox({ ...m, caption: 'Certificate of attendance' })}
+                    onExpand={(m) => setLightbox({ ...m, caption: 'Certificate of attendance', aspect: 842 / 595 })}
                   />
                   <figcaption>Certificate of attendance</figcaption>
                 </figure>
@@ -329,7 +345,7 @@ export function StartupsPage() {
                     label="Slush volunteer certificate"
                     fit="contain"
                     className="startup-fig-img startup-fig-img--cert"
-                    onExpand={(m) => setLightbox({ ...m, caption: 'Slush volunteer certificate' })}
+                    onExpand={(m) => setLightbox({ ...m, caption: 'Slush volunteer certificate', aspect: 596 / 843 })}
                   />
                   <figcaption>Slush volunteer certificate</figcaption>
                 </figure>

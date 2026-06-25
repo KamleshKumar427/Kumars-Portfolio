@@ -1,6 +1,6 @@
 export const profile = {
   name: 'Kamlesh Kumar',
-  title: 'Full-Stack Software Engineer',
+  title: 'AI Full-Stack Engineer',
   headline: 'Hand me the part that has to work. I’ll own it end to end.',
   tagline:
     'Full-stack engineer on a PCI DSS Level 1 payment gateway, and the only engineer on a live recruitment platform (1,600+ users, 250+ companies). MSc Computer Science, University of Helsinki.',

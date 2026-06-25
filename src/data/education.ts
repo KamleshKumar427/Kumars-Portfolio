@@ -18,7 +18,7 @@ export const education: Education[] = [
     period: 'Sep 2025 — May 2027',
     logo: '/images/education/helsinki.svg',
     logoTheme: 'mono',
-    grade: 'Grade 4.9 / 5',
+    grade: 'Grade 4.8 / 5',
     note: 'Courses: Machine learning, MLOps, Docker, Kubernetes (ongoing), distributed systems, and scalable architecture.',
   },
   {
