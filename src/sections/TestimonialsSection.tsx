@@ -35,18 +35,17 @@ function Avatar({ person }: { person: Testimonial }) {
 function Card({ person, ariaHidden }: { person: Testimonial; ariaHidden?: boolean }) {
   return (
     <figure className="tm-card" aria-hidden={ariaHidden || undefined}>
-      <span className="tm-quote-mark" aria-hidden="true">
-        &ldquo;
+      <span className="tm-glyph" aria-hidden="true">
+        &rdquo;
       </span>
-      <blockquote className="tm-quote">{person.quote}</blockquote>
-      <figcaption className="tm-person">
+      <header className="tm-head">
         <Avatar person={person} />
-        <div className="tm-person-meta">
+        <div className="tm-id">
           <div className="tm-name">{person.name}</div>
           <div className="tm-title">{person.title}</div>
-          {person.relationship && <div className="tm-rel">{person.relationship}</div>}
         </div>
-      </figcaption>
+      </header>
+      <blockquote className="tm-quote">{person.quote}</blockquote>
     </figure>
   )
 }
