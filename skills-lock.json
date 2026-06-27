@@ -31,6 +31,12 @@
       "skillPath": ".agent/skills/implement_lenis_scroll/SKILL.md",
       "computedHash": "595d911a46b2953b97ad2d77bf3bd59b335a5a728355a8ef1091f3615c08c0db"
     },
+    "linkedin-posts": {
+      "source": "kostja94/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/platforms/linkedin/SKILL.md",
+      "computedHash": "d487f95483268a7571e4a1a3be63a888388277863ad95def651ed33ee53b2dbd"
+    },
     "shadcn": {
       "source": "shadcn/ui",
       "sourceType": "github",
