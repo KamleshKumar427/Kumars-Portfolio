@@ -1,7 +1,26 @@
 {
-  "name": "portfolio-kkumar",
-  "private": true,
-  "version": "0.0.0",
+  "name": "meniscus-portfolio",
+  "description": "Open-source developer portfolio — React, TypeScript, Vite, WebGL. MIT licensed.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Kamlesh Kumar <kamlesh.kumar@helsinki.fi> (https://kamleshkumar.eu)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KamleshKumar427/Kumars-Portfolio.git"
+  },
+  "homepage": "https://kamleshkumar.eu",
+  "bugs": {
+    "url": "https://github.com/KamleshKumar427/Kumars-Portfolio/issues"
+  },
+  "keywords": [
+    "portfolio",
+    "react",
+    "typescript",
+    "vite",
+    "threejs",
+    "github-pages",
+    "open-source"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
