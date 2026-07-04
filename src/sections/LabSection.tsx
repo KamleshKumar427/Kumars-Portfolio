@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { Reveal } from '../components/ui/Reveal'
 import { projectsByCategory, type Project, type ProjectCategory } from '../data/projects'
+import { writings, type Writing } from '../data/writings'
+import { Lightbox, type LightboxMedia } from '../components/Lightbox'
+
+type LabTab = ProjectCategory | 'WRITING'
 
 function LabCardMedia({ project }: { project: Project }) {
   const images = project.images
@@ -106,9 +110,56 @@ function ProjectCard({ project }: { project: Project }) {
   )
 }
 
+function WritingCard({
+  writing,
+  onOpen,
+}: {
+  writing: Writing
+  onOpen: (media: LightboxMedia) => void
+}) {
+  return (
+    <button
+      type="button"
+      className="writing-card"
+      aria-label={`View “${writing.title}” full screen`}
+      onClick={() =>
+        onOpen({ src: writing.pdf, alt: writing.title, caption: writing.meta, aspect: writing.aspect })
+      }
+    >
+      <span className="writing-card-preview">
+        <iframe
+          className="writing-card-pdf"
+          src={`${writing.pdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+          title={writing.title}
+          loading="lazy"
+          tabIndex={-1}
+        />
+        <span className="writing-card-cue" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      </span>
+      <span className="writing-card-body">
+        <span className="writing-card-meta">{writing.meta}</span>
+        <span className="writing-card-title">{writing.title}</span>
+        <span className="writing-card-desc">{writing.description}</span>
+        <span className="writing-card-action">Read paper →</span>
+      </span>
+    </button>
+  )
+}
+
 export function LabSection() {
-  const [category, setCategory] = useState<ProjectCategory>('AI')
-  const list = projectsByCategory(category)
+  const [tab, setTab] = useState<LabTab>('AI')
+  const [lightbox, setLightbox] = useState<LightboxMedia | null>(null)
+  const list = tab === 'WRITING' ? [] : projectsByCategory(tab)
   const [featured, ...rest] = list
 
   return (
@@ -118,7 +169,7 @@ export function LabSection() {
           <div className="section-head">
             <div>
               <div className="section-kicker">研 — The Lab</div>
-              <h2 className="section-title">Studies &amp; experiments</h2>
+              <h2 className="section-title">Personal projects</h2>
             </div>
             <p className="section-lead">
               Things I built because I wanted to understand them — machine learning, search, computer
@@ -129,30 +180,42 @@ export function LabSection() {
 
         <Reveal>
           <div className="lab-toggle" role="tablist" aria-label="Project category">
-            {(['AI', 'GENERAL'] as ProjectCategory[]).map((cat) => (
+            {(['AI', 'GENERAL', 'WRITING'] as LabTab[]).map((t) => (
               <button
-                key={cat}
+                key={t}
                 type="button"
                 role="tab"
-                aria-selected={category === cat}
-                className={`lab-toggle-btn ${category === cat ? 'is-active' : ''}`}
-                onClick={() => setCategory(cat)}
+                aria-selected={tab === t}
+                className={`lab-toggle-btn ${tab === t ? 'is-active' : ''}`}
+                onClick={() => setTab(t)}
               >
-                {cat === 'AI' ? 'AI · 機械' : 'General · 一般'}
+                {t === 'AI' ? 'AI · 機械' : t === 'GENERAL' ? 'Software · ソフト' : 'Writing · 論文'}
               </button>
             ))}
           </div>
         </Reveal>
 
-        <Reveal>
-          <div className="lab-grid" style={{ marginTop: 'clamp(28px, 4vw, 44px)' }}>
-            {featured ? <FeaturedCard project={featured} /> : null}
-            {rest.map((project) => (
-              <ProjectCard key={project.title} project={project} />
-            ))}
-          </div>
-        </Reveal>
+        {tab === 'WRITING' ? (
+          <Reveal>
+            <div className="writing-grid" style={{ marginTop: 'clamp(28px, 4vw, 44px)' }}>
+              {writings.map((writing) => (
+                <WritingCard key={writing.pdf} writing={writing} onOpen={setLightbox} />
+              ))}
+            </div>
+          </Reveal>
+        ) : (
+          <Reveal>
+            <div className="lab-grid" style={{ marginTop: 'clamp(28px, 4vw, 44px)' }}>
+              {featured ? <FeaturedCard project={featured} /> : null}
+              {rest.map((project) => (
+                <ProjectCard key={project.title} project={project} />
+              ))}
+            </div>
+          </Reveal>
+        )}
       </div>
+
+      <Lightbox media={lightbox} onClose={() => setLightbox(null)} />
     </section>
   )
 }

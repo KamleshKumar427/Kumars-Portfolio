@@ -1,31 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=DM+Mono:wght@300;400;500&display=swap');
 @import 'tailwindcss';
 
 /* ════════════════════════════════════════════════════════════════
    SUMI-E PORTFOLIO — Japanese ink-wash design system.
-   Light = "washi" (warm paper). Dark = "sumi" (warm charcoal).
+   Light = "washi" (warm paper). Dark = "sumi" (cool ink charcoal).
+   Type: Fraunces (editorial serif) · Zen Kaku Gothic (JP sans) · DM Mono.
    ════════════════════════════════════════════════════════════════ */
 
 :root,
 [data-theme='light'] {
   color-scheme: light;
 
-  --paper: #f0e8d7; /* page */
-  --paper-2: #ece2cf; /* alternating section */
-  --paper-3: #ece3d0; /* hero / soft panels */
-  --card: #f4eddd; /* raised cards */
-  --ink: #1d1a16; /* primary text */
-  --ink2: #5e564a; /* secondary text */
-  --line: #d9cfb9; /* hairline */
+  --paper: #f4efe4; /* washi — soft warm white (airier, less yellow) */
+  --paper-2: #ebe4d5; /* alternating section — clearer step for rhythm */
+  --paper-3: #f1ebdf; /* hero / soft panels */
+  --card: #fcf9f2; /* raised cards — brighter lift */
+  --ink: #201c16; /* primary text */
+  --ink2: #625849; /* secondary text */
+  --line: #e1d9c8; /* hairline */
   --seal: #b23a2e; /* vermilion accent */
-  --seal-ink: #f4efe4; /* text on the seal */
-  --hover: rgba(247, 242, 231, 0.55);
-  --nav-bg: rgba(240, 232, 215, 0.82);
-  --media: repeating-linear-gradient(135deg, #e7dcc4 0 14px, #e1d4b8 14px 28px);
+  --seal-ink: #f6f2e9; /* text on the seal */
+  --hover: rgba(255, 253, 246, 0.6);
+  --nav-bg: rgba(244, 239, 228, 0.82);
+  --media: repeating-linear-gradient(135deg, #e9e0cd 0 14px, #e2d7c0 14px 28px);
 
-  --font-serif: 'Shippori Mincho', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Fraunces', 'Zen Kaku Gothic New', Georgia, serif;
   --font-sans: 'Zen Kaku Gothic New', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --font-mono: 'DM Mono', 'Zen Kaku Gothic New', ui-monospace, 'SFMono-Regular', monospace;
 
   --maxw: 1180px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -34,36 +35,36 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --paper: #14110c;
-  --paper-2: #19150f;
-  --paper-3: #100d09;
-  --card: #1d1810;
-  --ink: #ece3d0;
-  --ink2: #a89a82;
-  --line: rgba(236, 227, 208, 0.13);
-  --seal: #d4533f;
-  --seal-ink: #140f0c;
-  --hover: rgba(236, 227, 208, 0.05);
-  --nav-bg: rgba(20, 17, 12, 0.78);
-  --media: repeating-linear-gradient(135deg, #221c13 0 14px, #2a2218 14px 28px);
+  --paper: #141519; /* sumi charcoal — cool-neutral, no brown */
+  --paper-2: #1b1c20; /* alternating section (lifted) */
+  --paper-3: #0f1013; /* hero / recessed cards */
+  --card: #1d1e23; /* raised cards */
+  --ink: #ecebe6; /* primary text — soft off-white */
+  --ink2: #9b9ca3; /* secondary text — neutral grey (was tan) */
+  --line: rgba(235, 236, 240, 0.12);
+  --seal: #e2573f; /* vermilion — a touch brighter to pop on cool ground */
+  --seal-ink: #0f1013;
+  --hover: rgba(235, 236, 240, 0.05);
+  --nav-bg: rgba(20, 21, 25, 0.78);
+  --media: repeating-linear-gradient(135deg, #1f2126 0 14px, #262830 14px 28px);
 }
 
 /* honour the OS once before JS sets data-theme (avoids flash) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
-    --paper: #14110c;
-    --paper-2: #19150f;
-    --paper-3: #100d09;
-    --card: #1d1810;
-    --ink: #ece3d0;
-    --ink2: #a89a82;
-    --line: rgba(236, 227, 208, 0.13);
-    --seal: #d4533f;
-    --seal-ink: #140f0c;
-    --hover: rgba(236, 227, 208, 0.05);
-    --nav-bg: rgba(20, 17, 12, 0.78);
-    --media: repeating-linear-gradient(135deg, #221c13 0 14px, #2a2218 14px 28px);
+    --paper: #141519;
+    --paper-2: #1b1c20;
+    --paper-3: #0f1013;
+    --card: #1d1e23;
+    --ink: #ecebe6;
+    --ink2: #9b9ca3;
+    --line: rgba(235, 236, 240, 0.12);
+    --seal: #e2573f;
+    --seal-ink: #0f1013;
+    --hover: rgba(235, 236, 240, 0.05);
+    --nav-bg: rgba(20, 21, 25, 0.78);
+    --media: repeating-linear-gradient(135deg, #1f2126 0 14px, #262830 14px 28px);
   }
 }
 
@@ -446,6 +447,44 @@ html.lenis body {
   z-index: 0;
   cursor: crosshair;
   touch-action: none;
+}
+
+/* ── Ink-dab cursor (hero only, fine pointers) ──────────────────── */
+.ink-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 8;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.28s var(--ease), width 0.16s var(--ease),
+    height 0.16s var(--ease);
+  background: radial-gradient(
+    circle at 50% 44%,
+    color-mix(in srgb, var(--ink) 92%, transparent) 0%,
+    color-mix(in srgb, var(--ink) 80%, transparent) 38%,
+    color-mix(in srgb, var(--ink) 34%, transparent) 64%,
+    transparent 76%
+  );
+  box-shadow: 0 0 9px 0 color-mix(in srgb, var(--ink) 22%, transparent);
+}
+.ink-cursor.is-visible {
+  opacity: 0.92;
+}
+.ink-cursor.is-pressed {
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+}
+/* hide the native cursor across the hero only while the ink cursor is active */
+.hero.ink-cursor-on,
+.hero.ink-cursor-on *,
+.hero.ink-cursor-on .hero-fluid {
+  cursor: none;
 }
 .hero-fluid-canvas {
   display: block;
@@ -1200,6 +1239,119 @@ a.lab-card:hover {
 }
 .lab-card .tags {
   margin-top: auto;
+}
+
+/* ── Academic writing cards (Lab › Writing tab) ─────────────────── */
+.writing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 32px);
+}
+.writing-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+  background: var(--paper-3);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  color: inherit;
+  font: inherit;
+  transition: box-shadow 0.35s var(--ease), border-color 0.35s var(--ease),
+    transform 0.35s var(--ease);
+}
+.writing-card:hover {
+  border-color: color-mix(in srgb, var(--seal) 45%, var(--line));
+  box-shadow: 0 24px 50px -30px rgba(20, 15, 10, 0.55);
+  transform: translateY(-4px);
+}
+.writing-card:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 2px;
+}
+/* PDF page peek — shows the top of the paper like a real cover. */
+.writing-card-preview {
+  position: relative;
+  display: block;
+  height: clamp(230px, 26vw, 300px);
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+.writing-card-pdf {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* let the card button receive the click, not the iframe */
+  pointer-events: none;
+}
+.writing-card-cue {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--seal-ink);
+  background: color-mix(in srgb, var(--seal) 88%, transparent);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.writing-card:hover .writing-card-cue,
+.writing-card:focus-visible .writing-card-cue {
+  opacity: 1;
+  transform: none;
+}
+.writing-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: clamp(20px, 2vw, 28px);
+}
+.writing-card-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--seal);
+  margin-bottom: 10px;
+}
+.writing-card-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.12rem;
+  line-height: 1.28;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.writing-card-desc {
+  font-size: 0.92rem;
+  line-height: 1.62;
+  color: var(--ink2);
+}
+.writing-card-action {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--seal);
+  opacity: 0.85;
+  transition: transform 0.25s var(--ease);
+}
+.writing-card:hover .writing-card-action {
+  transform: translateX(3px);
+}
+@media (max-width: 680px) {
+  .writing-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -1963,6 +2115,45 @@ button.img-slot {
   transform: rotate(90deg);
   border-color: var(--seal);
   color: var(--seal);
+}
+.lightbox-download {
+  position: fixed;
+  top: clamp(14px, 2.4vw, 26px);
+  right: calc(clamp(14px, 2.4vw, 26px) + 58px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 18px;
+  border-radius: 23px;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  backdrop-filter: blur(10px) saturate(1.3);
+  -webkit-backdrop-filter: blur(10px) saturate(1.3);
+  z-index: 101;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.lightbox-download:hover {
+  border-color: var(--seal);
+  color: var(--seal);
+}
+.lightbox-download span {
+  line-height: 1;
+}
+@media (max-width: 560px) {
+  .lightbox-download span {
+    display: none;
+  }
+  .lightbox-download {
+    padding: 0;
+    width: 46px;
+    justify-content: center;
+  }
 }
 @keyframes lb-backdrop {
   from {

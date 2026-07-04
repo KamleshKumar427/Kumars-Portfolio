@@ -5,8 +5,8 @@ const STORAGE_KEY = 'theme'
 export function getStoredTheme(): ThemePreference {
   const stored = localStorage.getItem(STORAGE_KEY)
   if (stored === 'light' || stored === 'dark') return stored
-  // First visit or legacy "system" — honour OS once, no system toggle in UI.
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  // First visit: default to light (ignore OS preference); user can toggle.
+  return 'light'
 }
 
 export function applyTheme(preference: ThemePreference) {

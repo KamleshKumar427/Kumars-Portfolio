@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 import { profile } from '../data/profile'
 import { inkConfig } from '../hero/fluid/inkConfig'
+import { InkCursor } from '../hero/InkCursor'
 import { useIsDark } from '../hooks/useIsDark'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
@@ -16,6 +17,7 @@ export function Hero() {
 
   return (
     <section id="hero" className="hero">
+      {!reduced && <InkCursor />}
       {reduced ? (
         <div className="hero-fluid is-fallback" aria-hidden="true" />
       ) : (

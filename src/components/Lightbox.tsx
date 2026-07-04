@@ -51,6 +51,27 @@ export function Lightbox({ media, onClose }: { media: LightboxMedia | null; onCl
       aria-label={media.alt}
       onClick={onClose}
     >
+      {isPdf(media.src) ? (
+        <a
+          className="lightbox-download"
+          href={media.src.split('#')[0]}
+          download
+          onClick={(e) => e.stopPropagation()}
+          aria-label="Download PDF"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span>Download</span>
+        </a>
+      ) : null}
+
       <button type="button" className="lightbox-close" onClick={onClose} aria-label="Close">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
