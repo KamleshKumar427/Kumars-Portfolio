@@ -8,6 +8,7 @@ import { SiteFooter } from './components/SiteFooter'
 import { inkConfig } from './hero/fluid/inkConfig'
 import { useIsDark } from './hooks/useIsDark'
 import { useReducedMotion } from './hooks/useReducedMotion'
+import { useSeo } from './hooks/useSeo'
 import { profile } from './data/profile'
 
 const HeroFluid = lazy(() =>
@@ -113,6 +114,12 @@ const STARTUP_HERO_POINTS: { key: string; content: ReactNode }[] = [
 ]
 
 export function StartupsPage() {
+  useSeo({
+    title: 'Startups — Kamlesh Kumar · Founder-Minded Engineer',
+    description:
+      'The founder side of Kamlesh Kumar: sole engineer on XSTRYV, a live recruitment platform (1,600+ users, 250+ companies), alum of Helsinki’s Pathways pre-incubator, and Slush volunteer.',
+    canonical: 'https://kamleshkumar.eu/startups',
+  })
   const isDark = useIsDark()
   const reduced = useReducedMotion()
   const [activeId, setActiveId] = useState(inkConfig.swatches[0].id)

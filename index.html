@@ -4,12 +4,113 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ═══ Primary SEO ═══ -->
+    <title>Kamlesh Kumar — AI Full-Stack Engineer · Helsinki</title>
     <meta
       name="description"
-      content="Kamlesh Kumar — full-stack engineer who owns what he ships: PCI DSS payment systems, a recruitment platform run as its only engineer, and database internals. MSc Computer Science, University of Helsinki. Open to roles where ownership matters."
+      content="Kamlesh Kumar is an AI full-stack engineer in Helsinki, Finland — PCI DSS payment systems, a recruitment platform run as its only engineer, and open-source database internals. MSc Computer Science, University of Helsinki. Open to roles where ownership matters."
     />
+    <link rel="canonical" href="https://kamleshkumar.eu/" />
+    <meta name="author" content="Kamlesh Kumar" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#e8e6e2" />
-    <title>AI Full-Stack Engineer</title>
+
+    <!-- ═══ Open Graph (LinkedIn, Facebook, WhatsApp…) ═══ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kamlesh Kumar" />
+    <meta property="og:title" content="Kamlesh Kumar — AI Full-Stack Engineer" />
+    <meta
+      property="og:description"
+      content="Hand me the part that has to work. I'll own it end to end. PCI DSS payment systems, startup engineering, database internals — MSc CS, University of Helsinki."
+    />
+    <meta property="og:url" content="https://kamleshkumar.eu/" />
+    <meta property="og:image" content="https://kamleshkumar.eu/images/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Kamlesh Kumar — AI Full-Stack Engineer, Helsinki" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ═══ Twitter / X card ═══ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Kamlesh Kumar — AI Full-Stack Engineer" />
+    <meta
+      name="twitter:description"
+      content="Hand me the part that has to work. I'll own it end to end. PCI DSS payment systems, startup engineering, database internals."
+    />
+    <meta name="twitter:image" content="https://kamleshkumar.eu/images/og-card.png" />
+
+    <!-- ═══ Structured data — tells Google who this site is about ═══ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://kamleshkumar.eu/#person",
+            "name": "Kamlesh Kumar",
+            "url": "https://kamleshkumar.eu/",
+            "image": "https://kamleshkumar.eu/images/og-card.png",
+            "jobTitle": "AI Full-Stack Engineer",
+            "description": "Full-stack software engineer owning production systems end to end — payment gateways, startup platforms, and database internals.",
+            "email": "mailto:kamlesh.kumar@helsinki.fi",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Helsinki",
+              "addressCountry": "FI"
+            },
+            "alumniOf": [
+              {
+                "@type": "CollegeOrUniversity",
+                "name": "University of Helsinki",
+                "sameAs": "https://www.helsinki.fi/en"
+              },
+              {
+                "@type": "CollegeOrUniversity",
+                "name": "National University of Sciences and Technology (NUST)",
+                "sameAs": "https://nust.edu.pk/"
+              }
+            ],
+            "knowsAbout": [
+              "Full-Stack Development",
+              "AI Engineering",
+              "LLM Agents",
+              "Payment Systems",
+              "PCI DSS",
+              "React",
+              "TypeScript",
+              "Java",
+              "PostgreSQL",
+              "Machine Learning",
+              "WebGL",
+              "Three.js"
+            ],
+            "sameAs": [
+              "https://linkedin.com/in/kamlesh-kumar-389847224",
+              "https://github.com/KamleshKumar427",
+              "https://stackoverflow.com/users/15808441/kamlesh-kumar"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://kamleshkumar.eu/#website",
+            "url": "https://kamleshkumar.eu/",
+            "name": "Kamlesh Kumar — Portfolio",
+            "publisher": { "@id": "https://kamleshkumar.eu/#person" },
+            "inLanguage": "en"
+          }
+        ]
+      }
+    </script>
+
+    <!-- ═══ Fonts: preconnect + async-friendly load (was a render-blocking CSS @import) ═══ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=DM+Mono:wght@300;400;500&display=swap"
+    />
+
     <script>
       ;(function () {
         var stored = localStorage.getItem('theme')
@@ -21,6 +122,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Static fallback for crawlers/browsers without JavaScript -->
+    <noscript>
+      <h1>Kamlesh Kumar — AI Full-Stack Engineer</h1>
+      <p>
+        Full-stack engineer in Helsinki, Finland. PCI DSS Level 1 payment gateway, a live
+        recruitment platform run as its only engineer (1,600+ users), and open-source database
+        internals. MSc Computer Science, University of Helsinki.
+      </p>
+      <p>
+        <a href="https://linkedin.com/in/kamlesh-kumar-389847224">LinkedIn</a> ·
+        <a href="https://github.com/KamleshKumar427">GitHub</a> ·
+        <a href="mailto:kamlesh.kumar@helsinki.fi">kamlesh.kumar@helsinki.fi</a>
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
