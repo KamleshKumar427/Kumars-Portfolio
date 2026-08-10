@@ -25,7 +25,7 @@ export const experience: Experience[] = [
       'Sole engineer on a live recruitment platform connecting talent with companies — admin, company, and talent panels, serving 1,600+ users and 250+ companies. Landed 50+ commits in three months — shipped features, fixed production bugs, and ran deployments via GitHub Actions while acting as a core team member on product decisions.',
     points: [
       'Built LinkedIn-style messaging with CRON jobs that send one summary email after a conversation goes quiet.',
-      'Built self-serve hiring — shortlist, reject, accept, data export, bulk messaging, and announcements.',
+      'Built self-serve hiring — filterable candidate tables, shortlist/reject/accept actions, data export, bulk messaging, and announcements.',
       'Traced and fixed a race condition between two signup paths that mismatched user IDs across Supabase auth and application schemas.',
     ],
     tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Supabase', 'GitHub Actions'],
