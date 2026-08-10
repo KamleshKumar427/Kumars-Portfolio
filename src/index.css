@@ -447,7 +447,8 @@ html.lenis body {
   inset: 0;
   z-index: 0;
   cursor: crosshair;
-  touch-action: none;
+  /* Let vertical swipes scroll the page; horizontal drags/taps still reach JS for ink splats. */
+  touch-action: pan-y;
 }
 
 /* ── Ink-dab cursor (hero only, fine pointers) ──────────────────── */
@@ -1549,7 +1550,8 @@ a.lab-card:hover {
   background: radial-gradient(ellipse 70% 60% at 50% 42%, #7fcdd8, transparent 70%),
     linear-gradient(180deg, #cfe9ea 0%, #3aa6b6 55%, #1c6f7e 100%);
   cursor: crosshair;
-  touch-action: none;
+  /* Let vertical swipes scroll the page; taps still reach JS to feed the koi. */
+  touch-action: pan-y;
 }
 .koi-canvas {
   display: block;
