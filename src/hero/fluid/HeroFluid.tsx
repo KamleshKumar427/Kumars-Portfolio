@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { FluidSim } from './FluidSim'
+import type { FluidSim } from './FluidSim'
+import { getSharedFluid } from './sharedFluid'
 
 type HeroFluidProps = {
   /** sRGB hex of the currently selected ink */
@@ -8,9 +9,13 @@ type HeroFluidProps = {
   isDark: boolean
 }
 
+/**
+ * Mounts the visit-wide fluid (see sharedFluid) into this hero. The simulation
+ * and its canvas outlive the component: leaving a page detaches them, the next
+ * hero re-attaches them, so painted ink carries across routes.
+ */
 export function HeroFluid({ color, isDark }: HeroFluidProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
   const simRef = useRef<FluidSim | null>(null)
   const colorRef = useRef(color)
   const isDarkRef = useRef(isDark)
@@ -29,26 +34,20 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
 
   useEffect(() => {
     const container = containerRef.current
-    const canvas = canvasRef.current
-    if (!container || !canvas) return
+    if (!container) return
 
-    let sim: FluidSim
-    try {
-      sim = new FluidSim(canvas)
-    } catch {
+    const shared = getSharedFluid()
+    const { sim, canvas } = shared
+    if (!sim) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- WebGL capability probe
       setUnsupported(true)
-      return
-    }
-    if (!sim.isSupported) {
-      setUnsupported(true)
-      sim.dispose()
       return
     }
 
     simRef.current = sim
     sim.setColor(colorRef.current)
     sim.setTheme(isDarkRef.current)
+    container.appendChild(canvas)
 
     const sizeToContainer = () => {
       const rect = container.getBoundingClientRect()
@@ -104,39 +103,39 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
     container.addEventListener('pointerdown', onPointerDown)
     container.addEventListener('pointerleave', onPointerLeave)
 
-    // Seed a couple of soft blooms so the surface isn't empty on load.
-    sim.setColor(colorRef.current)
-    sim.addSplat(0.35, 0.55, 0.0, 0.002)
-    sim.addSplat(0.62, 0.42, -0.002, 0.0)
+    // Seed a couple of soft blooms so the surface isn't empty — once per visit,
+    // not every time you move between pages.
+    if (!shared.seeded) {
+      shared.seeded = true
+      sim.addSplat(0.35, 0.55, 0.0, 0.002)
+      sim.addSplat(0.62, 0.42, -0.002, 0.0)
+    }
 
-    // ── Render loop with offscreen pause ──
+    // ── Render loop on the wall clock ──
+    // The loop pauses while the hero is off-screen. The time it missed is
+    // applied as a single fade when it resumes (the clock is shared across
+    // pages), so ink fades with real time and never freezes.
     let raf = 0
-    let last = performance.now()
     let visible = true
+
+    const loop = (now: number) => {
+      const elapsed = shared.clock === null ? 0 : Math.max(0, (now - shared.clock) / 1000)
+      shared.clock = now
+      const dt = Math.min(elapsed, 1 / 60)
+      if (elapsed - dt > 0.1) sim.fade(elapsed - dt)
+      sim.step(dt)
+      sim.render()
+      raf = visible ? requestAnimationFrame(loop) : 0
+    }
 
     const io = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting
-        if (visible && !raf) {
-          last = performance.now()
-          raf = requestAnimationFrame(loop)
-        }
+        if (visible && !raf) raf = requestAnimationFrame(loop)
       },
       { threshold: 0 },
     )
     io.observe(container)
-
-    const loop = (now: number) => {
-      const dt = (now - last) / 1000
-      last = now
-      sim.step(dt)
-      sim.render()
-      if (visible) {
-        raf = requestAnimationFrame(loop)
-      } else {
-        raf = 0
-      }
-    }
     raf = requestAnimationFrame(loop)
 
     return () => {
@@ -146,14 +145,12 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
       container.removeEventListener('pointermove', onPointerMove)
       container.removeEventListener('pointerdown', onPointerDown)
       container.removeEventListener('pointerleave', onPointerLeave)
-      sim.dispose()
+      // Leave the canvas where it is: the next hero's appendChild moves it over.
+      // Detaching here would leave a frame with no canvas on screen, which reads
+      // as a blink during a route change. Never disposed — the fluid outlives us.
       simRef.current = null
     }
   }, [])
 
-  return (
-    <div ref={containerRef} className={`hero-fluid ${unsupported ? 'is-fallback' : ''}`}>
-      <canvas ref={canvasRef} className="hero-fluid-canvas" aria-hidden="true" />
-    </div>
-  )
+  return <div ref={containerRef} className={`hero-fluid ${unsupported ? 'is-fallback' : ''}`} />
 }

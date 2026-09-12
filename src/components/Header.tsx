@@ -6,7 +6,7 @@ import { ThemeToggle } from './ThemeToggle'
 const LINKS = [
   { href: '#experience', label: 'Experience' },
   { href: '#education', label: 'Education' },
-  { href: '#lab', label: 'Lab' },
+  { href: '#lab', label: 'Projects' },
   { href: '#testimonials', label: 'Testimonials' },
   { href: '#contact', label: 'Contact' },
 ]
@@ -25,14 +25,12 @@ export function Header() {
   return (
     <header className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="nav-inner">
-        <a className="nav-brand" href="#top" aria-label="Kamlesh Kumar — top" onClick={() => setOpen(false)}>
+        {/* Seal only — the name is the h1 right below, so repeating it here
+            just doubles it. The seal keeps the link clickable and branded;
+            the accessible name moves to aria-label since 墨 is decorative. */}
+        <a className="nav-brand" href="#top" aria-label="Back to top" onClick={() => setOpen(false)}>
           <span className="nav-seal" aria-hidden="true">
             墨
-          </span>
-          <span className="nav-name">
-            Kamlesh
-            <br />
-            Kumar
           </span>
         </a>
 

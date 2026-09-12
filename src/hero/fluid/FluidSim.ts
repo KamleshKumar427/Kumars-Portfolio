@@ -62,6 +62,8 @@ export class FluidSim {
 
   private width = 1
   private height = 1
+  /** Aspect the current grid was built for, rounded — see resize(). */
+  private aspectBucket = 0
   private reducedMotion = false
   private light = new THREE.Vector2(0.7, 0.7)
   private lightT = 0
@@ -142,6 +144,7 @@ export class FluidSim {
       uTarget: { value: null },
       aspectRatio: { value: 1 },
       color: { value: new THREE.Vector3() },
+      density: { value: 0 },
       point: { value: new THREE.Vector2() },
       radius: { value: 1 },
     })
@@ -186,20 +189,45 @@ export class FluidSim {
   }
 
   resize(width: number, height: number) {
-    this.width = Math.max(1, width)
-    this.height = Math.max(1, height)
-    this.renderer.setSize(this.width, this.height, false)
+    // A container that is detached, or not laid out yet, measures 0x0 — which
+    // happens intermittently around a route change. Acting on it would build a
+    // square grid and resample the ink into it, then immediately rebuild for
+    // the real size: two full reallocations, and the visible lurch when moving
+    // between pages. A hero is never legitimately this small.
+    if (width < 2 || height < 2) return
+
+    const w = Math.max(1, width)
+    const h = Math.max(1, height)
+    const sizeChanged = w !== this.width || h !== this.height
+    this.width = w
+    this.height = h
+    if (sizeChanged) this.renderer.setSize(w, h, false)
 
     if (!this.supported) return
 
-    const aspect = this.width / this.height
-    // Keep sim grid proportioned to the hero so ink isn't stretched.
+    // The grid is sized from a *rounded* aspect, and only rebuilt when that
+    // rounded value changes. Moving between two heroes of slightly different
+    // height (a route change) therefore costs nothing — rebuilding would
+    // reallocate every render target and resample the ink mid-transition,
+    // which is what made the switch stutter. Rotating a phone still rebuilds.
+    // Safe because the splat pass already corrects for canvas aspect, so the
+    // grid's aspect only affects resolution, never the shape of the ink.
+    const aspect = Math.round((w / h) * 4) / 4
+    if (this.dye && aspect === this.aspectBucket) return
+    this.aspectBucket = aspect
+
     const simW = aspect >= 1 ? Math.round(this.simRes * aspect) : this.simRes
     const simH = aspect >= 1 ? this.simRes : Math.round(this.simRes / aspect)
     const dyeW = aspect >= 1 ? Math.round(this.dyeRes * aspect) : this.dyeRes
     const dyeH = aspect >= 1 ? this.dyeRes : Math.round(this.dyeRes / aspect)
 
-    this.disposeTargets()
+    const prev = {
+      velocity: this.velocity,
+      dye: this.dye,
+      pressure: this.pressure,
+      divergence: this.divergence,
+      curl: this.curl,
+    }
     this.velocity = this.makeDoubleFBO(simW, simH)
     this.dye = this.makeDoubleFBO(dyeW, dyeH)
     this.divergence = this.makeRT(simW, simH)
@@ -214,6 +242,12 @@ export class FluidSim {
     }
     this.clearTarget(this.divergence)
     this.clearTarget(this.curl)
+
+    // Carry the painted ink onto the new grid — a window resize, or the canvas
+    // moving to the other page's hero, must not wipe it. (Velocity restarts
+    // still; the ink simply stops drifting for a moment.)
+    if (prev.dye) this.copyInto(prev.dye.read, this.dye.read)
+    this.disposeSet(prev)
   }
 
   private clearTarget(target: THREE.WebGLRenderTarget) {
@@ -224,13 +258,26 @@ export class FluidSim {
   }
 
   setColor(hex: string) {
-    this.activeColor.set(hex)
+    // Keep the swatch's own sRGB components. The display pass writes straight
+    // to the canvas with no colour-space conversion, so THREE.Color's default
+    // (convert to linear) would shift every ink away from the swatch it came
+    // from. Reading the hex "as linear" leaves the components untouched.
+    this.activeColor.setStyle(hex, THREE.LinearSRGBColorSpace)
   }
 
   setTheme(isDark: boolean) {
     const tint = isDark ? inkConfig.tints.dark : inkConfig.tints.light
     this.waterColor.set(tint.water)
     this.glassColor.set(tint.glass)
+
+    // Light mode is matte — the glossy specular and Fresnel of the dark theme's
+    // glass sheet would fight a paper surface.
+    const surface = isDark ? inkConfig.glass : inkConfig.glassLight
+    const display = this.materials.display
+    display.uniforms.reflectivity.value = surface.reflectivity
+    display.uniforms.fresnelPower.value = surface.fresnelPower
+    display.uniforms.sheen.value = surface.sheen
+    display.uniforms.refraction.value = surface.refraction
   }
 
   /** Queue an ink drop. dx/dy are pointer deltas in normalized [0,1] space. */
@@ -269,6 +316,7 @@ export class FluidSim {
         0,
       )
       vMat.uniforms.radius.value = radius
+      vMat.uniforms.density.value = 0
       this.renderPass(vMat, this.velocity.write)
       this.velocity.swap()
 
@@ -284,6 +332,7 @@ export class FluidSim {
         s.color.b,
       )
       dMat.uniforms.radius.value = radius
+      dMat.uniforms.density.value = 1 // .a accumulates ink amount (see displayFragment)
       this.renderPass(dMat, this.dye.write)
       this.dye.swap()
     }
@@ -387,14 +436,60 @@ export class FluidSim {
     this.renderPass(disp, null)
   }
 
+  /**
+   * Fade the ink (and settle the water) by `seconds` of real time in one pass.
+   * The render loop only steps while the hero is on screen; this makes up the
+   * time it was paused — scrolled away, a hidden tab, or the other page — so
+   * ink always fades on the clock instead of freezing.
+   */
+  fade(seconds: number) {
+    if (!this.supported || !this.dye || seconds <= 0) return
+    this.scaleInPlace(this.dye, Math.exp(-inkConfig.densityDissipation * seconds))
+    this.scaleInPlace(this.velocity, Math.exp(-inkConfig.velocityDissipation * seconds))
+  }
+
+  /** Multiply every channel of a double FBO by `factor` (colour/amount ratio is kept). */
+  private scaleInPlace(fbo: DoubleFBO, factor: number) {
+    const m = this.materials.clear
+    this.setTexel(m, fbo.write)
+    m.uniforms.uTexture.value = fbo.read.texture
+    m.uniforms.value.value = factor
+    this.renderPass(m, fbo.write)
+    fbo.swap()
+  }
+
+  /** Resampling copy (linear-filtered), used to keep ink across grid sizes. */
+  private copyInto(src: THREE.WebGLRenderTarget, dst: THREE.WebGLRenderTarget) {
+    const m = this.materials.clear
+    this.setTexel(m, dst)
+    m.uniforms.uTexture.value = src.texture
+    m.uniforms.value.value = 1
+    this.renderPass(m, dst)
+  }
+
   private disposeTargets() {
-    const fbos = [this.velocity, this.dye, this.pressure]
-    for (const fbo of fbos) {
+    this.disposeSet({
+      velocity: this.velocity,
+      dye: this.dye,
+      pressure: this.pressure,
+      divergence: this.divergence,
+      curl: this.curl,
+    })
+  }
+
+  private disposeSet(t: {
+    velocity?: DoubleFBO
+    dye?: DoubleFBO
+    pressure?: DoubleFBO
+    divergence?: THREE.WebGLRenderTarget
+    curl?: THREE.WebGLRenderTarget
+  }) {
+    for (const fbo of [t.velocity, t.dye, t.pressure]) {
       fbo?.read.dispose()
       fbo?.write.dispose()
     }
-    this.divergence?.dispose()
-    this.curl?.dispose()
+    t.divergence?.dispose()
+    t.curl?.dispose()
   }
 
   dispose() {

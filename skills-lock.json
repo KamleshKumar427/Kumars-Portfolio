@@ -7,6 +7,12 @@
       "skillPath": "skills/3d-web-experience/SKILL.md",
       "computedHash": "abf349a30764951de0ff17fe6e4b0d3a5332d3682b3b97109d7a23f813406d1a"
     },
+    "apple-design": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/apple-design/SKILL.md",
+      "computedHash": "8b94db67cb9edaad5f1501010804caa610131f1d2dfda0a27664b2e858deade3"
+    },
     "framer-motion-animator": {
       "source": "patricio0312rev/skills",
       "sourceType": "github",

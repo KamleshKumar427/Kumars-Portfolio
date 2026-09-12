@@ -57,12 +57,12 @@ export function TestimonialsSection() {
   const loop = [...testimonials, ...testimonials]
 
   return (
-    <section id="testimonials" className="section section--alt tm-section">
+    <section id="testimonials" className="section tm-section">
       <div className="section-inner">
         <Reveal>
           <div className="section-head">
             <div>
-              <div className="section-kicker">声 — In their words</div>
+              <div className="section-kicker">声 — Testimonials</div>
               <h2 className="section-title">People I’ve worked with</h2>
             </div>
             <p className="section-lead">

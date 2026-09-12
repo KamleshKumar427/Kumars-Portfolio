@@ -5,7 +5,8 @@ import { ImageSlot } from './components/ImageSlot'
 import { Lightbox, type LightboxMedia } from './components/Lightbox'
 import { Reveal } from './components/ui/Reveal'
 import { SiteFooter } from './components/SiteFooter'
-import { inkConfig } from './hero/fluid/inkConfig'
+import { inkConfig, resolveSwatch } from './hero/fluid/inkConfig'
+import { useActiveInk } from './hero/fluid/inkSelection'
 import { useIsDark } from './hooks/useIsDark'
 import { useReducedMotion } from './hooks/useReducedMotion'
 import { useSeo } from './hooks/useSeo'
@@ -23,6 +24,7 @@ const NAV = [
 
 function StartupNav() {
   const [scrolled, setScrolled] = useState(false)
+  const [open, setOpen] = useState(false)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16)
     onScroll()
@@ -33,22 +35,45 @@ function StartupNav() {
   return (
     <header className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="nav-inner">
-        <Link className="nav-brand nav-back" to="/" aria-label="Back to home">
+        <Link
+          className="nav-brand nav-back"
+          to="/"
+          aria-label="Back to home"
+          onClick={() => setOpen(false)}
+        >
           <span className="nav-seal" aria-hidden="true">
             墨
           </span>
-          <span className="nav-name">← Kamlesh Kumar</span>
+          <span className="nav-name">← Home</span>
         </Link>
 
         <div className="nav-end">
-          <nav className="nav-links" aria-label="Sections">
+          <nav className={`nav-links ${open ? 'is-open' : ''}`} aria-label="Sections">
             {NAV.map((item) => (
-              <a key={item.href} href={item.href} className="nav-link">
+              <a
+                key={item.href}
+                href={item.href}
+                className="nav-link"
+                onClick={() => setOpen(false)}
+              >
                 {item.label}
               </a>
             ))}
           </nav>
           <ThemeToggle />
+
+          {/* Below 900px .nav-links collapses into a sheet — it needs a trigger,
+              same as the main header, or these links become unreachable. */}
+          <button
+            type="button"
+            className="nav-menu"
+            aria-expanded={open}
+            aria-label="Toggle navigation"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span />
+            <span />
+          </button>
         </div>
       </div>
     </header>
@@ -122,8 +147,9 @@ export function StartupsPage() {
   })
   const isDark = useIsDark()
   const reduced = useReducedMotion()
-  const [activeId, setActiveId] = useState(inkConfig.swatches[0].id)
-  const activeInk = inkConfig.swatches.find((s) => s.id === activeId) ?? inkConfig.swatches[0]
+  const [activeId, setActiveId] = useActiveInk()
+  const swatches = inkConfig.swatches.map((s) => resolveSwatch(s, isDark))
+  const activeInk = swatches.find((s) => s.id === activeId) ?? swatches[0]
   const [lightbox, setLightbox] = useState<LightboxMedia | null>(null)
 
   return (
@@ -156,29 +182,37 @@ export function StartupsPage() {
                   </li>
                 ))}
               </ul>
-              <div className="startup-hero-hint">
-                <span>drag the ink ↑</span>
-                <span className="startup-hero-rule" aria-hidden="true" />
-              </div>
             </div>
           </div>
 
+          {/* Same cue as the home hero — this page had none, so nothing told a
+              visitor there was anything below the fold. */}
+          <a className="hero-scroll" href="#xstryv" aria-label="Scroll to startup experience">
+            <span className="hero-scroll-label">scroll</span>
+            <span className="hero-scroll-line" aria-hidden="true" />
+          </a>
+
           {!reduced && (
-            <div className="startup-inkpicker" role="group" aria-label="Pick an ink color">
-              {inkConfig.swatches.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
-                  style={{ background: s.hex }}
-                  onPointerEnter={() => setActiveId(s.id)}
-                  onFocus={() => setActiveId(s.id)}
-                  onClick={() => setActiveId(s.id)}
-                  aria-pressed={s.id === activeId}
-                  aria-label={`${s.name} ink`}
-                  title={s.name}
-                />
-              ))}
+            <div className="ink-dock">
+              <p className="ink-dock-hint">
+                <span className="ink-dock-hint-lead">Change colour</span>
+              </p>
+              <div className="startup-inkpicker" role="group" aria-label="Pick an ink color">
+                {swatches.map((s) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
+                    style={{ background: s.hex }}
+                    onPointerEnter={() => setActiveId(s.id)}
+                    onFocus={() => setActiveId(s.id)}
+                    onClick={() => setActiveId(s.id)}
+                    aria-pressed={s.id === activeId}
+                    aria-label={`${s.name} ink`}
+                    title={s.name}
+                  />
+                ))}
+              </div>
             </div>
           )}
         </section>

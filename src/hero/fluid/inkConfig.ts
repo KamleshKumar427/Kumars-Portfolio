@@ -7,8 +7,11 @@
 export type Swatch = {
   id: string
   name: string
-  /** sRGB hex of the ink released for this swatch */
+  /** sRGB hex of the ink released for this swatch — also the swatch's own fill */
   hex: string
+  /** Optional dark-theme variant (the neutral ink flips black → white so it
+   *  never vanishes into dark water). Fill and ink always match. */
+  dark?: { name: string; hex: string }
 }
 
 export type ThemeTint = {
@@ -25,11 +28,13 @@ export const inkConfig = {
   dyeResolution: 1024, // ink/color grid (capped per device below)
 
   // — Fluid feel —
-  // densityDissipation: how slowly ink fades. 0 = never fades (pure accumulation),
-  // higher = fades faster. Kept very low so colors persist, accumulate and blend.
-  // Single tunable for ink persistence; ~0.045 lets ink linger noticeably longer.
-  // Do NOT reach 0 — muddy brown build-up + sim instability.
-  densityDissipation: 0.045,
+  // densityDissipation: how fast painted ink fades, per second (exponential).
+  // 0.16 → a dense stroke keeps its full colour for roughly 10–15s, then
+  // dissolves and is gone by ~25s; light touches fade sooner. The fade runs on
+  // real time — it continues while the hero is off-screen or you're on the
+  // other page. Lower = lingers longer (0.045 lingered for minutes).
+  // Do NOT reach 0 — muddy build-up + sim instability.
+  densityDissipation: 0.16,
   // velocityDissipation: how fast motion settles to stillness.
   // Higher = ink comes to rest sooner (calmer).
   velocityDissipation: 1.1,
@@ -46,7 +51,7 @@ export const inkConfig = {
   // splatForce: how hard pointer motion pushes the water.
   splatForce: 6200,
 
-  // — Glass sheet over the water —
+  // — Glass sheet over the water (dark mode) —
   glass: {
     reflectivity: 0.42, // how strongly the glass reflects (Fresnel mix)
     fresnelPower: 2.6, // edge falloff of the reflection
@@ -54,20 +59,47 @@ export const inkConfig = {
     refraction: 0.55, // how much ink bends light beneath the glass
   },
 
+  // — Matte surface (light mode) —
+  // Same solver, almost no shine: the specular highlight and Fresnel are nearly
+  // gone, so the hero reads as pigment soaking into matte paper rather than ink
+  // under a glass sheet. Raise `sheen` to put the gloss back.
+  glassLight: {
+    reflectivity: 0.12,
+    fresnelPower: 2.6,
+    sheen: 0.1,
+    refraction: 0.48,
+  },
+
   // — Per-theme water + glass tints (washi paper / sumi ink moods) —
   tints: {
     dark: { water: '#0e1014', glass: '#cfdde4' } as ThemeTint,
-    light: { water: '#ece3d0', glass: '#fbf4e6' } as ThemeTint,
+    // These hexes are NOT the colour you see. The renderer treats them as
+    // linear and the canvas encodes sRGB, so what lands on screen is
+    // sRGB_to_linear(hex) — markedly darker than the swatch reads here. Each
+    // value below is therefore the inverse (linear_to_sRGB) of its target:
+    // #fcfefb renders as #f9fcf7, the page's own sage, so the hero blends into
+    // the page instead of sitting on it as a darker block. Measured, not
+    // guessed — if you change these, re-measure rather than eyeballing.
+    light: { water: '#fcfefb', glass: '#fdfefd' } as ThemeTint,
   },
 
-  // — The 5 selectable inks — traditional Japanese pigments —
+  // — The 5 selectable inks —
+  // Picked to read on BOTH waters. The gold is deliberately deep and saturated:
+  // the tan light-mode water shares gold's hue, so a pale gold would vanish.
+  // The neutral flips black → white in dark mode so it never sinks into dark water.
+  // The display pass renders these 1:1, so a swatch's fill IS its ink colour.
   swatches: [
-    { id: 'beni', name: 'Beni', hex: '#b23a2e' },
-    { id: 'sumi', name: 'Sumi', hex: '#3a3530' },
-    { id: 'ai', name: 'Ai', hex: '#2c4a60' },
-    { id: 'rokusho', name: 'Rokushō', hex: '#5e7b58' },
-    { id: 'kincha', name: 'Kincha', hex: '#a97b30' },
+    { id: 'beni', name: 'Beni', hex: '#ff1810' }, // the vivid red the sim always showed
+    { id: 'sumi', name: 'Sumi', hex: '#1f1b17', dark: { name: 'Gofun', hex: '#f4eee3' } },
+    { id: 'kin', name: 'Kin', hex: '#d4940a' }, // gold
+    { id: 'rokusho', name: 'Rokushō', hex: '#10a880' }, // verdigris jade
+    { id: 'ruri', name: 'Ruri', hex: '#1f6feb' }, // lapis — the one hue the set lacked
   ] as Swatch[],
 } as const
 
 export type InkConfig = typeof inkConfig
+
+/** A swatch as it should look — and ink — in the current theme. */
+export function resolveSwatch(s: Swatch, isDark: boolean): Swatch {
+  return isDark && s.dark ? { ...s, ...s.dark } : s
+}

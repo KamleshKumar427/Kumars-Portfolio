@@ -1,6 +1,7 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense } from 'react'
 import { profile } from '../data/profile'
-import { inkConfig } from '../hero/fluid/inkConfig'
+import { inkConfig, resolveSwatch } from '../hero/fluid/inkConfig'
+import { useActiveInk } from '../hero/fluid/inkSelection'
 import { InkCursor } from '../hero/InkCursor'
 import { useIsDark } from '../hooks/useIsDark'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -12,8 +13,9 @@ const HeroFluid = lazy(() =>
 export function Hero() {
   const isDark = useIsDark()
   const reduced = useReducedMotion()
-  const [activeId, setActiveId] = useState(inkConfig.swatches[0].id)
-  const active = inkConfig.swatches.find((s) => s.id === activeId) ?? inkConfig.swatches[0]
+  const [activeId, setActiveId] = useActiveInk()
+  const swatches = inkConfig.swatches.map((s) => resolveSwatch(s, isDark))
+  const active = swatches.find((s) => s.id === activeId) ?? swatches[0]
 
   return (
     <section id="hero" className="hero">
@@ -43,33 +45,40 @@ export function Hero() {
           <p className="hero-tagline">{profile.headline}</p>
         </div>
 
-        <div className="hero-bottom">
-          <div className="ink-dock" role="group" aria-label="Ink color">
-            <span className="ink-dock-label">墨 — drag the water · pick an ink</span>
-            <div className="ink-swatches">
-              {inkConfig.swatches.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
-                  style={{ background: s.hex }}
-                  onPointerEnter={() => setActiveId(s.id)}
-                  onFocus={() => setActiveId(s.id)}
-                  onClick={() => setActiveId(s.id)}
-                  aria-pressed={s.id === activeId}
-                  aria-label={`${s.name} ink`}
-                  title={s.name}
-                />
-              ))}
-            </div>
-          </div>
-
-          <a className="hero-scroll" href="#experience" aria-label="Scroll to experience">
-            <span className="hero-scroll-label">scroll</span>
-            <span className="hero-scroll-line" aria-hidden="true" />
-          </a>
-        </div>
       </div>
+
+      {/* Pinned to the hero, not to the copy: it shares the right rail with the
+          ink dock and stays at the bottom while the copy centres. */}
+      <a className="hero-scroll" href="#experience" aria-label="Scroll to experience">
+        <span className="hero-scroll-label">scroll</span>
+        <span className="hero-scroll-line" aria-hidden="true" />
+      </a>
+
+      {/* Ink dock: the instruction sits with the swatches rather than across the
+          hero from them, so it's obvious what the circles are for. */}
+      {!reduced && (
+        <div className="ink-dock">
+          <p className="ink-dock-hint">
+            <span className="ink-dock-hint-lead">Change colour</span>
+          </p>
+          <div className="ink-picker" role="group" aria-label="Ink color">
+            {swatches.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={`ink-swatch ${s.id === activeId ? 'is-active' : ''}`}
+                style={{ background: s.hex }}
+                onPointerEnter={() => setActiveId(s.id)}
+                onFocus={() => setActiveId(s.id)}
+                onClick={() => setActiveId(s.id)}
+                aria-pressed={s.id === activeId}
+                aria-label={`${s.name} ink`}
+                title={s.name}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   )
 }

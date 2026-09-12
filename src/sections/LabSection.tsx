@@ -168,13 +168,15 @@ export function LabSection() {
         <Reveal>
           <div className="section-head">
             <div>
-              <div className="section-kicker">研 — The Lab</div>
+              <div className="section-kicker">研 — Projects</div>
               <h2 className="section-title">Personal projects</h2>
             </div>
-            <p className="section-lead">
-              Things I built because I wanted to understand them — machine learning, search, computer
-              vision, low-level systems.
-            </p>
+            <ul className="section-lead lab-domains" aria-label="Domains">
+              <li>Software engineering</li>
+              <li>AI/ML model pipelines &amp; evaluation</li>
+              <li>LLM fine-tuning</li>
+              <li>AI agents</li>
+            </ul>
           </div>
         </Reveal>
 

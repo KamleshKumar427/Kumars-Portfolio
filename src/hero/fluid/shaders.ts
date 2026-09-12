@@ -21,21 +21,24 @@ export const baseVertex = /* glsl */ `
 `
 
 // Inject a soft Gaussian blob of `color` into `uTarget` at `point`.
+// `density` is added to the alpha channel: 1 for ink (so .a tracks how much ink
+// is present), 0 for velocity (whose alpha is never read).
 export const splatFragment = /* glsl */ `
   precision highp float;
   varying vec2 vUv;
   uniform sampler2D uTarget;
   uniform float aspectRatio;
   uniform vec3 color;
+  uniform float density;
   uniform vec2 point;
   uniform float radius;
 
   void main () {
     vec2 p = vUv - point.xy;
     p.x *= aspectRatio;
-    vec3 splat = exp(-dot(p, p) / radius) * color;
-    vec3 base = texture2D(uTarget, vUv).xyz;
-    gl_FragColor = vec4(base + splat, 1.0);
+    float g = exp(-dot(p, p) / radius);
+    vec4 base = texture2D(uTarget, vUv);
+    gl_FragColor = vec4(base.rgb + g * color, base.a + g * density);
   }
 `
 
@@ -201,28 +204,37 @@ export const displayFragment = /* glsl */ `
   uniform float refraction;
   uniform vec2 light;
 
-  float luma (vec3 c) {
-    return dot(c, vec3(0.299, 0.587, 0.114));
+  // The dye texture stores .rgb = sum of (ink colour x amount) and .a = total
+  // amount. So .rgb / .a is the true, averaged ink colour at this point — dark
+  // inks stay dark and overlapping inks still blend in proportion. (The old
+  // "divide by the brightest channel" trick threw luminance away, which is why
+  // Sumi, a near-black, rendered as cream-white.)
+  // Both constants below are calibrated so Beni, the default ink, blooms and
+  // lifts the glass exactly as it did before.
+  const float INK_HEIGHT = 0.16;
+  const float INK_COVERAGE = 0.45;
+
+  float height (vec2 uv) {
+    return texture2D(uDye, uv).a * INK_HEIGHT;
   }
 
   void main () {
     // Surface normal from the gradient of ink density (ink "lifts" the surface).
-    float lC = luma(texture2D(uDye, vUv).rgb);
-    float lR = luma(texture2D(uDye, vUv + vec2(texelSize.x, 0.0)).rgb);
-    float lT = luma(texture2D(uDye, vUv + vec2(0.0, texelSize.y)).rgb);
+    float lC = height(vUv);
+    float lR = height(vUv + vec2(texelSize.x, 0.0));
+    float lT = height(vUv + vec2(0.0, texelSize.y));
     float dx = lR - lC;
     float dy = lT - lC;
     vec3 normal = normalize(vec3(-dx, -dy, 0.18));
 
     // Refraction: sample the ink slightly offset along the surface slope.
     vec2 refr = normal.xy * refraction * 0.12;
-    vec3 dye = max(texture2D(uDye, vUv + refr).rgb, 0.0);
+    vec4 dye = max(texture2D(uDye, vUv + refr), 0.0);
 
     // Ink color blends into clear water by accumulated amount.
-    float amt = clamp(length(dye), 0.0, 1.4);
-    float maxc = max(max(dye.r, dye.g), dye.b);
-    vec3 inkHue = maxc > 0.001 ? dye / maxc : vec3(0.0);
-    vec3 col = mix(waterColor, inkHue, smoothstep(0.0, 0.55, amt));
+    float amt = clamp(dye.a * INK_COVERAGE, 0.0, 1.4);
+    vec3 inkColor = dye.a > 1e-4 ? clamp(dye.rgb / dye.a, 0.0, 1.0) : vec3(0.0);
+    vec3 col = mix(waterColor, inkColor, smoothstep(0.0, 0.55, amt));
 
     // Glass: Fresnel reflection toward the viewer (z-up normal).
     // NB: clamp the pow base above 0 — pow(0.0, y) is undefined in GLSL and

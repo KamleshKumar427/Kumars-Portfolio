@@ -4,7 +4,7 @@ import { profile } from '../data/profile'
 
 export function ContactSection() {
   return (
-    <section id="contact" className="section">
+    <section id="contact" className="section section--alt">
       <div className="contact-inner">
         <Reveal>
           <div className="section-kicker">結 — Contact</div>
