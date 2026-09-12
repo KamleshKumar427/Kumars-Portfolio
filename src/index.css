@@ -731,11 +731,10 @@ html.lenis body {
    HERO — fluid sim + overlay
    ════════════════════════════════════════════════════════════════ */
 .hero {
-  /* One right edge for everything that hangs on the right — the ink dock and
-     the scroll cue line up with the TEXT COLUMN, not the viewport. Without this
-     the dock sat ~130px outside the copy on a wide screen, which is what made
-     the hero read as lopsided. Falls back to the plain gutter once the viewport
-     is narrower than the content column. */
+  /* Right edge of the TEXT COLUMN, so the scroll cue lines up with the copy
+     instead of floating at the viewport edge. Falls back to the plain gutter
+     once the viewport is narrower than the content column. (The ink dock
+     deliberately sits further out, at the gutter.) */
   --rail: max(var(--gutter), calc((100% - var(--maxw)) / 2 + var(--gutter)));
   position: relative;
   height: 100svh;
@@ -999,7 +998,9 @@ html.lenis body {
    sides of the hero, which is why the swatches read as decoration. */
 .ink-dock {
   position: absolute;
-  right: var(--rail);
+  /* Out at the viewport gutter, not the text column: the palette reads as a
+     tool parked at the edge of the screen rather than part of the copy block. */
+  right: var(--gutter);
   top: 50%;
   transform: translateY(-50%);
   z-index: 4;
