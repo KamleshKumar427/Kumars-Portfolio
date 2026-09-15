@@ -58,6 +58,10 @@
   --glass-lift: 0 1px 1px rgba(18, 34, 24, 0.05), 0 8px 18px -8px rgba(18, 34, 24, 0.16),
     0 22px 44px -20px rgba(18, 34, 24, 0.2);
   --glass-ring: rgba(255, 255, 255, 0.92);
+  /* Mobile menu drawer (see .nav-links) */
+  --drawer-fill: linear-gradient(180deg, rgba(252, 254, 251, 0.8), rgba(248, 251, 246, 0.7));
+  --drawer-edge: rgba(20, 40, 24, 0.09);
+  --drawer-lift: 0 22px 44px -26px rgba(18, 34, 24, 0.3);
   --media: repeating-linear-gradient(135deg, #f3f9f0 0 14px, #ecf4e8 14px 28px);
   /* The notebook ruling. Deliberately faint: real ruling can't line up with
      arbitrary web text, so anything stronger reads as a worksheet behind the
@@ -133,6 +137,9 @@
   );
   --glass-lift: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 36px -14px rgba(0, 0, 0, 0.62);
   --glass-ring: rgba(28, 32, 40, 0.9);
+  --drawer-fill: linear-gradient(180deg, rgba(26, 28, 33, 0.8), rgba(20, 21, 25, 0.72));
+  --drawer-edge: rgba(255, 255, 255, 0.08);
+  --drawer-lift: 0 24px 48px -24px rgba(0, 0, 0, 0.62);
   --grain: none; /* paper texture is a light-mode treatment only */
   --crumple: none;
   --halftone: none;
@@ -176,6 +183,9 @@
   );
   --glass-lift: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 36px -14px rgba(0, 0, 0, 0.62);
   --glass-ring: rgba(28, 32, 40, 0.9);
+  --drawer-fill: linear-gradient(180deg, rgba(26, 28, 33, 0.8), rgba(20, 21, 25, 0.72));
+  --drawer-edge: rgba(255, 255, 255, 0.08);
+  --drawer-lift: 0 24px 48px -24px rgba(0, 0, 0, 0.62);
   --grain: none; /* paper texture is a light-mode treatment only */
   --crumple: none;
   --halftone: none;
@@ -433,14 +443,31 @@ html.lenis body {
   inset: 0 0 auto 0;
   z-index: 100;
   border-bottom: 1px solid transparent;
-  transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease),
-    backdrop-filter var(--t-base) var(--ease);
+  transition: border-color var(--t-base) var(--ease);
+}
+/* The bar's frosting lives on a pseudo-element, never on .nav itself. A
+   backdrop-filter on .nav makes it the BACKDROP ROOT for everything inside it —
+   including the mobile menu drawer — so the drawer's own blur has nothing to
+   sample and the page shows through it unblurred. That is exactly how the
+   drawer's links ended up tangled with the hero text behind them. A sibling
+   pseudo-element frosts the bar without owning the drawer's backdrop. */
+.nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--material);
+  -webkit-backdrop-filter: saturate(118%) blur(18px);
+  backdrop-filter: saturate(118%) blur(18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-base) var(--ease);
 }
 .nav.is-scrolled {
-  background: var(--material);
   border-bottom-color: var(--separator);
-  backdrop-filter: saturate(118%) blur(18px);
-  -webkit-backdrop-filter: saturate(118%) blur(18px);
+}
+.nav.is-scrolled::before {
+  opacity: 1;
 }
 .nav-inner {
   max-width: var(--maxw);
@@ -529,12 +556,17 @@ html.lenis body {
 }
 @media (max-width: 900px) {
   /* In the drawer it becomes a proper button rather than a red list row. */
+  /* Sized to its label, not stretched across the drawer, and pulled left by
+     exactly its own padding so the WORD lines up with every other row's text
+     (rows are inset 4px); only the red background hangs into the margin. */
   .nav-link.nav-link--accent {
-    margin: 10px 0 6px;
-    padding: 13px 16px;
+    align-self: flex-start;
+    margin: 10px 0 8px -12px;
+    padding: 9px 16px;
     border-bottom: 0;
-    border-radius: 12px;
-    text-align: center;
+    border-radius: 999px;
+    font-size: 16px;
+    color: var(--accent-text);
   }
   /* no darkening on touch — :hover sticks after a tap */
   .nav-link.nav-link--accent:hover {
@@ -593,10 +625,14 @@ html.lenis body {
     align-items: stretch;
     gap: 2px;
     padding: 12px var(--gutter) 20px;
-    background: var(--material);
-    backdrop-filter: saturate(118%) blur(18px);
-    -webkit-backdrop-filter: saturate(118%) blur(18px);
-    border-bottom: 1px solid var(--separator);
+    /* A thick material: heavy blur turns whatever is behind into soft colour
+       with no readable shapes, and the fill keeps it a tint rather than a
+       picture — so it still feels like glass but text never fights the page. */
+    background: var(--drawer-fill);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-bottom: 1px solid var(--drawer-edge);
+    box-shadow: var(--drawer-lift);
     opacity: 0;
     transform: translateY(-8px) scale(0.99);
     transform-origin: top center;
@@ -613,9 +649,75 @@ html.lenis body {
     font-size: 17px;
     border-bottom: 1px solid var(--separator);
     border-radius: 0;
+    /* Text on glass: full contrast and a touch heavier, not the muted grey used
+       on the solid page — translucency eats contrast. */
+    color: var(--text);
+    font-weight: 500;
   }
   .nav-link:hover {
     background: none;
+  }
+  /* While the menu is open the bar frosts to the same material, so bar and
+     drawer read as one sheet instead of a clear strip above a frosted one. */
+  .nav.is-menu-open {
+    border-bottom-color: transparent;
+  }
+  .nav.is-menu-open::before {
+    opacity: 1;
+    background: var(--drawer-fill);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(30px) saturate(180%);
+  }
+
+  /* CV becomes a disclosure inside the drawer: a row like the others whose
+     options open directly beneath it. A floating popover pinned to the right
+     edge made no sense in a vertical list, and it stacked a second glass
+     surface on the drawer. */
+  .nav-links .cv-menu-trigger {
+    width: 100%;
+    padding: 12px 4px;
+    border-radius: 0;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .nav-links .cv-menu-trigger:hover {
+    background: none;
+  }
+  .nav-links .cv-menu-panel {
+    position: static;
+    min-width: 0;
+    margin: 0 0 4px;
+    padding: 0 0 0 14px;
+    border: 0;
+    border-left: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    border-radius: 0;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    transform-origin: top left;
+    animation: disclosure-in 220ms var(--ease);
+  }
+  .nav-links .cv-menu-item {
+    padding: 10px 4px;
+    border-radius: 0;
+    font-size: 16px;
+    color: var(--text-2);
+  }
+  .nav-links .cv-menu-item:hover {
+    background: none;
+    color: var(--accent);
+  }
+}
+@keyframes disclosure-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -2950,9 +3052,22 @@ button.img-slot {
   }
 }
 
+@media (prefers-reduced-transparency: reduce) and (max-width: 900px) {
+  .nav-links,
+  .nav.is-menu-open::before {
+    background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 /* Frostier, not transparent, when the user asks for less transparency */
 @media (prefers-reduced-transparency: reduce) {
-  .nav.is-scrolled,
+  .nav::before {
+    background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
   .cv-menu-panel,
   .ink-picker,
   .startup-inkpicker {

@@ -23,7 +23,7 @@ export function Header() {
   }, [])
 
   return (
-    <header className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
+    <header className={`nav ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-menu-open' : ''}`}>
       <div className="nav-inner">
         {/* Seal only — the name is the h1 right below, so repeating it here
             just doubles it. The seal keeps the link clickable and branded;

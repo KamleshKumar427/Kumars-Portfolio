@@ -33,7 +33,7 @@ function StartupNav() {
   }, [])
 
   return (
-    <header className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
+    <header className={`nav ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-menu-open' : ''}`}>
       <div className="nav-inner">
         <Link
           className="nav-brand nav-back"
