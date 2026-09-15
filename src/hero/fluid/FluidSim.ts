@@ -21,6 +21,14 @@ type DoubleFBO = {
 
 type PerfTier = 'high' | 'low'
 
+/** Clear-colour wash. The display saturates dense ink, so a slow decay spends
+ *  most of its time on colour you can't see change and then drops at the end —
+ *  it read as a delayed cut. A fast rate keeps that hold to ~170ms for a heavy
+ *  scribble (instant for light strokes), and by the final zero the ink is well
+ *  under visibility, so it lands on clear water without a pop. */
+const WASH_SECONDS = 0.45
+const WASH_RATE = 16
+
 type Splat = {
   x: number
   y: number
@@ -56,6 +64,9 @@ export class FluidSim {
 
   private materials: Record<string, THREE.ShaderMaterial> = {}
   private splatQueue: Splat[] = []
+  /** Wall-clock end of a running wash in ms, or 0 when none (see clear). */
+  private washUntil = 0
+  private washLast = 0
   private activeColor = new THREE.Color(inkConfig.swatches[0].hex)
   private waterColor = new THREE.Color(inkConfig.tints.dark.water)
   private glassColor = new THREE.Color(inkConfig.tints.dark.glass)
@@ -301,7 +312,10 @@ export class FluidSim {
   private applySplats() {
     if (this.splatQueue.length === 0) return
     const aspect = this.width / this.height
-    const radius = inkConfig.splatRadius / 100
+    // Smaller, gentler drops on phone-sized heroes — see inkConfig.compact.
+    const compact = this.width <= inkConfig.compact.maxWidth
+    const radius = (inkConfig.splatRadius / 100) * (compact ? inkConfig.compact.radiusScale : 1)
+    const force = inkConfig.splatForce * (compact ? inkConfig.compact.forceScale : 1)
 
     for (const s of this.splatQueue) {
       // Velocity splat
@@ -311,8 +325,8 @@ export class FluidSim {
       vMat.uniforms.aspectRatio.value = aspect
       vMat.uniforms.point.value.set(s.x, s.y)
       ;(vMat.uniforms.color.value as THREE.Vector3).set(
-        s.dx * inkConfig.splatForce,
-        s.dy * inkConfig.splatForce,
+        s.dx * force,
+        s.dy * force,
         0,
       )
       vMat.uniforms.radius.value = radius
@@ -340,7 +354,12 @@ export class FluidSim {
   }
 
   step(dt: number) {
-    if (!this.supported) return
+    // No grids until the first real resize — a container measuring 0x0 at mount
+    // is skipped (see resize). Stepping then would throw on the missing buffers,
+    // and since the throw lands before the loop re-requests its next frame, the
+    // hero would stay frozen even after it gets a proper size.
+    if (!this.supported || !this.dye) return
+    if (this.washUntil) this.wash()
     const clamped = Math.min(dt, 0.016666)
 
     // Curl
@@ -420,6 +439,7 @@ export class FluidSim {
   }
 
   render() {
+    if (!this.dye) return // same reason as step()
     const disp = this.materials.display
     this.setTexel(disp, this.dye.read)
     disp.uniforms.uDye.value = this.dye.read.texture
@@ -446,6 +466,41 @@ export class FluidSim {
     if (!this.supported || !this.dye || seconds <= 0) return
     this.scaleInPlace(this.dye, Math.exp(-inkConfig.densityDissipation * seconds))
     this.scaleInPlace(this.velocity, Math.exp(-inkConfig.velocityDissipation * seconds))
+  }
+
+  /**
+   * Wash the water clean. Not an instant wipe: the ink drains over a short spell
+   * so it reads as the water clearing rather than a cut, then lands on exactly
+   * clear water. Deliberately NOT cancelled by painting — on desktop the hero
+   * paints on hover, so the first mouse move after the click would abort it.
+   * Input is never locked; a stroke made inside the window just drains too.
+   *
+   * Runs on the wall clock, not the sim's timestep: the loop clamps each step to
+   * 1/60s, so a wash counted in steps would take twice as long on a 30fps phone
+   * and crawl in a throttled tab. Here 0.4s is 0.4s on any display.
+   */
+  clear() {
+    if (!this.supported || !this.dye) return
+    const now = performance.now()
+    this.washUntil = now + WASH_SECONDS * 1000
+    this.washLast = now
+  }
+
+  private wash() {
+    if (!this.dye) return
+    const now = performance.now()
+    if (now >= this.washUntil) {
+      this.washUntil = 0
+      for (const fbo of [this.dye, this.velocity]) {
+        this.clearTarget(fbo.read)
+        this.clearTarget(fbo.write)
+      }
+      return
+    }
+    const factor = Math.exp((-WASH_RATE * (now - this.washLast)) / 1000)
+    this.washLast = now
+    this.scaleInPlace(this.dye, factor)
+    this.scaleInPlace(this.velocity, factor)
   }
 
   /** Multiply every channel of a double FBO by `factor` (colour/amount ratio is kept). */

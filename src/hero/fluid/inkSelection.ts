@@ -28,3 +28,20 @@ function setActiveInk(id: string) {
 export function useActiveInk(): [string, (id: string) => void] {
   return [useSyncExternalStore(subscribe, getSnapshot, getSnapshot), setActiveInk]
 }
+
+/**
+ * "Clear colour" is a one-off request rather than state, so it's a plain event:
+ * the button fires it, whichever hero currently owns the water washes it.
+ */
+const clearListeners = new Set<() => void>()
+
+export function clearInk() {
+  clearListeners.forEach((wash) => wash())
+}
+
+export function onInkClear(wash: () => void) {
+  clearListeners.add(wash)
+  return () => {
+    clearListeners.delete(wash)
+  }
+}

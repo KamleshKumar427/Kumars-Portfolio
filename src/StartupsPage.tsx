@@ -6,7 +6,7 @@ import { Lightbox, type LightboxMedia } from './components/Lightbox'
 import { Reveal } from './components/ui/Reveal'
 import { SiteFooter } from './components/SiteFooter'
 import { inkConfig, resolveSwatch } from './hero/fluid/inkConfig'
-import { useActiveInk } from './hero/fluid/inkSelection'
+import { clearInk, useActiveInk } from './hero/fluid/inkSelection'
 import { useIsDark } from './hooks/useIsDark'
 import { useReducedMotion } from './hooks/useReducedMotion'
 import { useSeo } from './hooks/useSeo'
@@ -212,6 +212,16 @@ export function StartupsPage() {
                     title={s.name}
                   />
                 ))}
+                {/* Reset sits in the same panel it acts on, set apart by a hairline so it
+                    reads as an action, not a sixth colour. Outlined, not filled, for the
+                    same reason. */}
+                <span className="ink-picker-divider" aria-hidden="true" />
+                <button type="button" className="ink-clear" onClick={clearInk} aria-label="Clear colour">
+                  <svg className="ink-clear-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 19.5 3.9 14.8a1.6 1.6 0 0 1 0-2.3l8.7-8.7a1.6 1.6 0 0 1 2.3 0l5.3 5.3a1.6 1.6 0 0 1 0 2.3L11.9 19.5" /><path d="M8.6 19.5H20" /><path d="m7.3 10.9 6.3 6.3" /></svg>
+                  <span className="ink-clear-tip" aria-hidden="true">
+                    Clear colour
+                  </span>
+                </button>
               </div>
             </div>
           )}

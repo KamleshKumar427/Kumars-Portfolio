@@ -51,6 +51,19 @@ export const inkConfig = {
   // splatForce: how hard pointer motion pushes the water.
   splatForce: 6200,
 
+  // — Small screens —
+  // Drop size is measured in canvas HEIGHT, and a phone hero is about as tall as
+  // a laptop's but a quarter as wide — so on a phone each drop covers far more of
+  // the screen. A finger's movement is measured as a fraction of that narrow
+  // width too, so it throws the ink much harder. Together they flood a phone in
+  // a couple of strokes. At or below maxWidth, drops are smaller and push less.
+  // Above it — desktop — nothing changes.
+  compact: {
+    maxWidth: 900, // px — the breakpoint the hero layout already switches at
+    radiusScale: 0.4, // × splatRadius
+    forceScale: 0.35, // × splatForce
+  },
+
   // — Glass sheet over the water (dark mode) —
   glass: {
     reflectivity: 0.42, // how strongly the glass reflects (Fresnel mix)

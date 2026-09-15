@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { FluidSim } from './FluidSim'
+import { onInkClear } from './inkSelection'
 import { getSharedFluid } from './sharedFluid'
 
 type HeroFluidProps = {
@@ -57,6 +58,8 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
 
     const ro = new ResizeObserver(sizeToContainer)
     ro.observe(container)
+
+    const offClear = onInkClear(() => sim.clear())
 
     // ── Pointer → ink dropper ──
     const pointer = { x: 0, y: 0, has: false }
@@ -140,6 +143,7 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
 
     return () => {
       cancelAnimationFrame(raf)
+      offClear()
       ro.disconnect()
       io.disconnect()
       container.removeEventListener('pointermove', onPointerMove)
