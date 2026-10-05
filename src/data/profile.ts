@@ -15,7 +15,7 @@ export const profile = {
    *  want next leads, and "open to" carries the same green dot as the hero. */
   glance: [
     { label: 'Open to', value: 'Discussing opportunities', led: true },
-    { label: 'Aspiring', value: 'Solution Architect · Infrastructure Engineer' },
+    { label: 'Aspiring', value: 'Forward Deployed Engineer · Software Architect' },
     { label: 'Based in', value: 'Helsinki, Finland' },
     { label: 'Thesis', value: 'Deep learning in healthcare' },
     { label: 'Focus', value: 'Full-stack · payments · DevOps · AI' },

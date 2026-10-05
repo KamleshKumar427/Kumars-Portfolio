@@ -53,7 +53,7 @@ The site, the CV and LinkedIn tell one story:
 
 The hero line already says it: "Hand me the part that has to work. I'll own it end to end."
 
-**Open question for Kamlesh, not for Claude to settle:** the title. The hero says "AI Full-Stack Engineer". The CV says "Full-Stack Software Engineer, AI Agents & DevOps". About lists "Solution Architect · Infrastructure Engineer" as aspirations. A recruiter writes down one title. Raise this whenever a change touches the hero, About, the page title or the SEO text.
+**Open question for Kamlesh, not for Claude to settle:** the title. The hero says "AI Full-Stack Engineer". The CV says "Full-Stack Software Engineer, AI Agents & DevOps". About lists "Forward Deployed Engineer · Software Architect" as aspirations (set 2026-10-05). A recruiter writes down one title. Raise this whenever a change touches the hero, About, the page title or the SEO text.
 
 ## The page, section by section
 
