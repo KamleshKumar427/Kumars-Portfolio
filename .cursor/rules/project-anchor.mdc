@@ -1,13 +1,15 @@
 ---
-description: Project anchor — name, purpose, structure, and core aesthetic for the Kamlesh Kumar portfolio.
+description: Project anchor for the Kamlesh Kumar portfolio. Points to the shared working rules in CLAUDE.md and .claude/brain/.
 alwaysApply: true
 ---
 
-# Project Anchor
+# Project anchor
 
-- **Project:** Kamlesh Kumar — premium personal portfolio (React + Vite + TS), for HRs, CTOs & engineers.
-- **Purpose:** showcase an engineer of expensive systems (PCI-DSS gateways, DB internals) + a solo-built startup (XSTRYV).
-- **Structure:** a multi-page *dossier* — a book of chapters, NOT a single-page scroller. Landing = cover + chapter index.
-- **The website is itself the work sample** — every route, transition, and interaction is a craft demo.
-- **Core aesthetic (one line):** "Meniscus" — glass sheets over deep, viscous water; depth, refraction, slow blooming motion; quiet restraint.
-- **Full design system:** see @design-system.mdc (narrative, tokens, type, motion, spacing, routing, the Fish) — follow it on every frontend task.
+The working rules for this repo live in one place, shared by Claude Code and Cursor:
+
+- `CLAUDE.md`: what the site is for, how to work on it, the facts rules, the checks.
+- `.claude/brain/audience.md`: who visits, what each visitor needs, the 5-second, 30-second and 3-minute tests.
+- `.claude/brain/playbook.md`: taste, quality bar, scope rules, writing rules, and what Kamlesh has turned down.
+- `.claude/brain/design-system.md`: tokens, patterns, motion and breakpoints as built.
+
+Read CLAUDE.md before any change. The old "Meniscus" multi-page plan is archived in `.claude/brain/archive/` and is not the current design.

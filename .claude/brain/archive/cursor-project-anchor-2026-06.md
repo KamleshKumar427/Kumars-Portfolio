@@ -1,0 +1,19 @@
+# Archived: Cursor project anchor (June 2026)
+
+This was `.cursor/rules/project-anchor.mdc` until 2026-10-05. Superseded by CLAUDE.md.
+
+---
+
+---
+description: Project anchor — name, purpose, structure, and core aesthetic for the Kamlesh Kumar portfolio.
+alwaysApply: true
+---
+
+# Project Anchor
+
+- **Project:** Kamlesh Kumar — premium personal portfolio (React + Vite + TS), for HRs, CTOs & engineers.
+- **Purpose:** showcase an engineer of expensive systems (PCI-DSS gateways, DB internals) + a solo-built startup (XSTRYV).
+- **Structure:** a multi-page *dossier* — a book of chapters, NOT a single-page scroller. Landing = cover + chapter index.
+- **The website is itself the work sample** — every route, transition, and interaction is a craft demo.
+- **Core aesthetic (one line):** "Meniscus" — glass sheets over deep, viscous water; depth, refraction, slow blooming motion; quiet restraint.
+- **Full design system:** see @design-system.mdc (narrative, tokens, type, motion, spacing, routing, the Fish) — follow it on every frontend task.

@@ -4,9 +4,11 @@ import { CvMenu } from './CvMenu'
 import { ThemeToggle } from './ThemeToggle'
 
 const LINKS = [
+  { href: '#about', label: 'About' },
   { href: '#experience', label: 'Experience' },
   { href: '#education', label: 'Education' },
   { href: '#lab', label: 'Projects' },
+  { href: '#recognition', label: 'Recognition' },
   { href: '#testimonials', label: 'Testimonials' },
   { href: '#contact', label: 'Contact' },
 ]

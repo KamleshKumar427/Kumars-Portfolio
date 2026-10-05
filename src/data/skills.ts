@@ -7,15 +7,15 @@ export type SkillGroup = {
 export const skills: SkillGroup[] = [
   {
     label: 'Languages',
-    items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C / C++', 'SQL', 'x86 Assembly'],
+    items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C / C++', 'SQL', 'Shell', 'x86 Assembly'],
   },
   {
     label: 'Frameworks',
-    items: ['React', 'Next.js', 'Node.js', 'Spring Boot', 'FastAPI', 'Three.js'],
+    items: ['React', 'Next.js', 'Node.js', 'Spring Boot', '.NET', 'FastAPI', 'Three.js'],
   },
   {
     label: 'Data',
-    items: ['PostgreSQL', 'MSSQL', 'MongoDB', 'YugabyteDB'],
+    items: ['PostgreSQL', 'MSSQL', 'MongoDB', 'YugabyteDB', 'Supabase'],
   },
   {
     label: 'Cloud · DevOps',
@@ -27,7 +27,21 @@ export const skills: SkillGroup[] = [
       'Docker',
       'Kubernetes',
       'GitHub Actions',
+      'Jenkins',
+      'Azure',
       'Linux',
+    ],
+  },
+  {
+    label: 'Practices',
+    items: [
+      'REST APIs',
+      'System Design',
+      'Microservices',
+      'OAuth 2.0 / JWT',
+      'CI/CD',
+      'Agile',
+      'AI-native development',
     ],
   },
 ]

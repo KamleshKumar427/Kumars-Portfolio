@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { FluidSim } from './FluidSim'
+import { inkConfig } from './inkConfig'
 import { onInkClear } from './inkSelection'
 import { getSharedFluid } from './sharedFluid'
 
@@ -63,6 +64,8 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
 
     // ── Pointer → ink dropper ──
     const pointer = { x: 0, y: 0, has: false }
+    // Where a mouse is, for leaning the view (touch paints but doesn't lean).
+    const mouse = { x: 0, y: 0, over: false }
 
     const toUv = (clientX: number, clientY: number) => {
       const rect = canvas.getBoundingClientRect()
@@ -89,17 +92,25 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
       }
     }
 
-    const onPointerMove = (e: PointerEvent) => move(e.clientX, e.clientY)
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse') {
+        mouse.x = e.clientX
+        mouse.y = e.clientY
+        mouse.over = true
+      }
+      move(e.clientX, e.clientY)
+    }
     const onPointerDown = (e: PointerEvent) => {
       const p = toUv(e.clientX, e.clientY)
       pointer.x = p.x
       pointer.y = p.y
       pointer.has = true
       // A gentle press releases a bloom even without movement.
-      sim.addSplat(p.x, p.y, 0, 0.0015)
+      sim.addSplat(p.x, p.y, 0, 0.0015, true)
     }
     const onPointerLeave = () => {
       pointer.has = false
+      mouse.over = false
     }
 
     container.addEventListener('pointermove', onPointerMove)
@@ -110,8 +121,34 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
     // not every time you move between pages.
     if (!shared.seeded) {
       shared.seeded = true
-      sim.addSplat(0.35, 0.55, 0.0, 0.002)
-      sim.addSplat(0.62, 0.42, -0.002, 0.0)
+      sim.addSplat(0.35, 0.55, 0.0, 0.002, true)
+      sim.addSplat(0.62, 0.42, -0.002, 0.0, true)
+    }
+
+    // ── The eye the water is seen from ──
+    // The viewer sits over the middle of the viewport, so as the hero scrolls
+    // the view tilts into the water and the paper slides beneath the ink. A
+    // mouse leans the view a little further, eased so it drifts rather than
+    // jumps. Reduced motion keeps the eye still, straight over the middle.
+    const stillEye = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const lean = { x: 0, y: 0 }
+    const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
+    const placeEye = (elapsed: number) => {
+      if (stillEye) return
+      const rect = container.getBoundingClientRect()
+      if (rect.width < 2 || rect.height < 2) return
+      const midX = window.innerWidth / 2
+      const midY = window.innerHeight / 2
+      const k = inkConfig.depth.lean
+      const toX = mouse.over ? ((mouse.x - midX) / rect.width) * k : 0
+      const toY = mouse.over ? (-(mouse.y - midY) / rect.height) * k : 0
+      const ease = 1 - Math.exp(-elapsed * 4)
+      lean.x += (toX - lean.x) * ease
+      lean.y += (toY - lean.y) * ease
+      sim.setEye(
+        clamp((midX - rect.left) / rect.width + lean.x, -0.3, 1.3),
+        clamp(1 - (midY - rect.top) / rect.height + lean.y, -0.5, 1.5),
+      )
     }
 
     // ── Render loop on the wall clock ──
@@ -127,6 +164,7 @@ export function HeroFluid({ color, isDark }: HeroFluidProps) {
       const dt = Math.min(elapsed, 1 / 60)
       if (elapsed - dt > 0.1) sim.fade(elapsed - dt)
       sim.step(dt)
+      placeEye(Math.min(elapsed, 0.1))
       sim.render()
       raf = visible ? requestAnimationFrame(loop) : 0
     }

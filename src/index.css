@@ -58,21 +58,27 @@
   --glass-lift: 0 1px 1px rgba(18, 34, 24, 0.05), 0 8px 18px -8px rgba(18, 34, 24, 0.16),
     0 22px 44px -20px rgba(18, 34, 24, 0.2);
   --glass-ring: rgba(255, 255, 255, 0.92);
+  /* Stat tiles. The emphasis lives in the FIGURE (see .stat-value), not in a
+     coloured box — tinted boxes read as muddy shapes and still hid the number.
+     So the tile is a quiet, neutral card: white, a crisp hairline, and a soft
+     shadow that lifts it off both plain and tinted sections. */
+  --stat-bg: var(--card);
+  --stat-border: #d3e3cb;
+  --stat-shadow: 0 1px 2px rgba(18, 34, 24, 0.06), 0 6px 16px -8px rgba(18, 34, 24, 0.16);
+  /* Split-flap tiles (see .flap-cell). A white tile on paper this light is
+     invisible, so the tile is sunken rather than raised: a faint ink tint, a
+     crisp edge, and a shadow pressed in at the top the way a real flap sits in
+     its slot. */
+  --flap-bg: color-mix(in srgb, var(--ink) 7%, var(--card));
+  --flap-border: #d3e3cb;
+  --flap-fold: rgba(18, 34, 24, 0.14);
+  --flap-inset: inset 0 1px 2px rgba(18, 34, 24, 0.13), inset 0 -1px 0 rgba(255, 255, 255, 0.75);
   /* Mobile menu drawer (see .nav-links) */
   --drawer-fill: linear-gradient(180deg, rgba(252, 254, 251, 0.8), rgba(248, 251, 246, 0.7));
   --drawer-edge: rgba(20, 40, 24, 0.09);
   --drawer-lift: 0 22px 44px -26px rgba(18, 34, 24, 0.3);
   --media: repeating-linear-gradient(135deg, #f3f9f0 0 14px, #ecf4e8 14px 28px);
-  /* The notebook ruling. Deliberately faint: real ruling can't line up with
-     arbitrary web text, so anything stronger reads as a worksheet behind the
-     paragraphs. The alpha below is the one knob — raise it for more visible
-     lines, drop it to 0 for plain paper. Dark mode has none. */
-  --rule: repeating-linear-gradient(
-    to bottom,
-    transparent 0 31px,
-    rgba(30, 68, 34, 0.055) 31px 32px
-  );
-  /* Alternating sections tint the paper instead of covering it, so the ruling
+  /* Alternating sections tint the paper instead of covering it, so the texture
      runs unbroken down the page instead of restarting at every section edge. */
   --alt-fill: rgba(24, 60, 28, 0.045);
 
@@ -82,20 +88,17 @@
      the knob. Dark mode keeps its smooth ink surface. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='0.12' intercept='0.87'/%3E%3CfeFuncG type='linear' slope='0.12' intercept='0.92'/%3E%3CfeFuncB type='linear' slope='0.12' intercept='0.86'/%3E%3CfeFuncA type='linear' slope='0.42'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
 
-  /* Crumpled sheet. feTurbulence alone is flat noise; running it through
-     feDiffuseLighting treats it as a HEIGHT FIELD and lights it from one side,
-     which is what turns it into creased facets rather than static. Tiled at
-     560px with stitchTiles so the folds don't visibly repeat. */
-  --crumple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Cfilter id='c' filterUnits='userSpaceOnUse' x='0' y='0' width='560' height='560'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.016' numOctaves='4' seed='11' stitchTiles='stitch' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23ffffff' surfaceScale='2.4' diffuseConstant='1'%3E%3CfeDistantLight azimuth='62' elevation='60'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='0.38' intercept='0.6'/%3E%3CfeFuncG type='linear' slope='0.38' intercept='0.65'/%3E%3CfeFuncB type='linear' slope='0.38' intercept='0.58'/%3E%3CfeFuncA type='linear' slope='0.34'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='560' height='560' filter='url(%23c)'/%3E%3C/svg%3E");
-
   /* Halftone screen — two dot lattices offset by half a tile, which puts the
-     dots on a 45deg diagonal the way a real print screen sits. Kept faint: at
-     full strength a raster over body text reads as a broken display, not
-     texture. */
-  --halftone: radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.17) 0 0.7px, rgba(70, 90, 72, 0) 1.2px),
-    radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.17) 0 0.7px, rgba(70, 90, 72, 0) 1.2px);
-  --halftone-size: 5px 5px, 5px 5px;
-  --halftone-pos: 0 0, 2.5px 2.5px;
+     dots on a 45deg diagonal the way a real print screen sits.
+     Two knobs, and spacing is the better one: the layer is painted OVER the
+     text, so it is the number of dots crossing each glyph that costs
+     legibility, not how dark any single dot is. Widening the tile thins the
+     screen far faster than fading it — 5px to 8px drops ink coverage ~61%,
+     which is what bought back the opacity here. */
+  --halftone: radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.07) 0 0.7px, rgba(70, 90, 72, 0) 1.2px),
+    radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.07) 0 0.7px, rgba(70, 90, 72, 0) 1.2px);
+  --halftone-size: 8px 8px, 8px 8px;
+  --halftone-pos: 0 0, 4px 4px;
 
   /* Shadows are tight and green-tinted rather than soft and floaty — matte
      stock sits on the page, it doesn't hover above it. */
@@ -119,7 +122,6 @@
   --hover: rgba(235, 236, 240, 0.05);
   --nav-bg: rgba(20, 21, 25, 0.78);
   --media: repeating-linear-gradient(135deg, #1f2126 0 14px, #262830 14px 28px);
-  --rule: none; /* the paper ruling is a light-mode texture only */
   --alt-fill: var(--paper-2);
 
   --glass-fill: linear-gradient(
@@ -137,11 +139,17 @@
   );
   --glass-lift: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 36px -14px rgba(0, 0, 0, 0.62);
   --glass-ring: rgba(28, 32, 40, 0.9);
+  --stat-bg: var(--card);
+  --stat-border: var(--line);
+  --stat-shadow: none;
+  --flap-bg: color-mix(in srgb, var(--ink) 9%, var(--card));
+  --flap-border: var(--line);
+  --flap-fold: rgba(0, 0, 0, 0.5);
+  --flap-inset: inset 0 -1px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.07);
   --drawer-fill: linear-gradient(180deg, rgba(26, 28, 33, 0.8), rgba(20, 21, 25, 0.72));
   --drawer-edge: rgba(255, 255, 255, 0.08);
   --drawer-lift: 0 24px 48px -24px rgba(0, 0, 0, 0.62);
   --grain: none; /* paper texture is a light-mode treatment only */
-  --crumple: none;
   --halftone: none;
 
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -165,7 +173,6 @@
     --hover: rgba(235, 236, 240, 0.05);
     --nav-bg: rgba(20, 21, 25, 0.78);
     --media: repeating-linear-gradient(135deg, #1f2126 0 14px, #262830 14px 28px);
-  --rule: none; /* the paper ruling is a light-mode texture only */
   --alt-fill: var(--paper-2);
 
   --glass-fill: linear-gradient(
@@ -183,11 +190,17 @@
   );
   --glass-lift: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 36px -14px rgba(0, 0, 0, 0.62);
   --glass-ring: rgba(28, 32, 40, 0.9);
+  --stat-bg: var(--card);
+  --stat-border: var(--line);
+  --stat-shadow: none;
+  --flap-bg: color-mix(in srgb, var(--ink) 9%, var(--card));
+  --flap-border: var(--line);
+  --flap-fold: rgba(0, 0, 0, 0.5);
+  --flap-inset: inset 0 -1px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.07);
   --drawer-fill: linear-gradient(180deg, rgba(26, 28, 33, 0.8), rgba(20, 21, 25, 0.72));
   --drawer-edge: rgba(255, 255, 255, 0.08);
   --drawer-lift: 0 24px 48px -24px rgba(0, 0, 0, 0.62);
   --grain: none; /* paper texture is a light-mode treatment only */
-  --crumple: none;
   --halftone: none;
     --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-2: 0 2px 8px rgba(0, 0, 0, 0.5), 0 10px 24px rgba(0, 0, 0, 0.4);
@@ -213,6 +226,26 @@
   --accent-wash: color-mix(in srgb, var(--seal) 12%, transparent);
   --material: var(--nav-bg);
   --material-border: var(--line);
+
+  /* ── Reading scale ──
+     Set from a measured audit, not by eye: 20 text styles were under 12px,
+     several uppercase at up to 0.22em tracking, and the longest reading lines
+     ran ~150 characters. Rem, not px, so it all follows the reader's own
+     browser text-size setting. */
+  --fs-label: 0.75rem; /* 12px — kickers, labels. Nothing smaller. */
+  --fs-tag: 0.78rem; /* ~12.5px — tags and chips */
+  --fs-meta: 0.8125rem; /* 13px — dates, years */
+  --fs-read: 1rem; /* 16px — secondary reading text */
+  --fs-read-lg: 1.0625rem; /* 17px — primary reading text; matches body */
+  /* Uppercase at small sizes wants a little air, not a lot: past ~0.1em the
+     letters stop forming words and get read one at a time. */
+  --track-label: 0.08em;
+  /* ~70 characters a line at ANY size — em scales with the text it limits,
+     which ch (the width of a zero) does not track for proportional type. */
+  --measure: 33em;
+  /* Long paragraphs read in the secondary grey were tiring; this sits between
+     ink and ink2, keeping them quieter than headings but easy to follow. */
+  --text-body: color-mix(in srgb, var(--ink) 55%, var(--ink2));
 
   /* ── Type: system font everywhere. The original design's serif / mono
      roles now resolve to the same family, so every section shares it.
@@ -260,7 +293,6 @@ body {
   letter-spacing: -0.011em;
   color: var(--text);
   background-color: var(--bg);
-  background-image: var(--rule);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-synthesis-weight: none;
@@ -276,12 +308,11 @@ body::after {
   inset: 0;
   z-index: 500;
   pointer-events: none;
-  /* Screen over creases over tooth, as it would sit on real printed stock.
-     Each layer carries its own alpha (see the feFuncA in the filters above),
-     so the three share a single blend instead of stacking three of them. */
-  background-image: var(--halftone), var(--crumple), var(--grain);
-  background-size: var(--halftone-size, auto), 560px 560px, 160px 160px;
-  background-position: var(--halftone-pos, 0 0), 0 0, 0 0;
+  /* Dot screen over paper tooth. Each layer carries its own alpha (see the
+     feFuncA in the filter above), so they share a single blend. */
+  background-image: var(--halftone), var(--grain);
+  background-size: var(--halftone-size, auto), 160px 160px;
+  background-position: var(--halftone-pos, 0 0), 0 0;
   mix-blend-mode: multiply;
 }
 
@@ -366,13 +397,14 @@ html.lenis body {
 
 .tag {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-tag);
   color: var(--ink2);
   border: 1px solid var(--line);
   padding: 5px 10px;
   border-radius: 100px;
   white-space: nowrap;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
+  letter-spacing: 0.01em;
 }
 .tag:hover {
   background: var(--seal);
@@ -382,13 +414,14 @@ html.lenis body {
 
 .chip {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-tag);
   color: var(--ink);
   border: 1px solid var(--line);
   background: var(--card);
   padding: 6px 11px;
   border-radius: 100px;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
+  letter-spacing: 0.01em;
 }
 .chip:hover {
   background: var(--seal);
@@ -554,7 +587,7 @@ html.lenis body {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
   /* In the drawer it becomes a proper button rather than a red list row. */
   /* Sized to its label, not stretched across the drawer, and pulled left by
      exactly its own padding so the WORD lines up with every other row's text
@@ -614,7 +647,12 @@ html.lenis body {
   transform: translateY(-3.25px) rotate(-45deg);
 }
 
-@media (max-width: 900px) {
+/* The nav collapses at 1080px, not the 900px the rest of the mobile layout
+   uses: nine links need ~974px on macOS's system font, and Windows' Segoe UI
+   sets wider, so below this the full bar wraps onto a second row and runs out
+   of the bar. Keep all three nav breakpoints (pill, drawer, and the
+   reduced-transparency fallback) on the same value. */
+@media (max-width: 1080px) {
   .nav-menu {
     display: flex;
   }
@@ -633,6 +671,13 @@ html.lenis body {
     backdrop-filter: blur(30px) saturate(180%);
     border-bottom: 1px solid var(--drawer-edge);
     box-shadow: var(--drawer-lift);
+    /* Never taller than the screen. It's fixed, so anything below the fold
+       would otherwise be unreachable — a landscape phone, or a reader with a
+       larger default text size (the type is rem-based and grows with it). */
+    max-height: calc(100vh - 56px);
+    max-height: calc(100dvh - 56px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     opacity: 0;
     transform: translateY(-8px) scale(0.99);
     transform-origin: top center;
@@ -1041,6 +1086,125 @@ html.lenis body {
   text-wrap: pretty;
 }
 
+/* ── Split-flap highlights ──
+   A departure board under the headline. Every tile is the same width so the
+   row never reflows while characters change, and the value is tabular for the
+   same reason. Tiles are paper, not glass: the card surface and the same
+   hairline the rest of the site uses, with one crease across the middle. */
+.flap {
+  margin-top: 4px;
+}
+/* The board rewrites itself constantly, so screen readers get this instead:
+   the whole list, once, as plain text. */
+.flap-readable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  list-style: none;
+}
+.flap-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin: 0;
+}
+.flap-label {
+  flex-shrink: 0;
+  min-width: 7.5rem;
+  text-align: right;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--text-2);
+  animation: flap-label-in 300ms var(--ease) both;
+}
+@keyframes flap-label-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.flap-cells {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 1rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+.flap-cell {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  /* fixed width, so the row never reflows as characters change. Wide enough
+     that an M clears the tile edge in the site's sans. */
+  width: 1.02em;
+  padding: 0.2em 0;
+  border: 1px solid var(--flap-border);
+  border-radius: 3px;
+  background: var(--flap-bg);
+  box-shadow: var(--flap-inset);
+  color: var(--text);
+  transition:
+    color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+/* the crease a real flap tile folds along */
+.flap-cell::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px solid var(--flap-fold);
+  pointer-events: none;
+}
+/* Still spinning: lighter, and tipped back a little, so the eye can watch the
+   value land one tile at a time. Landing is the transition above. */
+.flap-cell.is-rolling {
+  color: var(--text-2);
+  transform: translateY(-1px) scaleY(0.94);
+}
+/* Past the end of the value — keep the space, drop the tile. */
+.flap-cell.is-blank {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  transform: none;
+}
+.flap-cell.is-blank::after {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flap-cell,
+  .flap-label {
+    transition: none;
+    animation: none;
+  }
+  .flap-cell.is-rolling {
+    transform: none;
+  }
+}
+/* Phones: the label leads the line instead of sitting in a right-aligned
+   column, since there is no room for a column. */
+@media (max-width: 640px) {
+  .flap-label {
+    min-width: 0;
+    text-align: left;
+  }
+  .flap-cells {
+    font-size: 0.875rem;
+  }
+}
+
 
 /* Stays on the right where it has always sat; the prominence comes from the
    label weight and the falling drop below, not from moving it. */
@@ -1149,7 +1313,7 @@ html.lenis body {
   gap: 3px;
   max-width: 150px;
   text-align: right;
-  font-size: 11px;
+  font-size: var(--fs-label);
   font-weight: 500;
   letter-spacing: 0.05em;
   line-height: 1.35;
@@ -1344,7 +1508,7 @@ html.lenis body {
     gap: 6px;
   }
   .ink-dock-hint {
-    font-size: 10px;
+    font-size: 0.6875rem;
   }
   .ink-picker,
   .startup-inkpicker {
@@ -1415,8 +1579,8 @@ html.lenis body {
 }
 .section-kicker {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--seal);
   margin-bottom: 14px;
@@ -1431,9 +1595,9 @@ html.lenis body {
 }
 .section-lead {
   max-width: 34ch;
-  font-size: 0.96rem;
+  font-size: var(--fs-read-lg);
   line-height: 1.6;
-  color: var(--ink2);
+  color: var(--text-body);
 }
 
 /* Section heads in the Apple-style sections */
@@ -1463,7 +1627,7 @@ html.lenis body {
   font-size: 17px;
   line-height: 1.5;
   letter-spacing: -0.011em;
-  color: var(--text-2);
+  color: var(--text-body);
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -1518,16 +1682,16 @@ html.lenis body {
 }
 .work-meta {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
   color: var(--ink2);
   margin-top: 14px;
   line-height: 1.9;
 }
 .work-kicker {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--ink2);
   margin-bottom: 10px;
@@ -1541,10 +1705,10 @@ html.lenis body {
   margin-bottom: 12px;
 }
 .work-summary {
-  font-size: 1rem;
+  font-size: var(--fs-read-lg);
   line-height: 1.65;
-  color: var(--ink2);
-  max-width: 62ch;
+  color: var(--text-body);
+  max-width: var(--measure);
   margin-bottom: 18px;
 }
 .work-points {
@@ -1556,10 +1720,14 @@ html.lenis body {
 .work-point {
   display: flex;
   gap: 12px;
-  font-size: 0.95rem;
-  line-height: 1.55;
+  font-size: var(--fs-read);
+  line-height: 1.6;
   color: var(--ink);
-  max-width: 64ch;
+  max-width: var(--measure);
+}
+.work-point-label {
+  font-weight: 650;
+  color: var(--ink);
 }
 .work-point::before {
   content: '◇';
@@ -1681,7 +1849,7 @@ html.lenis body {
 .tm-quote {
   position: relative;
   margin: 0;
-  font-size: 15px;
+  font-size: var(--fs-read);
   line-height: 1.62;
   letter-spacing: -0.006em;
   color: var(--text);
@@ -1716,8 +1884,8 @@ html.lenis body {
 }
 .lab-toggle-btn {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--ink2);
   background: none;
@@ -1766,7 +1934,7 @@ a.lab-card:hover {
 }
 .lab-card-media span {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: 0.08em;
   color: var(--ink2);
   background: color-mix(in srgb, var(--paper) 85%, transparent);
@@ -1815,7 +1983,7 @@ a.lab-card:hover {
 }
 .lab-card-slider-hint {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--seal-ink);
@@ -1877,8 +2045,8 @@ a.lab-card:hover {
 }
 .lab-badge {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--seal-ink);
   background: var(--seal);
@@ -1906,9 +2074,9 @@ a.lab-card:hover {
   color: var(--seal);
 }
 .lab-card-desc {
-  font-size: 0.95rem;
+  font-size: var(--fs-read);
   line-height: 1.62;
-  color: var(--ink2);
+  color: var(--text-body);
   margin: 10px 0 18px;
 }
 .lab-card .tags {
@@ -2007,8 +2175,8 @@ a.lab-card:hover {
 }
 .writing-card-meta {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--seal);
   margin-bottom: 10px;
@@ -2029,7 +2197,7 @@ a.lab-card:hover {
 .writing-card-action {
   margin-top: 16px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: 0.06em;
   color: var(--seal);
   opacity: 0.85;
@@ -2047,11 +2215,12 @@ a.lab-card:hover {
 /* ════════════════════════════════════════════════════════════════
    PATH
    ════════════════════════════════════════════════════════════════ */
-.path-grid {
+/* Tools & Materials now has its own band, so the groups can run side by side
+   across the full width instead of stacking in a narrow column. */
+.skills--grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-  gap: clamp(36px, 6vw, 90px);
-  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(20px, 3vw, 38px);
 }
 .path-col-title {
   font-family: var(--font-serif);
@@ -2063,7 +2232,7 @@ a.lab-card:hover {
 }
 .edu-item {
   border-top: 1px solid var(--line);
-  padding: 22px 0;
+  padding: clamp(26px, 3vw, 38px) 0;
 }
 .edu-item:last-of-type {
   border-bottom: 1px solid var(--line);
@@ -2082,7 +2251,7 @@ a.lab-card:hover {
 }
 .edu-period {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-meta);
   color: var(--ink2);
   white-space: nowrap;
 }
@@ -2104,21 +2273,12 @@ a.lab-card:hover {
 [data-theme='dark'] .edu-logo--mono {
   filter: invert(1) brightness(1.15);
 }
-.edu-grade {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--seal-ink);
-  background: var(--seal);
-  padding: 3px 8px;
-  border-radius: 100px;
-}
 .edu-note {
-  font-size: 0.92rem;
+  font-size: var(--fs-read);
   line-height: 1.6;
-  color: var(--ink2);
+  color: var(--text-body);
   margin-top: 10px;
+  max-width: var(--measure);
 }
 .path-recognition {
   font-size: 0.9rem;
@@ -2130,14 +2290,6 @@ a.lab-card:hover {
   content: '◇ ';
   color: var(--seal);
 }
-.skills-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink2);
-  margin-bottom: 24px;
-}
 .skills {
   display: flex;
   flex-direction: column;
@@ -2145,18 +2297,11 @@ a.lab-card:hover {
 }
 .skill-label {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--seal);
   margin-bottom: 12px;
-}
-
-@media (max-width: 820px) {
-  .path-grid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -2272,9 +2417,9 @@ a.lab-card:hover {
 .koi-section .scene-eyebrow {
   gap: 9px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-label);
   font-weight: 400;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .scene-title {
@@ -2291,7 +2436,7 @@ a.lab-card:hover {
 }
 .scene-cue {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: 0.1em;
   text-transform: lowercase;
   color: var(--ink2);
@@ -2466,8 +2611,8 @@ a.lab-card:hover {
   font-size: 16.5px;
   line-height: 1.6;
   letter-spacing: -0.009em;
-  color: var(--text-2);
-  max-width: 62ch;
+  color: var(--text-body);
+  max-width: var(--measure);
   margin-bottom: 16px;
 }
 
@@ -2548,9 +2693,9 @@ a.lab-card:hover {
   margin-bottom: 8px;
 }
 .startup-card-body {
-  font-size: 14.5px;
+  font-size: var(--fs-read);
   line-height: 1.58;
-  color: var(--text-2);
+  color: var(--text-body);
 }
 /* Tech tags: Apple-style pills, with the seal fill on hover like the rest
    of the site. */
@@ -2589,9 +2734,9 @@ a.lab-card:hover {
 }
 #pathways .startup-sec-label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-label);
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--ink2);
 }
@@ -2627,8 +2772,8 @@ a.lab-card:hover {
   display: inline-flex;
   margin-bottom: 18px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--seal-ink);
   background: var(--seal);
@@ -2648,7 +2793,7 @@ a.lab-card:hover {
 }
 .startup-spec dt {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink2);
@@ -2671,7 +2816,7 @@ a.lab-card:hover {
 .startup-fig figcaption {
   margin-top: 9px;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--fs-meta);
   letter-spacing: 0.08em;
   color: var(--ink2);
 }
@@ -2783,6 +2928,21 @@ a.lab-card:hover {
   overflow: hidden;
   pointer-events: none;
 }
+/* Stand-in for the frame above on browsers that won't render a PDF inline.
+   The frame fits the page to its width and lets the rest run past the bottom
+   edge (view=FitH); anchoring the picture to the top and leaving its height
+   natural reproduces that exactly, so the two look the same. The extra 18px
+   above is only there to push the viewer's scrollbar out of sight — a picture
+   has none, so it keeps its true width. */
+.img-slot-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
 .img-slot--empty {
   display: grid;
   place-items: center;
@@ -2793,7 +2953,7 @@ a.lab-card:hover {
 }
 .img-slot-hint {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: 0.06em;
   color: var(--ink2);
   max-width: 24ch;
@@ -2938,7 +3098,7 @@ button.img-slot {
 }
 .lightbox-caption {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-meta);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink2);
@@ -3052,7 +3212,7 @@ button.img-slot {
   }
 }
 
-@media (prefers-reduced-transparency: reduce) and (max-width: 900px) {
+@media (prefers-reduced-transparency: reduce) and (max-width: 1080px) {
   .nav-links,
   .nav.is-menu-open::before {
     background: var(--bg);
@@ -3080,4 +3240,388 @@ button.img-slot {
   .startup-inkpicker::before {
     display: none;
   }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ABOUT · STATS · RECOGNITION · CERTIFICATIONS
+   Content added in the content pass. Built from the patterns already on
+   the page — hairline rows, mono kickers, pill tags — so the new sections
+   read as part of the same document rather than bolted on.
+   ════════════════════════════════════════════════════════════════ */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+  gap: clamp(36px, 6vw, 90px);
+  align-items: start;
+  margin-top: clamp(18px, 3vw, 34px);
+}
+/* The whole section is one short statement in giant quote marks. It used to
+   be five paragraphs repeating what the sections below already prove, which
+   is a lot of words to skim past on the way to the evidence. */
+.about-quote {
+  position: relative;
+  margin: 0;
+  /* No padding on top: the first line starts level with the table's top rule
+     beside it. The right padding keeps the closing mark clear of the last
+     line, whatever width the text wraps at. */
+  padding: 0 clamp(38px, 4.6vw, 58px) clamp(22px, 2.6vw, 30px) clamp(26px, 3.4vw, 40px);
+  /* Narrow enough to wrap into a block rather than run as a wide ribbon. */
+  max-width: 17.5em;
+  font-size: clamp(1.4rem, 3vw, 2.35rem);
+  font-weight: 500;
+  line-height: 1.38;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+/* The marks sit at opposite corners, hung outside the text, so the statement
+   reads as something said rather than as another paragraph. */
+.about-quote::before,
+.about-quote::after {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-size: clamp(3.6rem, 7.4vw, 5.4rem);
+  line-height: 1;
+  color: var(--seal);
+  opacity: 0.2;
+  pointer-events: none;
+}
+.about-quote::before {
+  content: '\201C';
+  left: 0;
+  top: 0;
+}
+.about-quote::after {
+  content: '\201D';
+  right: 0;
+  bottom: 0;
+  transform: translateY(0.34em);
+}
+
+/* The green dot from the hero, reused on the one row people scan for. */
+.glance-value .status-led {
+  margin-right: 8px;
+  vertical-align: baseline;
+  display: inline-block;
+}
+
+.glance {
+  border-top: 1px solid var(--line);
+}
+/* Reference, not the headline: the rows stay tight so the statement beside
+   them keeps the weight. */
+.glance-row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.glance-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink2);
+  padding-top: 3px;
+}
+.glance-value {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* Figures pulled out of the prose. A number buried mid-sentence is read as
+   prose; the same number on its own line is read as evidence. */
+/* Wide screens: tiles in one natural row, sized to their content (equal
+   heights come free from the flex row). Phones get their own grid below. */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 20px;
+}
+/* A boxed figure is read as data; the same figure inside a sentence is read as
+   prose and skimmed past. Applies everywhere stats appear — roles, degrees,
+   recognition. */
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 8rem;
+  padding: 14px 16px 13px;
+  border: 1px solid var(--stat-border);
+  border-radius: var(--r-sm);
+  background: var(--stat-bg);
+  box-shadow: var(--stat-shadow);
+  text-align: center;
+}
+/* The figure is the highlight: large, bold, and in the accent — the same red
+   the 01/02/03 role numbers use, so on this site red numerals already mean
+   "look here". Tabular figures keep digits evenly spaced. */
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  text-wrap: balance;
+}
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+.honour {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: clamp(18px, 4vw, 56px);
+  padding: clamp(28px, 4vw, 46px) clamp(10px, 2vw, 22px);
+  border-top: 1px solid var(--line);
+  align-items: start;
+}
+.honour-kind {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--seal);
+}
+.honour-period {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.16em;
+  color: var(--ink2);
+  margin-top: 8px;
+}
+.honour-title {
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.honour-org {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin: 8px 0 14px;
+}
+.honour-summary {
+  font-size: var(--fs-read-lg);
+  line-height: 1.65;
+  color: var(--text-body);
+  max-width: var(--measure);
+  margin-bottom: 18px;
+}
+
+/* Certifications: cards on the same raised surface as the stat tiles, so
+   every piece of evidence on the page reads as the same kind of object. */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: clamp(14px, 2vw, 22px);
+}
+.cert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: clamp(18px, 2.4vw, 24px);
+  border: 1px solid var(--stat-border);
+  border-radius: var(--r-md);
+  background: var(--stat-bg);
+  box-shadow: var(--stat-shadow);
+}
+/* the course's own mark, on a small tile */
+.cert-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.cert-mark .skill-icon {
+  width: 22px;
+  height: 22px;
+}
+.cert-link {
+  display: inline-block;
+  margin-top: 14px;
+}
+.cert-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cert-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.cert-year {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--ink2);
+  flex-shrink: 0;
+}
+.cert-issuer {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin: 7px 0 8px;
+}
+.cert-detail {
+  font-size: var(--fs-read);
+  line-height: 1.6;
+  color: var(--text-body);
+}
+
+/* Transcripts, certificates and profiles — a claim with a link behind it reads
+   differently from the same claim on its own. */
+.proof-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 18px;
+}
+.proof-link {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--seal);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color var(--t-fast) var(--ease);
+}
+.proof-link:hover {
+  border-bottom-color: currentColor;
+}
+/* On a phone the link is only 21px of text — under the 24px WCAG target and
+   well under a fingertip. The box stays the same size so the design doesn't
+   change; an invisible pad around it takes the tap. The row gap grows to match,
+   so neighbouring pads meet rather than overlap and steal each other's taps. */
+@media (pointer: coarse) {
+  .proof-link {
+    position: relative;
+  }
+  .proof-link::after {
+    content: '';
+    position: absolute;
+    inset: -11px -8px;
+  }
+  .proof-links {
+    gap: 24px 20px;
+  }
+}
+.edu-points {
+  margin-top: 14px;
+}
+
+/* Education gained a focus line and named coursework. */
+.edu-focus {
+  font-size: var(--fs-read);
+  line-height: 1.6;
+  color: var(--ink);
+  margin-top: 12px;
+  max-width: var(--measure);
+}
+.edu-courses {
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .about-grid,
+  .honour {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(22px, 5vw, 36px);
+  }
+  .honour-aside {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .honour-period {
+    margin-top: 0;
+  }
+}
+
+/* Paragraphs avoid a single orphaned word on the last line; headings split
+   into lines of similar length instead of a long line over a short one. */
+p,
+.work-point,
+.tm-quote {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+/* Phones: an explicit two-column set, so figures line up in a 2x2 grid.
+   Content-sized tiles landed one per line here (their uppercase labels are
+   wide), which read as a ragged list rather than a set of figures. */
+@media (max-width: 640px) {
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stat {
+    min-width: 0;
+    padding: 12px 10px 11px;
+  }
+  .stat-value {
+    font-size: 1.12rem;
+  }
+  /* an odd one out spans the row instead of sitting at half width */
+  .stat:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Skill logos. Each mark's colour arrives per theme as --icon-light /
+   --icon-dark (see SkillIcon: a brand colour only where it stays visible on
+   the chip, otherwise the text colour). */
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px 6px 10px;
+}
+.skill-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--icon-light, currentColor);
+  transition: color var(--t-fast) var(--ease);
+}
+[data-theme='dark'] .skill-icon {
+  color: var(--icon-dark, currentColor);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .skill-icon {
+    color: var(--icon-dark, currentColor);
+  }
+}
+/* On hover the chip turns red; a coloured mark on red would clash. */
+.chip:hover .skill-icon {
+  color: currentColor;
 }

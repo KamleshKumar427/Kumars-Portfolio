@@ -57,7 +57,7 @@ export function TestimonialsSection() {
   const loop = [...testimonials, ...testimonials]
 
   return (
-    <section id="testimonials" className="section tm-section">
+    <section id="testimonials" className="section section--alt tm-section">
       <div className="section-inner">
         <Reveal>
           <div className="section-head">

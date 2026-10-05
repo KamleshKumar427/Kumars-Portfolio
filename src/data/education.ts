@@ -6,20 +6,55 @@ export type Education = {
   logo?: string
   /** mono logos (e.g. Helsinki wordmark) invert on dark; color logos stay as-is */
   logoTheme?: 'mono' | 'color'
-  /** Highlighted grade badge, e.g. MSc GPA */
-  grade?: string
+  /** what the degree is actually pointed at */
+  focus?: string
   note?: string
+  /** claims worth stating in full */
+  points?: string[]
+  /** figures, shown as boxes — quicker to read than the same numbers in a sentence */
+  stats?: { value: string; label: string }[]
+  /** coursework worth naming */
+  courses?: string[]
+  /** proof: transcripts, certificates, profiles */
+  links?: { label: string; href: string }[]
 }
 
 export const education: Education[] = [
   {
     degree: 'MSc Computer Science',
     school: 'University of Helsinki',
-    period: 'Sep 2025 — May 2027',
+    period: 'Sep 2025 — Mar 2027',
     logo: '/images/education/helsinki.svg',
     logoTheme: 'mono',
-    grade: 'Grade 4.9 / 5',
-    note: 'Courses: Machine learning, MLOps, Docker, Kubernetes (ongoing), distributed systems, and scalable architecture.',
+    focus:
+      'Study track: Software Engineering — scalable systems, full-stack development, ML/deep learning and MLOps.',
+    points: [
+      'Awarded a 100% scholarship on academic merit.',
+      'Master’s thesis in healthcare AI and deep learning, running since January 2026.',
+      'Expected graduation: March 2027.',
+    ],
+    stats: [
+      { value: '4.9 / 5', label: 'Grade' },
+      { value: '85 / 90 ECTS', label: 'Coursework completed' },
+      { value: 'Healthcare AI · deep learning', label: 'Master’s thesis · 30 ECTS · ongoing' },
+      { value: '100%', label: 'Scholarship · merit-based' },
+    ],
+    courses: [
+      'Distributed Systems',
+      'DevOps',
+      'Machine Learning',
+      'MLOps',
+      'Docker & Kubernetes',
+      'Full-Stack (React · TypeScript · Node)',
+      'Databases',
+      'Scalable Architecture',
+    ],
+    links: [
+      {
+        label: 'Transcript',
+        href: 'https://drive.google.com/file/d/1hbIjksV2ktIPD2UaGc4uwFDCTquNz2K0/view?usp=sharing',
+      },
+    ],
   },
   {
     degree: 'BSc Computer Science',
@@ -27,9 +62,34 @@ export const education: Education[] = [
     period: 'Sep 2020 — Jun 2024',
     logo: '/images/education/nust.svg',
     logoTheme: 'color',
+    focus: 'Computer-science fundamentals, with a final year spent on VR and language models.',
+    points: [
+      'Awarded a 100% scholarship on academic merit.',
+      'Vice-President of Hack Club, and a United Nations MCN Fellow.',
+    ],
+    stats: [{ value: '100%', label: 'Scholarship · merit-based' }],
     note: 'Final-year project: WebXR metaverse classroom with a fine-tuned LLaMA-2 7B model on Meta Quest 2.',
+    courses: [
+      'Databases',
+      'Distributed Computing',
+      'Operating Systems',
+      'Computer Networks',
+      'OOP',
+      'Data Structures & Algorithms',
+    ],
+    links: [
+      {
+        label: 'Transcript',
+        href: 'https://drive.google.com/file/d/1JHPBLhS0tAdyOVVjbnvBHtfLHKrYHLy8/view?usp=sharing',
+      },
+      {
+        label: 'United Nations MCN Fellow',
+        href: 'https://drive.google.com/drive/u/0/folders/1g2FoR_6SYC1bY6Og4j09LgebYkWnFTrw',
+      },
+      {
+        label: 'Vice-President · Hack Club',
+        href: 'https://drive.google.com/file/d/1m9TwM5f71ssgoHWki6CvfqVYYEVvjyzq/view?usp=drive_link',
+      },
+    ],
   },
 ]
-
-export const recognition =
-  'Slush 2025 volunteer · UN Millennium Fellow (top 9% of 44,000 applicants) · Campus Director, top 1%.'

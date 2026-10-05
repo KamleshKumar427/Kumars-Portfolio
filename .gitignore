@@ -30,3 +30,10 @@ _assets-src/
 FirstPageDesignInspiration/
 startupPage/
 startupPage.zip
+
+# Claude Code working files that stay on this machine: screenshots, design
+# briefs, personal settings, and the links to the private CV profile.
+.claude/shots/
+.claude/briefs/
+.claude/profile/
+.claude/settings.local.json

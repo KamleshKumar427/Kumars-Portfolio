@@ -5,7 +5,22 @@ export const profile = {
   tagline:
     'Full-stack engineer on a PCI DSS Level 1 payment gateway, and the only engineer on a live recruitment platform (1,600+ users, 250+ companies). MSc Computer Science, University of Helsinki.',
   summary:
-    'Full-Stack Software Engineer and MSc Computer Science student at the University of Helsinki, with 2+ years owning production systems end to end. I take on the work most people would rather not touch — payment routing, PCI-compliant APIs, database internals — and I see it through: from a fintech gateway moving hundreds of millions of euros to a recruitment platform I ran as its only engineer.',
+    'AI full-stack engineer with 2+ years owning production systems end to end. I take on the work most people would rather not touch — payment routing, PCI-compliant APIs, database internals — and I see it through: from a fintech gateway moving hundreds of millions of euros to a recruitment platform I ran as its only engineer.',
+  /** The only place on the site that speaks in the first person, and it stays
+   *  a gist: the roles, degrees and projects below are the detail, so saying
+   *  it twice only made people skim. Set in giant quote marks (AboutSection). */
+  about:
+    'I’m a full-stack engineer based in Helsinki, with two years of production work experience: a PCI DSS Level 1 payment gateway, a recruitment platform, and core database internals.',
+  /** Short answers for the at-a-glance panel beside the About copy. What I
+   *  want next leads, and "open to" carries the same green dot as the hero. */
+  glance: [
+    { label: 'Open to', value: 'Discussing opportunities', led: true },
+    { label: 'Aspiring', value: 'Solution Architect · Infrastructure Engineer' },
+    { label: 'Based in', value: 'Helsinki, Finland' },
+    { label: 'Thesis', value: 'Deep learning in healthcare' },
+    { label: 'Focus', value: 'Full-stack · payments · DevOps · AI' },
+    { label: 'Shipped in', value: 'Fintech · startups · open source' },
+  ],
   location: 'Helsinki, Finland',
   email: 'kamlesh.kumar@helsinki.fi',
   phone: '+358 44 939 3428',
@@ -22,6 +37,6 @@ export const profile = {
   metrics: [
     { value: 'PCI DSS L1', label: 'payment gateway' },
     { value: '1,600+', label: 'xstryv users' },
-    { value: '5/5', label: 'msc · helsinki' },
+    { value: '4.9/5', label: 'msc · helsinki' },
   ],
 } as const

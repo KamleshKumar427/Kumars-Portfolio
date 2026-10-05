@@ -26,7 +26,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "shots": "node scripts/shots.mjs",
+    "check:content": "node scripts/check-content.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -39,6 +41,7 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.18.0",
+    "simple-icons": "^16.31.0",
     "tailwind-merge": "^3.6.0",
     "three": "^0.184.0"
   },
@@ -54,6 +57,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "playwright-core": "^1.63.0",
     "tailwindcss": "^4.3.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",

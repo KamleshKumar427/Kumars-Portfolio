@@ -11,6 +11,7 @@ import { useIsDark } from './hooks/useIsDark'
 import { useReducedMotion } from './hooks/useReducedMotion'
 import { useSeo } from './hooks/useSeo'
 import { profile } from './data/profile'
+import { splitPoint, xstryv } from './data/experience'
 
 const HeroFluid = lazy(() =>
   import('./hero/fluid/HeroFluid').then((m) => ({ default: m.HeroFluid })),
@@ -80,35 +81,12 @@ function StartupNav() {
   )
 }
 
-const XSTRYV_CARDS = [
-  {
-    title: 'Messaging system',
-    body: 'Built LinkedIn-style messaging between companies and talent, with scheduled background CRON jobs so users receive one summary email after a conversation goes quiet.',
-  },
-  {
-    title: 'Race-condition fix',
-    body: 'Traced a race condition between two signup paths that caused mismatched user IDs across two database schemas, diagnosed the root cause, and shipped a permanent fix.',
-  },
-  {
-    title: 'Data integrity',
-    body: 'Debugged and resolved pre-existing inconsistent data across the auth and application layers.',
-  },
-  {
-    title: 'Self-serve hiring',
-    body: 'Built a self-serve applicant workflow so companies independently manage hiring — shortlist, reject and accept candidates with data export, plus bulk in-platform messaging and announcements.',
-  },
-]
-
-const XSTRYV_TECH = [
-  'Next.js',
-  'React',
-  'TypeScript',
-  'Node.js',
-  'PostgreSQL',
-  'Supabase',
-  'CRON Jobs',
-  'GitHub Actions',
-]
+// Highlight cards: one per labelled point of the shared XSTRYV entry
+// (src/data/experience.ts), so this page and the home page always agree.
+const XSTRYV_CARDS = xstryv.points.map((point) => {
+  const { label, text } = splitPoint(point)
+  return { title: label ?? '', body: text }
+})
 
 const PATHWAYS_SPECS = [
   ['Programme', 'Interdisciplinary pre-incubator'],
@@ -116,11 +94,16 @@ const PATHWAYS_SPECS = [
   ['Host', 'Helsinki Incubators · University of Helsinki'],
 ]
 
-/** Static assets in public/images/startups/ */
+/** Static assets in public/images/startups/
+ *  Each certificate keeps a .jpg of its page beside the .pdf: phones refuse to
+ *  render a PDF in a frame and show an "open PDF" button instead, so there they
+ *  get the picture. See useInlinePdf. */
 const STARTUP_MEDIA = {
   helsinkiIncubators: '/images/startups/helsinki-incubators.jpg',
   pathwaysCertificate: '/images/startups/pathways-certificate.pdf',
+  pathwaysCertificateImage: '/images/startups/pathways-certificate.jpg',
   slushCertificate: '/images/startups/slush-certificate.pdf',
+  slushCertificateImage: '/images/startups/slush-certificate.jpg',
   slushTeam: '/images/startups/slush-team.jpeg',
   slushFloor: '/images/startups/slush-floor.jpeg',
 } as const
@@ -241,11 +224,12 @@ export function StartupsPage() {
               <Reveal className="startup-x-side">
                 <div className="startup-x-num">01</div>
                 <div className="startup-x-meta">
-                  2026 · MAR–JUN
-                  <br />
-                  ONLY ENGINEER
-                  <br />
-                  HYBRID
+                  {xstryv.meta.map((line, i) => (
+                    <span key={line}>
+                      {line}
+                      {i < xstryv.meta.length - 1 ? <br /> : null}
+                    </span>
+                  ))}
                 </div>
                 <a className="startup-x-link" href="https://xstryv.com" target="_blank" rel="noopener noreferrer">
                   xstryv.com ↗
@@ -253,19 +237,20 @@ export function StartupsPage() {
               </Reveal>
 
               <Reveal className="startup-x-body" delay={0.05}>
-                <div className="work-kicker">XSTRYV · Recruitment Platform</div>
-                <h2 className="startup-h2">Sole engineer on a live recruitment platform</h2>
-                <p className="startup-p">
-                  Joined XSTRYV — a recruitment platform connecting talent with companies — as its
-                  only engineer and a core team member. Inherited all three panels (admin, company,
-                  talent) and owned them end to end while serving{' '}
-                  <strong>1,600+ users</strong> and <strong>250+ companies</strong>.
-                </p>
-                <p className="startup-p">
-                  Across <strong>50+ commits in three months</strong> I shipped features, fixed
-                  production bugs, and ran deployments through GitHub Actions CI/CD — shaping
-                  product and market decisions, not just the code.
-                </p>
+                <div className="work-kicker">{xstryv.kicker}</div>
+                <h2 className="startup-h2">{xstryv.title}</h2>
+                <p className="startup-p">{xstryv.summary}</p>
+
+                {xstryv.stats ? (
+                  <ul className="stat-row">
+                    {xstryv.stats.map((stat) => (
+                      <li className="stat" key={stat.label}>
+                        <span className="stat-value">{stat.value}</span>
+                        <span className="stat-label">{stat.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
 
                 <div className="startup-cards">
                   {XSTRYV_CARDS.map((card) => (
@@ -279,7 +264,7 @@ export function StartupsPage() {
                 </div>
 
                 <ul className="tags">
-                  {XSTRYV_TECH.map((t) => (
+                  {xstryv.tech.map((t) => (
                     <li className="tag" key={t}>
                       {t}
                     </li>
@@ -341,6 +326,7 @@ export function StartupsPage() {
                 <figure className="startup-fig">
                   <ImageSlot
                     src={STARTUP_MEDIA.pathwaysCertificate}
+                    poster={STARTUP_MEDIA.pathwaysCertificateImage}
                     alt="Pathways pre-incubator certificate of attendance"
                     label="Pathways certificate"
                     fit="contain"
@@ -392,6 +378,7 @@ export function StartupsPage() {
                 <figure className="startup-fig">
                   <ImageSlot
                     src={STARTUP_MEDIA.slushCertificate}
+                    poster={STARTUP_MEDIA.slushCertificateImage}
                     alt="Slush 2025 volunteer certificate"
                     label="Slush volunteer certificate"
                     fit="contain"

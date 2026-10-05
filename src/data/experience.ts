@@ -11,26 +11,42 @@ export type Experience = {
   summary: string
   /** one or two highlighted ◇ points */
   points: string[]
+  /** labelled figures for this role, shown as chips */
+  stats?: { value: string; label: string }[]
   tech: string[]
   href?: string
 }
 
+/** XSTRYV — shown on the home page AND /startups. One entry, so the two
+ *  pages can't drift apart again (they had: "sole engineer, 50+ commits" on one,
+ *  different figures on the other). */
+export const xstryv: Experience = {
+  n: '01',
+  meta: ['MAR–JUN 2026', 'FULL-TIME', 'ESPOO, FINLAND'],
+  kicker: 'XSTRYV · HR-Tech Platform',
+  title: 'Full-Stack Developer (HR-Tech)',
+  summary:
+    'Took ownership of the codebase from day 1, delivering 67 commits in 4 months across the frontend, server, and data layers, and later onboarded two new developers onto the platform.',
+  points: [
+    'Application architecture: Built and extended feature modules for jobs, chat, admin, onboarding, and dashboards in Next.js (App Router) with React, TypeScript, Tailwind, and Radix UI, backed by a typed service layer.',
+    'Server layer: Implemented server-side logic through Next.js Server Actions covering authentication, messaging, admin approval flows, bulk job operations, and candidate data export to Excel.',
+    'Data layer: Designed and shipped 14 PostgreSQL migrations with Prisma covering company-scoped chat, review statuses, rejection reasons, and program enrolment.',
+    'Authentication: Worked across Supabase Auth OAuth and email flows, unified separate company and talent sign-in into a single entry point, and hardened one-time verification links against automated email scanners.',
+    'Async processing & caching: Used Inngest for background workflows, Upstash Redis for caching, and Resend for transactional email, including debounced notifications for unread messages.',
+    'Reliability: Configured Sentry error monitoring and added audit logging through a dedicated service.',
+  ],
+  stats: [
+    { value: '67', label: 'commits in 4 months' },
+    { value: '14', label: 'PostgreSQL migrations' },
+    { value: 'Day 1', label: 'owned the codebase' },
+    { value: '2', label: 'developers onboarded' },
+  ],
+  tech: ['Next.js', 'React', 'TypeScript', 'PostgreSQL', 'Prisma', 'Supabase Auth', 'Inngest', 'Tailwind'],
+  href: 'https://xstryv.com/signin',
+}
+
 export const experience: Experience[] = [
-  {
-    n: '01',
-    meta: ['2026', 'MAR–JUN', 'HYBRID'],
-    kicker: 'XSTRYV · Recruitment Platform',
-    title: 'Developer (Sole Engineer) — Startup Recruitment Platform',
-    summary:
-      'Sole engineer on a live recruitment platform connecting talent with companies — admin, company, and talent panels, serving 1,600+ users and 250+ companies. Landed 50+ commits in three months — shipped features, fixed production bugs, and ran deployments via GitHub Actions while acting as a core team member on product decisions.',
-    points: [
-      'Built LinkedIn-style messaging with CRON jobs that send one summary email after a conversation goes quiet.',
-      'Built self-serve hiring — filterable candidate tables, shortlist/reject/accept actions, data export, bulk messaging, and announcements.',
-      'Traced and fixed a race condition between two signup paths that mismatched user IDs across Supabase auth and application schemas.',
-    ],
-    tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Supabase', 'GitHub Actions'],
-    href: 'https://xstryv.com/signin',
-  },
+  xstryv,
   {
     n: '02',
     meta: ['2024–2025', 'FULL-TIME', 'IRELAND · REMOTE'],
@@ -41,9 +57,30 @@ export const experience: Experience[] = [
     points: [
       'Onboarded the gateway as a Google-listed processor; integrated Google Pay with full merchant support (notifications, webhooks, emails).',
       'Completed Apple Pay integration into the core gateway.',
-      'Built PCI-compliant, JWT-secured REST APIs for mobile and cut end-to-end processing time 11% through query and workflow optimisation.',
+      'Built PCI-compliant, JWT-secured REST APIs so the mobile app could talk straight to the gateway, unifying the experience across platforms.',
+      'Cut end-to-end processing time by 11% by optimising queries and workflows across the gateway architecture and database.',
+      'Worked directly with white-label merchants on notification, webhook, risk-rule and performance issues — deploying to production independently.',
     ],
-    tech: ['React', 'TypeScript', 'Java', 'Spring Boot',  'Docker', 'OAuth 2.0', 'JWT', 'REST APIs', 'YugabyteDB', 'Azure'],
+    stats: [
+      { value: '20+', label: 'currencies' },
+      { value: 'Hundreds of millions €', label: 'processed' },
+      { value: '25 yrs', label: 'of legacy codebase' },
+      { value: '11%', label: 'faster processing' },
+    ],
+    tech: [
+      'React',
+      'TypeScript',
+      'Java',
+      'Spring Boot',
+      '.NET',
+      'Docker',
+      'OAuth 2.0',
+      'JWT',
+      'REST APIs',
+      'MSSQL',
+      'YugabyteDB',
+      'Azure',
+    ],
     href: 'https://pbt.com.cy/',
   },
   {
@@ -58,7 +95,30 @@ export const experience: Experience[] = [
       'Pgpool-II: load balancing and read/write splitting for uninterrupted access during failures.',
       'AgeViewer-Go: REST APIs, routing, and sessions in Go for the age-viewer-go desktop app.',
     ],
-    tech: ['React', 'Node.js', 'Go', 'C / C++', 'Apache AGE', 'PostgreSQL', 'MongoDB'],
+    stats: [
+      { value: '3', label: 'open-source tools shipped' },
+      { value: 'Apache AGE', label: 'graph database internals' },
+      { value: '1 yr', label: 'alongside a CS degree' },
+    ],
+    tech: [
+      'React',
+      'Node.js',
+      'Go',
+      'C / C++',
+      'Apache AGE',
+      'PostgreSQL internals',
+      'Pgpool-II',
+      'MongoDB',
+      'PM2',
+      'DigitalOcean',
+    ],
     href: 'https://age.apache.org/',
   },
 ]
+
+/** "Data layer: Designed and shipped…" → { label: 'Data layer', text: 'Designed…' }.
+ *  Points without a short leading label come back with no label. */
+export function splitPoint(point: string): { label?: string; text: string } {
+  const m = point.match(/^([^:.]{2,32}):\s+(.+)$/)
+  return m ? { label: m[1], text: m[2] } : { text: point }
+}

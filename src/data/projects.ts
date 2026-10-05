@@ -22,7 +22,7 @@ export const projects: Project[] = [
   {
     title: 'Cloud DevOps: AWS Deployment with Infrastructure-as-Code',
     description:
-      'Designed and automated the full cloud deployment of a containerized web app on AWS using Infrastructure-as-Code (AWS CDK). Provisioned the entire environment (ECS Fargate, ECR, Application Load Balancer, S3, CloudFront, and networking) as versioned code that spins up with a single command, and built cross-platform CI-style scripts for Windows, macOS, and Linux to deploy, verify, and tear down the whole stack reproducibly in minutes.',
+      'Deployed a containerized web app on AWS entirely from code, with AWS CDK. ECS Fargate, ECR, the load balancer, S3, CloudFront and the networking are all versioned and come up with one command. CI-style scripts for Windows, macOS and Linux deploy the stack, check it, and tear it down again in minutes.',
     tech: ['AWS CDK', 'Terraform', 'Docker', 'ECS Fargate', 'CloudFront', 'S3', 'CI/CD', 'TypeScript'],
     github: 'https://github.com/KamleshKumar427/WebApplicationAWSHostingUsingIaC',
     order: 1,
@@ -33,7 +33,7 @@ export const projects: Project[] = [
   {
     title: 'LLM Agent with MCP Tool-Calling',
     description:
-      "Built an AI agent that gets things done through natural voice and text conversations, powered by OpenAI's LLMs. Gave the agent real-world abilities using the Model Context Protocol (MCP), building custom MCP tools that let it securely read and act on a user's Google Calendar and personal context. Wired it into Telegram (with a Mini App) and the web so users can just talk to it and have it take action on their behalf.",
+      "An agent you talk to, by voice or text, which then goes and does the work. It runs on OpenAI's LLMs, and custom Model Context Protocol (MCP) tools give it secure access to a user's Google Calendar and personal context. It lives in Telegram as a Mini App, and on the web.",
     tech: ['LLM Agents', 'MCP', 'OpenAI Realtime API', 'Next.js', 'TypeScript', 'MongoDB', 'Telegram'],
     github: 'https://github.com/KamleshKumar427/micromanager-agent',
     order: 2,
@@ -66,7 +66,7 @@ export const projects: Project[] = [
   {
     title: 'National ID Card Detector',
     description:
-      "Developed an OpenCV application detecting ID cards with 95% accuracy across varying angles, dimensions, and environments; initially tailored for Pakistan's National ID.",
+      "An OpenCV app that finds ID cards at 95% accuracy across varying angles, sizes and environments. Built first for Pakistan's National ID.",
     tech: ['Python', 'OpenCV'],
     github: 'https://github.com/KamleshKumar427/National_ID_CARD_detection-',
     order: 5,
@@ -100,7 +100,7 @@ export const projects: Project[] = [
   {
     title: 'Automatic Assessments and Feedback System using LLMs',
     description:
-      'Created an innovative system for generating automatic assessments and providing feedback post-results utilizing the capabilities of LLaMA-2 7B and LangChain, aimed at enhancing the educational process for teachers and students.',
+      'Writes assessments for teachers and gives students feedback once their results are in, on LLaMA-2 7B and LangChain.',
     tech: ['LangChain', 'Python', 'PyTorch', 'LLaMA-2 7B'],
     github: 'https://github.com/KamleshKumar427/Assessment-Generation-and-Realtime-Feedback-System-using-Large-Language-Models',
     order: 2,
@@ -122,7 +122,7 @@ export const projects: Project[] = [
   {
     title: 'Atmospheric Event Classification',
     description:
-      'Developed a two-stage ML pipeline to classify daily atmospheric conditions into new particle formation (NPF) event types (Ia, Ib, II) or nonevent using meteorological data from the SMEAR II station in Hyytiälä, Finland. Used calibrated Logistic Regression for binary event detection and Random Forest for multi-class classification, achieving a Kaggle leaderboard score of 0.76139.',
+      'A two-stage pipeline that sorts each day of weather data from the SMEAR II station in Hyytiälä, Finland into new particle formation event types (Ia, Ib, II) or no event. Calibrated logistic regression decides whether anything happened; random forest picks the type. Kaggle leaderboard score 0.76139.',
     tech: ['Python', 'scikit-learn', 'XGBoost', 'Random Forest', 'Logistic Regression'],
     github: null,
     order: 4,

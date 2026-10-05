@@ -163,7 +163,7 @@ export function LabSection() {
   const [featured, ...rest] = list
 
   return (
-    <section id="lab" className="section section--alt">
+    <section id="lab" className="section">
       <div className="section-inner">
         <Reveal>
           <div className="section-head">

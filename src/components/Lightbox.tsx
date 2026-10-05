@@ -1,6 +1,7 @@
 import { useEffect, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { useInlinePdf } from '@/hooks/useInlinePdf'
 
 export type LightboxMedia = {
   src: string
@@ -9,6 +10,8 @@ export type LightboxMedia = {
   /** PDF page aspect ratio (width / height) so the frame matches it exactly — the
    *  whole page fits with no scrolling, no letterbox, and no on-load re-flow. */
   aspect?: number
+  /** Image of the page, shown where the browser won't render the PDF itself. */
+  poster?: string
 }
 
 function isPdf(src: string) {
@@ -22,6 +25,7 @@ function isPdf(src: string) {
  */
 export function Lightbox({ media, onClose }: { media: LightboxMedia | null; onClose: () => void }) {
   const reduced = useReducedMotion()
+  const inlinePdf = useInlinePdf()
 
   useEffect(() => {
     if (!media) return
@@ -42,6 +46,11 @@ export function Lightbox({ media, onClose }: { media: LightboxMedia | null; onCl
   }, [media, onClose])
 
   if (!media) return null
+
+  /* Same reason as the thumbnail: a phone paints an "open PDF" panel where the
+     document should be, so the picture of the page stands in for it. The
+     Download button above still hands over the real PDF. */
+  const showPoster = Boolean(media.poster) && !inlinePdf
 
   return createPortal(
     <div
@@ -79,7 +88,7 @@ export function Lightbox({ media, onClose }: { media: LightboxMedia | null; onCl
       </button>
 
       <figure className="lightbox-figure" onClick={(e) => e.stopPropagation()}>
-        {isPdf(media.src) ? (
+        {isPdf(media.src) && !showPoster ? (
           <div
             className="lightbox-pdf-wrap"
             style={{ '--lb-aspect': media.aspect ?? 0.707 } as CSSProperties}
@@ -91,7 +100,7 @@ export function Lightbox({ media, onClose }: { media: LightboxMedia | null; onCl
             />
           </div>
         ) : (
-          <img className="lightbox-img" src={media.src} alt={media.alt} />
+          <img className="lightbox-img" src={media.poster ?? media.src} alt={media.alt} />
         )}
         {media.caption ? <figcaption className="lightbox-caption">{media.caption}</figcaption> : null}
       </figure>

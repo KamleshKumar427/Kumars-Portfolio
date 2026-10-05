@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { profile } from '../data/profile'
 import { inkConfig, resolveSwatch } from '../hero/fluid/inkConfig'
 import { clearInk, useActiveInk } from '../hero/fluid/inkSelection'
+// import { FlapBoard } from '../components/FlapBoard'
 import { InkCursor } from '../hero/InkCursor'
 import { useIsDark } from '../hooks/useIsDark'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -43,6 +44,12 @@ export function Hero() {
           </h1>
           <p className="hero-role">{profile.title}</p>
           <p className="hero-tagline">{profile.headline}</p>
+          {/* Split-flap highlights board — parked, not finished. To switch it
+              back on, uncomment the import above and this line. The component
+              is src/components/FlapBoard.tsx, its lines are
+              src/data/highlights.ts, and its styles are still in index.css
+              under ".flap" (plus the --flap-* tokens in the theme blocks). */}
+          {/* <FlapBoard /> */}
         </div>
 
       </div>

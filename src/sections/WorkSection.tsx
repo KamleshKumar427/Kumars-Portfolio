@@ -1,6 +1,18 @@
 import type { ReactNode } from 'react'
 import { Reveal } from '../components/ui/Reveal'
-import { experience, type Experience } from '../data/experience'
+import { experience, splitPoint, type Experience } from '../data/experience'
+
+/** "Data layer: Designed and shipped…" → the label in bold, so a long list of
+ *  points can be scanned by topic. Points without a short label are left as is. */
+function Point({ text }: { text: string }) {
+  const { label, text: rest } = splitPoint(text)
+  if (!label) return <>{rest}</>
+  return (
+    <>
+      <strong className="work-point-label">{label}:</strong> {rest}
+    </>
+  )
+}
 
 function RowBody({ role }: { role: Experience }) {
   return (
@@ -20,10 +32,22 @@ function RowBody({ role }: { role: Experience }) {
         <div className="work-kicker">{role.kicker}</div>
         <h3 className="work-title">{role.title}</h3>
         <p className="work-summary">{role.summary}</p>
+        {role.stats ? (
+          <ul className="stat-row">
+            {role.stats.map((stat) => (
+              <li className="stat" key={stat.label}>
+                <span className="stat-value">{stat.value}</span>
+                <span className="stat-label">{stat.label}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <div className="work-points">
           {role.points.map((point) => (
             <div className="work-point" key={point}>
-              {point}
+              <span>
+                <Point text={point} />
+              </span>
             </div>
           ))}
         </div>

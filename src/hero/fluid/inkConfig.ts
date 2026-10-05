@@ -17,7 +17,7 @@ export type Swatch = {
 export type ThemeTint = {
   /** clear-water base color the ink blooms into */
   water: string
-  /** glossy reflection / sheen color of the glass sheet */
+  /** colour of the light glinting off the water surface */
   glass: string
 }
 
@@ -29,27 +29,57 @@ export const inkConfig = {
 
   // — Fluid feel —
   // densityDissipation: how fast painted ink fades, per second (exponential).
-  // 0.16 → a dense stroke keeps its full colour for roughly 10–15s, then
-  // dissolves and is gone by ~25s; light touches fade sooner. The fade runs on
-  // real time — it continues while the hero is off-screen or you're on the
-  // other page. Lower = lingers longer (0.045 lingered for minutes).
-  // Do NOT reach 0 — muddy build-up + sim instability.
-  densityDissipation: 0.16,
+  // A stroke stays solid for several seconds, is pale by ~12s and gone by
+  // ~20–25s — the same timing as before the ink started riding the flow. That
+  // needed a slower rate than the old 0.16: moving ink is resampled every
+  // frame, which thins the band on its own, so the fade itself had to ease off
+  // to land at the same moment. Runs on real time (continues off-screen).
+  // Lower = lingers longer. Do NOT reach 0 — muddy build-up + instability.
+  densityDissipation: 0.11,
   // velocityDissipation: how fast motion settles to stillness.
   // Higher = ink comes to rest sooner (calmer).
   velocityDissipation: 1.1,
   // pressureIterations: incompressibility solve quality. More = more "liquid".
   pressureIterations: 24,
   pressure: 0.8,
-  // curl: vorticity strength — the wispy, viscous ink filaments.
-  // Higher = more turbulent curls; lower = smoother diffusion.
-  curl: 22,
-  // splatRadius: size of each ink drop (thick bloom, not a thin line).
-  // The Gaussian's visible radius scales with sqrt(splatRadius), so a value of
-  // 0.205 (= 0.32 * 0.8^2) renders a bloom ~80% the diameter of 0.32.
-  splatRadius: 0.205,
-  // splatForce: how hard pointer motion pushes the water.
-  splatForce: 6200,
+  // curl: vorticity confinement — re-injects the small swirls the solver's
+  // numerical damping loses. 4 keeps strokes as flowing ribbons that curl at
+  // the turns and leave a wake at the end — how a finger dragged through real
+  // water looks. Higher = busier (22 boiled into confetti); 0 = glassy.
+  curl: 4,
+  // splatRadius: size of each ink drop. The Gaussian's visible radius scales
+  // with sqrt(splatRadius). 0.11 lays a band about as wide as the old renderer
+  // showed — rendered as dye, the soft edge of a wider drop reads as more ink.
+  splatRadius: 0.11,
+  // splatForce: how hard pointer motion pushes the water — roughly how much of
+  // the pointer's speed the water under it picks up, x60 events/s. 36 ≈ the
+  // water moving at 60% of the pointer, as dragging through real water does.
+  // This is what makes it feel like water. (Tried at 5 for an even release;
+  // it stopped feeling like water, so the flow is back and the thinner brush
+  // below keeps the curls fine and the fill down instead.)
+  splatForce: 36,
+
+  // inkAmount: how much ink each movement of the pointer releases. Strokes are
+  // laid down evenly (see splatFragment), so this is the ink in the band at any
+  // speed. 3 gives the deep, glossy colour. With the water flowing, a 3s
+  // scribble covers 20% of the hero (the first flowing version flooded 43%).
+  inkAmount: 3,
+  // dropAmount: ink in a single round drop — a tap, or the two welcome blooms on
+  // page load. Kept at the old value so those stay soft blooms rather than the
+  // dense dots stroke-strength ink would make.
+  dropAmount: 1,
+  // faintInk: ink thinner than `from` is invisible, fully shown by `to`. Hides
+  // the haze of each drop's soft tail so strokes keep a clean edge — that haze
+  // made every stroke look wider and blurrier than the brush, and filled the
+  // hero fast. Together with splatRadius and inkAmount this sets the width a
+  // stroke shows at; lowering it widens every stroke.
+  faintInk: { from: 0.08, to: 0.35 },
+
+  // pushSpread: how much wider than the ink band the push is (width ratio).
+  // 1.365 pushes exactly the water the earlier, wider brush pushed (0.205 =
+  // 0.11 x 1.365^2), so the flow is that version's while the ink stays thin.
+  // Much wider (4) lays ink evenly but the water stops feeling like water.
+  pushSpread: 1.365,
 
   // — Small screens —
   // Drop size is measured in canvas HEIGHT, and a phone hero is about as tall as
@@ -60,27 +90,111 @@ export const inkConfig = {
   // Above it — desktop — nothing changes.
   compact: {
     maxWidth: 900, // px — the breakpoint the hero layout already switches at
-    radiusScale: 0.4, // × splatRadius
-    forceScale: 0.35, // × splatForce
+    // Re-measured after the transport fix (which let ink finally ride the flow):
+    // these put one swipe on a phone at ~0.83x the share of the hero it covers
+    // on desktop — the same ratio as before the fix.
+    radiusScale: 0.35, // × splatRadius
+    forceScale: 0.25, // × splatForce
+    // Strokes are narrower here, so a desktop-sized shadow offset sits too far
+    // from them and reads as a grey ghost copy instead of depth.
+    shadowScale: 0.6, // × the paper's depth (so the shadow's offset) and shadow blur
   },
 
-  // — Glass sheet over the water (dark mode) —
-  glass: {
-    reflectivity: 0.42, // how strongly the glass reflects (Fresnel mix)
-    fresnelPower: 2.6, // edge falloff of the reflection
-    sheen: 0.5, // specular highlight + surface gloss strength
-    refraction: 0.55, // how much ink bends light beneath the glass
+  // — Ink as dye (light mode) —
+  // inkDepth: optical depth per unit of ink. Higher = colours go deep faster;
+  // lower = more of every stroke reads as a pale wash.
+  inkDepth: 0.5,
+  // thicknessCap: ink beyond this amount stops getting darker, so the core of a
+  // heavy scribble stays a rich colour instead of going black.
+  thicknessCap: 3,
+  // How solid ink looks on dark water (it's seen by scattered light there).
+  darkCoverage: 0.9,
+
+  // — Depth: ink floats at the surface, the paper lies below the water —
+  // The view is traced from a virtual eye `eyeHeight` above the hero, through
+  // the water, down to the paper `floor` below the surface (both in hero
+  // heights). The eye stays over the middle of the screen, so scrolling the
+  // hero tilts the view into the water, and it leans toward the pointer by
+  // `lean` (share of the pointer's offset): the paper and the ink's shadows
+  // slide against the ink above them, which is what reads as real depth.
+  // floor is the one knob for how deep it looks (shadow distance, softness and
+  // parallax all follow it). Raise eyeHeight with it: seen from too close, deep
+  // paper shrinks toward the middle of the view and shadows near the edges
+  // drift onto the wrong side of their ink.
+  depth: {
+    floor: 0.52,
+    eyeHeight: 2.0,
+    lean: 0.25,
+    // Key light: direction toward it on the page (y up — upper left), and how
+    // far it travels sideways per unit of depth. The ink's shadow lands
+    // floor x slope away from the ink.
+    light: { x: -0.6, y: 0.8, slope: 0.2 },
   },
 
-  // — Matte surface (light mode) —
-  // Same solver, almost no shine: the specular highlight and Fresnel are nearly
-  // gone, so the hero reads as pigment soaking into matte paper rather than ink
-  // under a glass sheet. Raise `sheen` to put the gloss back.
-  glassLight: {
-    reflectivity: 0.12,
-    fresnelPower: 2.6,
-    sheen: 0.1,
-    refraction: 0.48,
+  // — The water's depth: ink sinks into it —
+  // Below the surface the water is a stack of `layers`, surface to paper. Ink
+  // painted on the surface is slowly released into it and sinks, so the hero
+  // fills in depth rather than only across: fresh strokes ride the surface,
+  // older ink drifts down, slows, and hazes out toward the paper.
+  volume: {
+    // More layers = smoother sinking, a little more work per frame. Keep it
+    // even: the shadow reads the layers in pairs.
+    layers: 8,
+    // Resolution of each layer vs the surface ink. Sunk ink is soft anyway.
+    scale: 0.25,
+    // Share of surface ink per second that starts to sink, and the extra share
+    // where the water spins (a stroke that curls drains faster).
+    release: 0.2,
+    swirlRelease: 0.4,
+    // Swirl strength that counts as half-way to "full" — a fresh swirl core
+    // reads ~50-400, a calm stroke's under 1 (measured).
+    swirlRef: 10,
+    // Sinking speed on its own, and the extra in a full swirl — both in
+    // depths per second (0.2 = five seconds from surface to paper).
+    settle: 0.2,
+    swirlPull: 0.6,
+    // How far down the surface's motion reaches (share of the depth): at this
+    // depth the water moves at a third of the surface's speed.
+    drag: 0.3,
+    // Share of its contrast ink loses by the time it lies on the paper — deep
+    // ink is seen through more water, so it fades into it.
+    haze: 0.55,
+    // How fast sunk ink fades, per second — slower than surface ink
+    // (densityDissipation), so a stroke is seen all the way down to the paper.
+    fade: 0.07,
+    // Dark mode: how solid sunk ink looks next to surface ink. Lit from above
+    // in dark water, a full-strength cloud read as glowing smoke.
+    darkCover: 0.6,
+  },
+
+  // — The ink's shadow on the paper —
+  // blur = softness per unit of depth — a shadow falling further lands softer,
+  // so depth.floor alone sets how deep it all looks. strength = how dark it gets.
+  // neutral: 0 = shadow tinted like the ink, 1 = plain grey. Mostly grey is
+  // what reads as a shadow rather than as more ink.
+  // fill: share of the light that still reaches the paper under even the
+  // thickest ink (skylight from around it) — keeps shadows soft grey, never black.
+  // glow: dark mode's shadow — the faint coloured light the ink scatters onto
+  // the paper below (a shadow can't show on dark water).
+  shadow: { blur: 0.1, strength: 0.45, neutral: 0.8, fill: 0.45, glow: 0.15 },
+
+  // — The water surface (driven by the flow; flat when the water is still) —
+  // height: pressure → surface height. refraction: how far a ripple shifts the
+  // ink riding just under it. wobble: how strongly ripples bend the view of the
+  // paper below (1 = real water). caustics: light focused by the moving
+  // surface onto the paper. glint: light caught on tilted ripples.
+  // 0.12 was the sweet spot of a 0.1 / 0.5 / 2 sweep: wet and lensed. By 0.5
+  // it looks like wet plastic; by 2 the solver's noise shows as grain.
+  // Refraction stays small: a vortex's pressure dip is deep, so a strong lens
+  // magnifies each clear core into a white "eye" and turns spirals into rings
+  // (visible by 0.02, creeping in at 0.014). 0.008 keeps the spiral intact
+  // while the surface still visibly moves.
+  surface: {
+    height: 0.12,
+    refraction: 0.008,
+    wobble: 1,
+    caustics: 0.35,
+    glint: { light: 0.3, dark: 0.6 },
   },
 
   // — Per-theme water + glass tints (washi paper / sumi ink moods) —
