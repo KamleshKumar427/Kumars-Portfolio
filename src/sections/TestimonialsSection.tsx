@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Reveal } from '../components/ui/Reveal'
+import { profile } from '../data/profile'
 import { testimonials, type Testimonial } from '../data/testimonials'
 
 function initials(name: string) {
@@ -65,9 +66,19 @@ export function TestimonialsSection() {
               <div className="section-kicker">声 — Testimonials</div>
               <h2 className="section-title">People I’ve worked with</h2>
             </div>
-            <p className="section-lead">
-              Managers, mentors, and teammates on what it’s like to build alongside me.
-            </p>
+            <div className="tm-lead">
+              <p className="section-lead">
+                Managers, mentors, and teammates on what it’s like to build alongside me.
+              </p>
+              <a
+                className="proof-link tm-linkedin"
+                href={profile.links.recommendations}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Read them on LinkedIn ↗
+              </a>
+            </div>
           </div>
         </Reveal>
       </div>

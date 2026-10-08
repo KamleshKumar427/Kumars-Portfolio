@@ -16,6 +16,20 @@ export type Honour = {
 
 export const honours: Honour[] = [
   {
+    kind: 'Thesis grant',
+    title: 'AI Thesis Grant',
+    org: 'Technology Industries of Finland Centennial Foundation',
+    period: '2026',
+    summary:
+      'Awarded for a Master’s thesis on deep learning for detecting hypertensive retinopathy in cats from retinal fundus images, carried out as part of Optomed Oy’s veterinary AI project.',
+    stats: [
+      { value: '€20k', label: 'Grant' },
+      { value: '2026', label: 'Awarded' },
+      { value: 'Optomed Oy', label: 'Project partner' },
+    ],
+    points: [],
+  },
+  {
     kind: 'United Nations',
     title: 'Millennium Fellow, then Campus Director',
     org: 'UN Academic Impact · MCN',

@@ -27,7 +27,7 @@ export const testimonials: Testimonial[] = [
     name: 'Shalini Sharma',
     title: 'CEO @ XSTRYV',
     quote:
-      'I worked closely with Kamlesh at XSTRYV, where he joined as our only engineer and quickly became a core team member, owning our recruitment platform end-to-end while it served real users. He never behaved like just a developer. He joined every product discussion, pushed back when something didn\'t make sense, and understood the business behind the code. He was dependable, fast, and took ownership without being asked. Any team would be lucky to have him, and I recommend him without hesitation.',
+      "I had the pleasure of working closely with Kamlesh at STRYV, where he joined as a Full Stack Engineer. Over time, he became a core member of the team, taking end-to-end ownership of our team-building platform, which served real users in production. Kamlesh is diligent and proactive. He actively participated in product discussions, wasn't afraid to challenge ideas that didn't make sense, and consistently demonstrated a strong understanding of the business context behind the code. He delivered high-quality work, moved quickly, and took ownership without needing to be asked. Beyond his technical skills, Kamlesh is dependable, thoughtful, and a great teammate. He is someone you can trust to solve problems, communicate openly, and see things through to completion. I am happy to recommend him without hesitation, any team would be lucky to have him!",
     relationship: 'Managed Kamlesh directly',
     date: 'July 2025',
     avatar: '/images/testimonials/Shalini-Sharma.jpeg',

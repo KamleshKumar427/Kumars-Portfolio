@@ -1,4 +1,4 @@
-// Selected Work — the three roles, derived from Curriculum_Vitae_Md.md (source of truth).
+// Selected Work: the three roles, word for word from Kamlesh's CV (2026-10-07).
 export type Experience = {
   /** display index, e.g. "01" */
   n: string
@@ -12,7 +12,7 @@ export type Experience = {
   /** one or two highlighted ◇ points */
   points: string[]
   /** labelled figures for this role, shown as chips */
-  stats?: { value: string; label: string }[]
+  stats?: { value: string; label: string; href?: string }[]
   tech: string[]
   href?: string
 }
@@ -24,24 +24,23 @@ export const xstryv: Experience = {
   n: '01',
   meta: ['MAR–JUN 2026', 'FULL-TIME', 'ESPOO, FINLAND'],
   kicker: 'XSTRYV · HR-Tech Platform',
-  title: 'Full-Stack Developer (HR-Tech)',
+  title: 'Full-Stack Developer',
   summary:
-    'Took ownership of the codebase from day 1, delivering 67 commits in 4 months across the frontend, server, and data layers, and later onboarded two new developers onto the platform.',
+    "A startup recruitment platform connecting talent with companies. Joined as the only engineer and **a core team member**, owning the platform end-to-end while it handled real users traffic.",
   points: [
-    'Application architecture: Built and extended feature modules for jobs, chat, admin, onboarding, and dashboards in Next.js (App Router) with React, TypeScript, Tailwind, and Radix UI, backed by a typed service layer.',
-    'Server layer: Implemented server-side logic through Next.js Server Actions covering authentication, messaging, admin approval flows, bulk job operations, and candidate data export to Excel.',
-    'Data layer: Designed and shipped 14 PostgreSQL migrations with Prisma covering company-scoped chat, review statuses, rejection reasons, and program enrolment.',
-    'Authentication: Worked across Supabase Auth OAuth and email flows, unified separate company and talent sign-in into a single entry point, and hardened one-time verification links against automated email scanners.',
-    'Async processing & caching: Used Inngest for background workflows, Upstash Redis for caching, and Resend for transactional email, including debounced notifications for unread messages.',
-    'Reliability: Configured Sentry error monitoring and added audit logging through a dedicated service.',
+    "Built a **multi-user messaging system** between companies and talent, featuring in-chat acceptance/rejection workflows and scheduled Inngest background jobs to deliver **rate-limited email notifications**",
+    "**Implemented a self-serve applicant workflow** so companies can independently manage hiring on the platform, with excel data export and bulk in-platform messaging announcements.",
+    "Implemented **Upstash Redis caching layer** and Sentry error tracking from scratch, boosting **system performance** and **observability**.",
+    "**Traced a race condition** between two signup paths that caused mismatched user IDs across database tables and metadata, diagnosed the root cause, and shipped a permanent fix.",
+    "Debugged and resolved **pre-existing inconsistent data across the auth and application layers**.",
+    "Participated in product and market discussions, shaped decisions, built a full understanding of the business alongside the code, and hired two new developer interns.",
   ],
   stats: [
-    { value: '67', label: 'commits in 4 months' },
-    { value: '14', label: 'PostgreSQL migrations' },
-    { value: 'Day 1', label: 'owned the codebase' },
-    { value: '2', label: 'developers onboarded' },
+    { value: '2', label: 'developer interns onboarded' },
+
+    { value: 'Core Team Member', label: 'owned the platform end-to-end' },
   ],
-  tech: ['Next.js', 'React', 'TypeScript', 'PostgreSQL', 'Prisma', 'Supabase Auth', 'Inngest', 'Tailwind'],
+  tech: ['Next.js', 'TypeScript', 'WebSockets', 'Supabase', 'Prisma', 'nginx', 'GitHub Actions', 'Docker Swarm', 'Terraform'],
   href: 'https://xstryv.com/signin',
 }
 
@@ -49,70 +48,48 @@ export const experience: Experience[] = [
   xstryv,
   {
     n: '02',
-    meta: ['2024–2025', 'FULL-TIME', 'IRELAND · REMOTE'],
+    meta: ['JUN 2024–JUL 2025', 'FULL-TIME', 'IRELAND · REMOTE'],
     kicker: 'Datapulse Technologies · PCI DSS L1 Gateway',
-    title: 'Full-Stack Engineer — Payment Gateway (Fintech)',
+    title: 'Full Stack Engineer (Fin-Tech)',
     summary:
-      'Full-stack engineer on a PCI DSS Level 1 payment gateway with a 25-year legacy — 20+ currencies, hundreds of millions of euros processed. Modernised core services with teams across Ireland, Cyprus, and Pakistan; deployed to production independently.',
+      'PCI DSS Level 1 payment gateway, with 25+ years legacy code, processing tens of millions of euros in 20+ currencies. Worked with teams in Ireland, Cyprus, and Pakistan.',
     points: [
-      'Onboarded the gateway as a Google-listed processor; integrated Google Pay with full merchant support (notifications, webhooks, emails).',
-      'Completed Apple Pay integration into the core gateway.',
-      'Built PCI-compliant, JWT-secured REST APIs so the mobile app could talk straight to the gateway, unifying the experience across platforms.',
-      'Cut end-to-end processing time by 11% by optimising queries and workflows across the gateway architecture and database.',
-      'Worked directly with white-label merchants on notification, webhook, risk-rule and performance issues — deploying to production independently.',
+      'Cut end-to-end payment processing time by **11%**: optimized slow SQL queries and indexes, made log writes and transaction status updates asynchronous so payments no longer waited on them, and removed legacy VBScript.',
+      'Built the core gateway’s **Google Pay** integration end to end, from the payment API and token handling to the transaction flow and webhooks, and worked with Google’s technical teams to qualify it as a participating processor.',
+      'Helped complete the **Apple Pay integration** in the core gateway.',
+      'Designed and built **PCI-compliant REST APIs** secured with JWT, so the mobile app could connect directly to the core gateway. This improved data consistency and unified the experience across platforms.',
+      '**Worked directly with gateway customers** on their white-label setups, each isolated in its own database: diagnosed notification, webhook, risk rule, and performance issues, and shipped the fixes to production.',
     ],
     stats: [
-      { value: '20+', label: 'currencies' },
-      { value: 'Hundreds of millions €', label: 'processed' },
-      { value: '25 yrs', label: 'of legacy codebase' },
-      { value: '11%', label: 'faster processing' },
+      { value: '11%', label: 'faster payment processing' },
+      { value: 'Client-Facing Engineering', label: '' },
+      { value: '€10M+', label: 'PROCESSED ANNUALLY' },
     ],
-    tech: [
-      'React',
-      'TypeScript',
-      'Java',
-      'Spring Boot',
-      '.NET',
-      'Docker',
-      'OAuth 2.0',
-      'JWT',
-      'REST APIs',
-      'MSSQL',
-      'YugabyteDB',
-      'Azure',
-    ],
+    tech: ['TypeScript', 'React', 'Python', 'Java', 'Spring Boot', 'MSSQL', 'YugabyteDB (database-per-tenant)', 'Azure', 'Docker'],
     href: 'https://pbt.com.cy/',
   },
   {
     n: '03',
-    meta: ['2022–2023', 'PART-TIME', 'S. KOREA · REMOTE'],
+    meta: ['NOV 2022–NOV 2023', 'PART-TIME', 'SOUTH KOREA · REMOTE'],
     kicker: 'Bitnine Global · Apache AGE',
-    title: 'Software Engineer Intern (Open Source)',
+    title: 'Software Engineer Intern, Open Source',
     summary:
-      'Open-source tooling for the Apache AGE graph database — a browser-based DBaaS, high availability via Pgpool-II, and a Go desktop client for managing AGE databases.',
+      'Contributed 11 merged pull requests to **Apache AGE**, an open-source graph database extension for PostgreSQL.',
     points: [
-      'AgeDB-Cloud: Database-as-a-Service to run AGE in a web interface with no local install.',
-      'Pgpool-II: load balancing and read/write splitting for uninterrupted access during failures.',
-      'AgeViewer-Go: REST APIs, routing, and sessions in Go for the age-viewer-go desktop app.',
+      'Worked on high availability for AGE through Pgpool-II (load balancing, read/write splitting): implemented Cypher function extraction and added regression tests for Cypher load balancing, in C.',
+      'Wrote REST APIs, routing, and sessions in Go for AgeViewer-Go, the desktop app for managing AGE databases: connecting and disconnecting databases, reading graph metadata, and returning query results.',
+      'Built AgeDB-Cloud, a web app for using AGE in the browser without installing it, on a DigitalOcean VM.',
     ],
     stats: [
-      { value: '3', label: 'open-source tools shipped' },
-      { value: 'Apache AGE', label: 'graph database internals' },
-      { value: '1 yr', label: 'alongside a CS degree' },
+      {
+        value: '11 PRs',
+        label: 'merged into Apache AGE\u00a0↗',
+        href: 'https://github.com/apache/age/pulls?q=is:pr+author:KamleshKumar427+is:merged',
+      },
+      { value: '5k', label: 'Github Stars ⭐' },
     ],
-    tech: [
-      'React',
-      'Node.js',
-      'Go',
-      'C / C++',
-      'Apache AGE',
-      'PostgreSQL internals',
-      'Pgpool-II',
-      'MongoDB',
-      'PM2',
-      'DigitalOcean',
-    ],
-    href: 'https://age.apache.org/',
+    tech: ['C', 'Go', 'PostgreSQL', 'Pgpool-II', 'React', 'Node.js', 'MongoDB', 'PM2'],
+    href: 'https://github.com/apache/age',
   },
 ]
 

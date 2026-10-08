@@ -29,16 +29,18 @@ export const inkConfig = {
 
   // — Fluid feel —
   // densityDissipation: how fast painted ink fades, per second (exponential).
-  // A stroke stays solid for several seconds, is pale by ~12s and gone by
-  // ~20–25s — the same timing as before the ink started riding the flow. That
-  // needed a slower rate than the old 0.16: moving ink is resampled every
-  // frame, which thins the band on its own, so the fade itself had to ease off
-  // to land at the same moment. Runs on real time (continues off-screen).
+  // 0.061 is the old 0.11 slowed by 1.8. Measured on a 3s scribble: half of it
+  // is gone by ~15s and the last traces by ~50s, against ~10s and ~30s before.
+  // (The early drop is the flow thinning the band, not this rate, so the first
+  // half goes a little faster than 1.8 would suggest.) Runs on real time, so
+  // it keeps fading while the hero is off screen.
   // Lower = lingers longer. Do NOT reach 0 — muddy build-up + instability.
-  densityDissipation: 0.11,
-  // velocityDissipation: how fast motion settles to stillness.
-  // Higher = ink comes to rest sooner (calmer).
-  velocityDissipation: 1.1,
+  densityDissipation: 0.061,
+  // velocityDissipation: how fast motion settles to stillness. Higher = ink
+  // comes to rest sooner. 1.7 gives the water left behind by a quick stroke
+  // less time to wind its head into a curl, while a stroke still visibly
+  // flows and drifts while it is being drawn.
+  velocityDissipation: 1.7,
   // pressureIterations: incompressibility solve quality. More = more "liquid".
   pressureIterations: 24,
   pressure: 0.8,
@@ -75,11 +77,23 @@ export const inkConfig = {
   // stroke shows at; lowering it widens every stroke.
   faintInk: { from: 0.08, to: 0.35 },
 
-  // pushSpread: how much wider than the ink band the push is (width ratio).
-  // 1.365 pushes exactly the water the earlier, wider brush pushed (0.205 =
-  // 0.11 x 1.365^2), so the flow is that version's while the ink stays thin.
-  // Much wider (4) lays ink evenly but the water stops feeling like water.
-  pushSpread: 1.365,
+  // maxStep: how far the pointer can move in one event (fraction of the hero)
+  // before the push stops growing with it. The push is what the pointer hands
+  // the water, and it used to scale straight with speed: a flick handed the
+  // water several times what a stroke did, and that jet rolled up into a
+  // vortex pair as soon as the pointer stopped — the two ink rings at the end
+  // of every quick stroke. Saturating it (a smooth tanh, not a hard cut) means
+  // speed decides how far the ink is carried, not how hard the water is hit.
+  // The ink itself is unaffected: it is laid along the whole path either way.
+  maxStep: 0.014,
+
+  // pushSpread: how much wider than the ink band the push is (width ratio;
+  // radius is a variance, so width x k means radius x k^2). The ink rides the
+  // calm middle of the moving water while the shearing edges, where a stroke's
+  // end winds itself into a ring, sit outside the ink and stay invisible.
+  // At 1.365 (the push as wide as the brush) those rings were drawn in ink; at
+  // 4 the ink lands evenly but the water stops reading as water. 2.4 holds both.
+  pushSpread: 2.4,
 
   // — Small screens —
   // Drop size is measured in canvas HEIGHT, and a phone hero is about as tall as
@@ -161,7 +175,8 @@ export const inkConfig = {
     haze: 0.55,
     // How fast sunk ink fades, per second — slower than surface ink
     // (densityDissipation), so a stroke is seen all the way down to the paper.
-    fade: 0.07,
+    // Slowed by the same 1.8 as the surface, so both keep the same relation.
+    fade: 0.039,
     // Dark mode: how solid sunk ink looks next to surface ink. Lit from above
     // in dark water, a full-strength cloud read as glowing smoke.
     darkCover: 0.6,

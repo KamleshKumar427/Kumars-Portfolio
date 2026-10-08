@@ -1,89 +1,81 @@
+import { ProofLinks, RecordSlip } from '../components/RecordSlip'
 import { Reveal } from '../components/ui/Reveal'
 import { education } from '../data/education'
 
+/** Degrees as transcript slips: the story on the left, the figures on a
+ *  "Record" slip on the right, with the first proof link in its header. */
 export function PathSection() {
   return (
     <section id="education" className="section">
       <div className="section-inner">
         <Reveal>
-          <div className="section-kicker">道 — Education</div>
-          <h2 className="path-col-title">Degrees &amp; recognition</h2>
+          <div className="section-head">
+            <div>
+              <h2 className="section-title section-title--marked">
+                <span className="section-mark" aria-hidden="true">
+                  道
+                </span>
+                Education
+              </h2>
+            </div>
+          </div>
         </Reveal>
 
         <Reveal stagger>
-          {education.map((edu) => (
-            <div className="edu-item" key={edu.degree}>
-              <div className="edu-head">
-                <h3 className="edu-degree">{edu.degree}</h3>
-                <span className="edu-period">{edu.period}</span>
-              </div>
+          {education.map((edu) => {
+            const links = edu.links ?? []
+            const slip = edu.stats?.length ? edu.stats : null
+            // With a slip, the first link moves into its header.
+            const ownLinks = slip ? links.slice(1) : links
+            return (
+              <article className={`slip-item${slip ? '' : ' slip-item--solo'}`} key={edu.degree}>
+                <div className="slip-main">
+                  <div className="slip-period">{edu.period}</div>
+                  <h3 className="slip-title">{edu.degree}</h3>
+                  <div className="edu-school">
+                    {edu.logo ? (
+                      <img
+                        className={`edu-logo ${edu.logoTheme === 'mono' ? 'edu-logo--mono' : ''}`}
+                        src={edu.logo}
+                        alt=""
+                        loading="lazy"
+                      />
+                    ) : null}
+                    <span>{edu.school}</span>
+                  </div>
 
-              <div className="edu-school">
-                {edu.logo ? (
-                  <img
-                    className={`edu-logo ${edu.logoTheme === 'mono' ? 'edu-logo--mono' : ''}`}
-                    src={edu.logo}
-                    alt=""
-                    loading="lazy"
-                  />
-                ) : null}
-                <span>{edu.school}</span>
-              </div>
+                  {edu.focus ? <p className="slip-summary">{edu.focus}</p> : null}
 
-              {edu.focus ? <p className="edu-focus">{edu.focus}</p> : null}
-
-              {edu.points ? (
-                <div className="work-points edu-points">
-                  {edu.points.map((point) => (
-                    <div className="work-point" key={point}>
-                      {point}
+                  {edu.points ? (
+                    <div className="work-points">
+                      {edu.points.map((point) => (
+                        <div className="work-point" key={point}>
+                          {point}
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  ) : null}
+
+                  {edu.note ? <p className="edu-note">{edu.note}</p> : null}
+
+                  {edu.courses ? (
+                    <ul className="tags edu-courses">
+                      {edu.courses.map((course) => (
+                        <li className="chip" key={course}>
+                          {course}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+
+                  <ProofLinks links={ownLinks} />
                 </div>
-              ) : null}
 
-              {edu.stats ? (
-                <ul className="stat-row">
-                  {edu.stats.map((stat) => (
-                    <li className="stat" key={stat.label}>
-                      <span className="stat-value">{stat.value}</span>
-                      <span className="stat-label">{stat.label}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-
-              {edu.note ? <p className="edu-note">{edu.note}</p> : null}
-
-              {edu.courses ? (
-                <ul className="tags edu-courses">
-                  {edu.courses.map((course) => (
-                    <li className="chip" key={course}>
-                      {course}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-
-              {edu.links ? (
-                <div className="proof-links">
-                  {edu.links.map((link) => (
-                    <a
-                      className="proof-link"
-                      key={link.href}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.label} ↗
-                    </a>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ))}
+                {slip ? <RecordSlip stats={slip} link={links[0]} /> : null}
+              </article>
+            )
+          })}
         </Reveal>
-
       </div>
     </section>
   )

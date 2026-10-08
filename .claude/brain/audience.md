@@ -40,7 +40,7 @@ The site has one job: get the right people to contact Kamlesh, or to keep Kamles
 Run these against anything a visitor will see.
 
 1. **5 seconds, first screen, on a phone.** Without scrolling or tapping: who is this, what do they do, where, are they available, and is there a reason to keep going? Nothing decorative may compete with those answers.
-2. **30 seconds, skimming like a recruiter.** Reading only headings, kickers, stat tiles, job titles and dates: role and level, the three jobs, one proof each, the degree, and where the CV and the email are.
+2. **30 seconds, skimming like a recruiter.** Reading only headings, kickers, figures, job titles and dates: role and level, the three jobs, one proof each, the degree, and where the CV and the email are.
 3. **3 minutes, reading like a hiring manager.** Every claim specific and checkable, with a link behind it where possible, and nothing a skeptical engineer would discount.
 
 ## What a visitor should leave with
@@ -51,9 +51,9 @@ The site, the CV and LinkedIn tell one story:
 - That has happened in three places: a PCI DSS Level 1 payment gateway (Datapulse), a live recruitment platform run as its sole full-stack engineer (XSTRYV), and open-source tooling for Apache AGE, close to PostgreSQL internals (Bitnine, part-time).
 - Around that: an MSc at the University of Helsinki (4.9/5), AI projects, and managers who vouch for the work.
 
-The hero line already says it: "Hand me the part that has to work. I'll own it end to end."
+The hero has no tagline any more (removed 2026-10-06): name, title, location. About carries the summary.
 
-**Open question for Kamlesh, not for Claude to settle:** the title. The hero says "AI Full-Stack Engineer". The CV says "Full-Stack Software Engineer, AI Agents & DevOps". About lists "Forward Deployed Engineer · Software Architect" as aspirations (set 2026-10-05). A recruiter writes down one title. Raise this whenever a change touches the hero, About, the page title or the SEO text.
+**Open question for Kamlesh, not for Claude to settle:** the title. The hero says "AI Full-Stack Software Engineer" (set 2026-10-06). The CV says "Full-Stack Software Engineer, AI Agents & DevOps". About lists "Forward Deployed Engineer · Software Architect" as aspirations (set 2026-10-05). A recruiter writes down one title. Raise this whenever a change touches the hero, About, the page title or the SEO text.
 
 ## The page, section by section
 
@@ -74,4 +74,4 @@ What each section is for. When you change a section, keep it doing its job. If i
 | 11 | Contact (`contact`) | One clear next step | everyone |
 | /startups | `startup-hero`, `xstryv`, `pathways`, `slush`, `contact` | The startup side: XSTRYV, the Pathways pre-incubator, Slush | founders |
 
-After the pond, sections are meant to alternate between plain and tinted (`section--alt`). Moving or adding a section means re-checking that order. (As of 2026-10-05 it is broken: Certifications and Projects are both plain, and Recognition and Testimonials are both tinted. That happened when Projects and Recognition swapped places.)
+After the pond, sections alternate between plain and tinted (`section--alt`): Education plain, Skills tinted, Certifications plain, Projects tinted, Recognition plain, Testimonials tinted, Contact plain. Moving or adding a section means re-checking that order.

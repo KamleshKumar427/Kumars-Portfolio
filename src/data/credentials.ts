@@ -22,11 +22,23 @@ export const credentials: Credential[] = [
     href: 'https://drive.google.com/file/d/1faaH0bdAFqiBw7d8yrfIfLqqFx2LOqpG/view?usp=sharing',
   },
   {
+    title: 'DevOps with Kubernetes',
+    issuer: 'University of Helsinki · MOOC',
+    year: '2026 · ongoing',
+    detail:
+      'Learning to run Kubernetes clusters and deploy to them (deployments, services, ingress and gateways), with GitOps pipelines, auto-scaling, and monitoring through Prometheus and Grafana.',
+    icon: 'Kubernetes',
+    href: 'https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes-2026',
+    linkLabel: 'Course',
+  },
+  {
     title: 'Java Spring Framework 6 with Spring Boot 3',
     issuer: 'Udemy',
     year: '2024',
     detail: 'Spring 6, Spring Boot 3, JDBC, JPA, Security, Docker and microservices.',
     icon: 'Spring Boot',
+    href: 'https://www.udemy.com/course/spring-5-with-spring-boot-2/?srsltid=AU7gw4VtBu3BpeljexkspDR_McvFTv41ux7NzDsBMVKRFjTbd7YL2DXR&couponCode=PMNVD3025',
+    linkLabel: 'Course',
   },
   {
     title: 'PostgreSQL Indexes',

@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from './components/ThemeToggle'
+import { Figures } from './components/Figures'
+import { RichText } from './components/RichText'
 import { ImageSlot } from './components/ImageSlot'
 import { Lightbox, type LightboxMedia } from './components/Lightbox'
 import { Reveal } from './components/ui/Reveal'
@@ -239,26 +241,23 @@ export function StartupsPage() {
               <Reveal className="startup-x-body" delay={0.05}>
                 <div className="work-kicker">{xstryv.kicker}</div>
                 <h2 className="startup-h2">{xstryv.title}</h2>
-                <p className="startup-p">{xstryv.summary}</p>
+                <p className="startup-p">
+                  <RichText text={xstryv.summary} />
+                </p>
 
-                {xstryv.stats ? (
-                  <ul className="stat-row">
-                    {xstryv.stats.map((stat) => (
-                      <li className="stat" key={stat.label}>
-                        <span className="stat-value">{stat.value}</span>
-                        <span className="stat-label">{stat.label}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+                {xstryv.stats ? <Figures stats={xstryv.stats} /> : null}
 
                 <div className="startup-cards">
                   {XSTRYV_CARDS.map((card) => (
-                    <div className="startup-card" key={card.title}>
-                      <div className="startup-card-title">
-                        <span aria-hidden="true">◇</span> {card.title}
-                      </div>
-                      <p className="startup-card-body">{card.body}</p>
+                    <div className="startup-card" key={card.body}>
+                      {card.title ? (
+                        <div className="startup-card-title">
+                          <span aria-hidden="true">◇</span> {card.title}
+                        </div>
+                      ) : null}
+                      <p className="startup-card-body">
+                        <RichText text={card.body} />
+                      </p>
                     </div>
                   ))}
                 </div>

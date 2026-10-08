@@ -19,10 +19,11 @@ Sumi-e: ink and water. A sheet of paper over water, ink that blooms as the point
 Use tokens, never raw values. Palette tokens are defined per theme in `:root, [data-theme='light']` and `[data-theme='dark']`, with a copy under `prefers-color-scheme: dark` for the moment before JS runs. A new colour goes into all three.
 
 **Palette** (light / dark)
-- `--paper` page #f9fcf7 / #141519 · `--paper-2` #f4faf1 / #1b1c20 · `--paper-3` #f7fbf5 / #0f1013 · `--card` #ffffff / #1d1e23
+- `--paper` page #fbfcf9 / #141519 · `--paper-2` the sage band #eef3ea / #1b1c20 (also `--alt-fill`, the alternating section colour; halftone dots are at 10% strength since 2026-10-06) · `--paper-3` #f7fbf5 / #0f1013 · `--card` #ffffff / #1d1e23
 - `--ink` text #161a17 / #ecebe6 · `--ink2` secondary #566150 / #9b9ca3 · `--line` hairline #dfecd9 / rgba(235,236,240,.12)
 - `--seal` vermilion #b23a2e / #e2573f · `--seal-ink` text on the seal
-- `--alt-fill` tint for alternating sections · `--glass-*` glass controls · `--stat-*` stat tiles · `--grain`, `--halftone` paper texture (light only)
+- `--rule` strong ink line over figures and the lead glance rows #161a17 / rgba(236,235,230,.75) · `--hairline-strong` a firmer hairline #d3e3cb / rgba(235,236,240,.14)
+- `--alt-fill` tint for alternating sections · `--glass-*` glass controls · `--cert-bg`, `--cert-shadow` certification cards · `--grain`, `--halftone` paper texture (light only)
 
 **Semantic aliases** (prefer these in new code): `--bg`, `--bg-2`, `--surface`, `--surface-2`, `--surface-sunken`, `--text`, `--text-2`, `--text-body` (long paragraphs), `--separator`, `--accent`, `--accent-hover`, `--accent-text`, `--accent-wash`.
 
@@ -40,14 +41,20 @@ Use tokens, never raw values. Palette tokens are defined per theme in `:root, [d
 ## Patterns to reuse
 
 - **Section scaffold:** `<section id="…" className="section">` (add `section--alt` for the tinted band), then `.section-inner`, then `<Reveal>` around a `.section-head` holding `.section-kicker` (kanji and a word, vermilion, 12px uppercase) and `h2.section-title`. An optional `.section-lead` sits beside the title.
-- **Role and honour rows:** two columns, a 108px left rail (a big vermilion number, or kind and period) and the body. Experience uses `.work-row`; Recognition uses `.honour`.
-- **Stat tiles:** `.stat-row > .stat > .stat-value + .stat-label`. For figures only: a number and a short label, never a sentence.
+- **Marked title:** `h2.section-title.section-title--marked` with `<span class="section-mark" aria-hidden>` holding the kanji: the word at section-title size, the kanji at 0.68em, weight 400, `--seal`, on the same baseline. Used by Experience, Education and Recognition in place of a kicker line plus a tagline title.
+- **Role and honour rows:** a left rail and the body. Experience (`.work-row`) has a 190px rail holding the vermilion role number, the dates and the margin figures; Recognition (`.honour`) has a 108px rail with kind and period.
+- **Figures (`<Figures>` in `src/components/Figures.tsx`):** the one way to show a number site-wide: the value in ink (never red; red is for role numbers) over a 12px uppercase label, separated by rules, never boxed. Two variants:
+  - **Ledger figures** (`variant="ledger"`, the default): a row, one column per figure (up to 4), each under a `--rule` line; value 28px/600. Two columns at 640px and below, with the value at 22px. Used by Education, Recognition and the XSTRYV block on /startups.
+  - **Margin figures** (`variant="margin"`): a stacked list in the Experience rail, `--rule` on top and `--hairline-strong` between; value 24px/600. Below 900px it becomes a two-up grid above the role's kicker.
+- **Portrait (About):** a cut-out colour photo (`profile.portrait`: transparent AVIF with a PNG fallback in `public/images/about/`) in a 340px column, 144px from the text at desktop width, no frame, standing on a `--hairline-strong` baseline and centred vertically against the text. The frame is 1:1.12, taller than the square photo, so the hover lift never clips the hair. The bottom edge is tinted toward `--ink` (darker on light paper, lighter on dark) by `.portrait-tint`, masked to the photo's outline. On hover (hover devices only) the figure lifts 10px and scales to 1.03 from its baseline with a drop shadow in its own shape, over 0.8s with `--ease`; no colour or glow is added. Reduced motion drops the movement. A 64px vermilion 印 seal is stamped on the bottom-left corner (inset to 12px on phones), with a name · city caption under it. The statement beside it hangs from a 96px serif “ in `--seal`; the glance grid below is two columns, its first two rows (what Kamlesh wants next) get the `--rule` line, a seal-coloured label and a 600 value, and "Based in" carries a small Finland flag on a pole (`flag: 'fi'` on the row).
 - **Points:** `.work-points > .work-point`, with a ◇ marker.
 - **Pills:** `.tag` (outlined, for technologies) and `.chip` (filled, for skills and courses). Both turn vermilion on hover.
 - **Proof links:** `.proof-links > a.proof-link`, ending in ↗ (transcripts, certificates).
 - **Buttons:** `.btn.btn--seal` (primary, vermilion) and `.btn.btn--ghost`. Pills 44px tall that scale to 0.96 on press.
 - **Glass controls:** the ink dock, the nav sheet, the CV menu and the theme switch use `--glass-fill`, `--glass-edge` and `--glass-lift`.
-- **Media:** `ImageSlot` (a photo, or a PDF with a poster image for phones) and `Lightbox` for the full view.
+- **Paged grid (`<PagedGrid>`, Certifications):** pages of two by two sit side by side on a track that slides. Below it, one line per page (the current one long and `--seal`, the others short and grey); hovering a line for 140ms, clicking, focusing or swiping brings its page in. No counts, no Prev/Next, nothing on a timer. The track is as tall as its tallest page, so nothing below moves.
+- **Project tabs (Lab):** Software · AI/LLM · Writing, Software first. The tabs advance on their own every 5s, with a 2px bar filling inside the active pill; it waits while the section is mostly off screen, while the pointer is over the tabs or the projects, and while the browser tab is hidden. Hovering a tab opens it; a click or a key press stops the auto-advance for good; reduced motion turns it off. The panel keeps the tallest height it has shown so the page below doesn't jump. Order per tab comes from `ranks` in `projects.ts`.
+- **Media:** `ImageSlot` (a photo, or a PDF with a poster image for phones) and `Lightbox` for the full view. Project cards take `images: { src, alt, fit? }[]` in `projects.ts`; two or more become a slider (LabSection `useSlideshow`): it steps through every picture while a mouse hovers and returns to the first on leave, plays on its own on touch screens while the card is visible, and stays on the first picture with reduced motion. `fit: 'contain'` keeps a diagram whole. Project pictures live in `public/images/projects/<project>/`.
 
 ## Two layers (known debt)
 

@@ -495,9 +495,13 @@ export class FluidSim {
       // more texels across than down on a wide screen, horizontal strokes
       // pushed the water a different distance from vertical ones — isotropic
       // water it was not. Now a stroke pushes the same way in any direction.
+      // Past maxStep the push stops growing with pointer speed (see inkConfig).
+      const step = Math.hypot(s.dx, s.dy)
+      const cap = inkConfig.maxStep
+      const ease = step > 1e-6 ? (cap * Math.tanh(step / cap)) / step : 0
       ;(vMat.uniforms.color.value as THREE.Vector3).set(
-        s.dx * this.velocity.read.width * force,
-        s.dy * this.velocity.read.height * force,
+        s.dx * ease * this.velocity.read.width * force,
+        s.dy * ease * this.velocity.read.height * force,
         0,
       )
       // The push can be wider than the ink band (radius is a variance, so

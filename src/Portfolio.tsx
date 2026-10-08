@@ -19,7 +19,7 @@ import { useSeo } from './hooks/useSeo'
  *  adding one (the tint is the `section--alt` class). */
 export function Portfolio() {
   useSeo({
-    title: 'Kamlesh Kumar — AI Full-Stack Engineer · Helsinki',
+    title: 'Kamlesh Kumar — AI Full-Stack Software Engineer · Helsinki',
     description:
       'Kamlesh Kumar is an AI full-stack engineer in Helsinki, Finland — PCI DSS payment systems, a recruitment platform run as its only engineer, and open-source database internals. MSc Computer Science, University of Helsinki. Open to roles where ownership matters.',
     canonical: 'https://kamleshkumar.eu/',

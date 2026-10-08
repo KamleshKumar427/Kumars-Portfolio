@@ -27,8 +27,8 @@
      turns yellow, so this sits deliberately between the two. Light enough that
      contrast stops being a constraint, which is what lets the vermilion seal
      below stay vivid. */
-  --paper: #f9fcf7; /* page */
-  --paper-2: #f4faf1; /* solid alt, for surfaces that can't be translucent */
+  --paper: #fbfcf9; /* page: almost white, a breath of green */
+  --paper-2: #eef3ea; /* the sage band: alternating sections and inset surfaces */
   --paper-3: #f7fbf5; /* hero / soft panels */
   --card: #ffffff; /* raised cards — the ground is so light that only white lifts */
   --ink: #161a17; /* primary text — forest-floor near-black */
@@ -37,7 +37,7 @@
   --seal: #b23a2e; /* vermilion accent — 4.9:1 here, green's warm complement */
   --seal-ink: #f6fbf4; /* text on the seal */
   --hover: rgba(255, 255, 255, 0.6);
-  --nav-bg: rgba(249, 252, 247, 0.82);
+  --nav-bg: rgba(251, 252, 249, 0.82);
 
   /* Glass surfaces. On a near-white page the fill alone is almost invisible,
      so the rim and the lift are what define the panel — which is exactly how
@@ -58,13 +58,15 @@
   --glass-lift: 0 1px 1px rgba(18, 34, 24, 0.05), 0 8px 18px -8px rgba(18, 34, 24, 0.16),
     0 22px 44px -20px rgba(18, 34, 24, 0.2);
   --glass-ring: rgba(255, 255, 255, 0.92);
-  /* Stat tiles. The emphasis lives in the FIGURE (see .stat-value), not in a
-     coloured box — tinted boxes read as muddy shapes and still hid the number.
-     So the tile is a quiet, neutral card: white, a crisp hairline, and a soft
-     shadow that lifts it off both plain and tinted sections. */
-  --stat-bg: var(--card);
-  --stat-border: #d3e3cb;
-  --stat-shadow: 0 1px 2px rgba(18, 34, 24, 0.06), 0 6px 16px -8px rgba(18, 34, 24, 0.16);
+  /* Rules. --rule is the strong ink line that sits over a figure (ledger and
+     margin figures) and over the lead rows of the About glance grid.
+     --hairline-strong is a hairline one step firmer than --line, for the
+     dividers between stacked figures and for card edges. */
+  --rule: #161a17;
+  --hairline-strong: #d3e3cb;
+  /* Certification cards keep a quiet raised surface. */
+  --cert-bg: var(--card);
+  --cert-shadow: 0 1px 2px rgba(18, 34, 24, 0.06), 0 6px 16px -8px rgba(18, 34, 24, 0.16);
   /* Split-flap tiles (see .flap-cell). A white tile on paper this light is
      invisible, so the tile is sunken rather than raised: a faint ink tint, a
      crisp edge, and a shadow pressed in at the top the way a real flap sits in
@@ -78,9 +80,9 @@
   --drawer-edge: rgba(20, 40, 24, 0.09);
   --drawer-lift: 0 22px 44px -26px rgba(18, 34, 24, 0.3);
   --media: repeating-linear-gradient(135deg, #f3f9f0 0 14px, #ecf4e8 14px 28px);
-  /* Alternating sections tint the paper instead of covering it, so the texture
-     runs unbroken down the page instead of restarting at every section edge. */
-  --alt-fill: rgba(24, 60, 28, 0.045);
+  /* Alternating sections: a solid sage band, distinct enough from the page
+     that each section change reads at a glance (2026-10-06). */
+  --alt-fill: var(--paper-2);
 
   /* Matte tooth — fine grain over the whole surface, the way uncoated paper
      scatters light instead of reflecting it. Tiled SVG noise, desaturated so it
@@ -95,8 +97,8 @@
      legibility, not how dark any single dot is. Widening the tile thins the
      screen far faster than fading it — 5px to 8px drops ink coverage ~61%,
      which is what bought back the opacity here. */
-  --halftone: radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.07) 0 0.7px, rgba(70, 90, 72, 0) 1.2px),
-    radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.07) 0 0.7px, rgba(70, 90, 72, 0) 1.2px);
+  --halftone: radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.007) 0 0.7px, rgba(70, 90, 72, 0) 1.2px),
+    radial-gradient(circle at 50% 50%, rgba(70, 90, 72, 0.007) 0 0.7px, rgba(70, 90, 72, 0) 1.2px);
   --halftone-size: 8px 8px, 8px 8px;
   --halftone-pos: 0 0, 4px 4px;
 
@@ -139,9 +141,10 @@
   );
   --glass-lift: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 36px -14px rgba(0, 0, 0, 0.62);
   --glass-ring: rgba(28, 32, 40, 0.9);
-  --stat-bg: var(--card);
-  --stat-border: var(--line);
-  --stat-shadow: none;
+  --rule: rgba(236, 235, 230, 0.75);
+  --hairline-strong: rgba(235, 236, 240, 0.14);
+  --cert-bg: var(--card);
+  --cert-shadow: none;
   --flap-bg: color-mix(in srgb, var(--ink) 9%, var(--card));
   --flap-border: var(--line);
   --flap-fold: rgba(0, 0, 0, 0.5);
@@ -190,9 +193,10 @@
   );
   --glass-lift: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 36px -14px rgba(0, 0, 0, 0.62);
   --glass-ring: rgba(28, 32, 40, 0.9);
-  --stat-bg: var(--card);
-  --stat-border: var(--line);
-  --stat-shadow: none;
+  --rule: rgba(236, 235, 230, 0.75);
+  --hairline-strong: rgba(235, 236, 240, 0.14);
+  --cert-bg: var(--card);
+  --cert-shadow: none;
   --flap-bg: color-mix(in srgb, var(--ink) 9%, var(--card));
   --flap-border: var(--line);
   --flap-fold: rgba(0, 0, 0, 0.5);
@@ -1077,14 +1081,6 @@ html.lenis body {
   letter-spacing: -0.018em;
   color: var(--text);
 }
-.hero-tagline {
-  font-size: clamp(1rem, 1.8vw, 1.2rem);
-  line-height: 1.45;
-  letter-spacing: -0.014em;
-  color: var(--text-2);
-  max-width: 42ch;
-  text-wrap: pretty;
-}
 
 /* ── Split-flap highlights ──
    A departure board under the headline. Every tile is the same width so the
@@ -1593,6 +1589,20 @@ html.lenis body {
   letter-spacing: -0.01em;
   color: var(--ink);
 }
+/* A title led by its kanji instead of a kicker line: the word carries the
+   section-title size, the kanji sits before it as a vermilion mark, smaller
+   and lighter, sharing the baseline (Experience, Education, Recognition). */
+.section-title--marked {
+  display: flex;
+  align-items: baseline;
+  gap: 0.32em;
+}
+.section-mark {
+  font-size: 0.68em;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--seal);
+}
 .section-lead {
   max-width: 34ch;
   font-size: var(--fs-read-lg);
@@ -1622,6 +1632,15 @@ html.lenis body {
   font-weight: 700;
   color: var(--text);
 }
+.tm-lead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+.tm-linkedin {
+  margin-top: 0;
+}
 .tm-section .section-lead {
   max-width: 38ch;
   font-size: 17px;
@@ -1635,9 +1654,9 @@ html.lenis body {
    ════════════════════════════════════════════════════════════════ */
 .work-row {
   display: grid;
-  grid-template-columns: 108px minmax(0, 1fr);
-  gap: clamp(18px, 4vw, 56px);
-  padding: clamp(28px, 4vw, 46px) clamp(10px, 2vw, 22px);
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 56px;
+  padding: 46px 20px;
   border-top: 1px solid var(--line);
   text-decoration: none;
   color: inherit;
@@ -1647,7 +1666,7 @@ html.lenis body {
 }
 .work-row--link {
   position: relative;
-  padding-right: clamp(44px, 5vw, 60px);
+  padding-right: 60px;
 }
 .work-row:last-child {
   border-bottom: 1px solid var(--line);
@@ -1656,12 +1675,26 @@ html.lenis body {
   background: var(--hover);
   box-shadow: inset 3px 0 0 var(--seal);
 }
+/* The row's link covers the whole row; anything interactive inside sits
+   above it (see WorkSection). */
+.work-row-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+.work-row .figure-link,
+.work-more-toggle,
+.work-row--link .tag {
+  position: relative;
+  z-index: 1;
+}
 .work-row-arrow {
   position: absolute;
-  right: clamp(12px, 2vw, 24px);
-  top: clamp(28px, 4vw, 46px);
+  right: 22px;
+  top: 46px;
   font-family: var(--font-mono);
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-size: 22px;
   line-height: 1;
   color: var(--seal);
   opacity: 0;
@@ -1673,20 +1706,33 @@ html.lenis body {
   opacity: 1;
   transform: translateX(0);
 }
+/* The rail: number, dates, then the role's figures as margin notes. */
+.work-rail,
+.work-id {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
 .work-num {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  font-size: clamp(2.4rem, 4vw, 3.125rem);
   line-height: 1;
   color: var(--seal);
 }
 .work-meta {
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-mono);
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   color: var(--ink2);
-  margin-top: 14px;
   line-height: 1.9;
+  white-space: nowrap;
+}
+.work-body {
+  min-width: 0;
 }
 .work-kicker {
   font-family: var(--font-mono);
@@ -1725,6 +1771,76 @@ html.lenis body {
   color: var(--ink);
   max-width: var(--measure);
 }
+.work-body .work-point {
+  max-width: 40em;
+}
+.work-body .tag {
+  white-space: nowrap;
+}
+/* Bold spans from the CV (**…** in the data): same ink, heavier weight. */
+.rich-strong {
+  font-weight: 650;
+  color: var(--ink);
+}
+/* Extra points: closed by default, opening in place. The 0fr → 1fr grid row
+   animates to the content's real height. */
+.work-points-wrap {
+  margin-bottom: 20px;
+}
+.work-points-wrap .work-points {
+  margin-bottom: 0;
+}
+.work-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.45s var(--ease), opacity 0.35s var(--ease);
+}
+.work-more.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.work-more-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.work-more-inner .work-points {
+  padding-top: 9px;
+}
+.work-more-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin: 4px 0 -6px 26px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--seal);
+  cursor: pointer;
+}
+.work-more-toggle:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.work-more-chevron {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.35s var(--ease);
+}
+.work-more-toggle[aria-expanded='true'] .work-more-chevron {
+  transform: rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-more,
+  .work-more-chevron {
+    transition: none;
+  }
+}
 .work-point-label {
   font-weight: 650;
   color: var(--ink);
@@ -1735,13 +1851,31 @@ html.lenis body {
   flex-shrink: 0;
 }
 
-@media (max-width: 560px) {
+/* Tablets and phones: the rail becomes a block on top. Number and dates sit
+   side by side, the figures turn into a two-up ledger above the kicker. */
+@media (max-width: 900px) {
   .work-row {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: 36px 16px;
   }
-  .work-meta {
-    margin-top: 6px;
+  .work-row--link {
+    padding-right: 48px;
+  }
+  .work-row-arrow {
+    top: 36px;
+    right: 16px;
+  }
+  .work-id {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .work-figures.figures--margin {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+    margin-top: 4px;
   }
 }
 
@@ -1899,6 +2033,54 @@ html.lenis body {
   background: var(--seal);
   color: var(--seal-ink);
 }
+/* The countdown to the next tab: a bar that fills along the bottom of the
+   active pill. Paused while the visitor is reading (see LabSection). */
+.lab-toggle-btn {
+  position: relative;
+  overflow: hidden;
+}
+.lab-tab-progress {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 1px;
+  background: color-mix(in srgb, var(--seal-ink) 85%, transparent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation-name: lab-tab-fill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  pointer-events: none;
+}
+@keyframes lab-tab-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+/* A new tab's projects fade up into place. */
+.lab-panel-in {
+  animation: lab-panel-in 0.5s var(--ease);
+}
+@keyframes lab-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-panel-in {
+    animation: none;
+  }
+}
+.lab-card-context {
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin-bottom: 8px;
+}
 .lab-grid {
   display: flex;
   flex-wrap: wrap;
@@ -1932,7 +2114,9 @@ a.lab-card:hover {
   display: flex;
   align-items: flex-end;
 }
-.lab-card-media span {
+/* The tech label on a card without pictures (only the direct child, so the
+   slider's own hint and dots keep their styles). */
+.lab-card-media > span {
   font-family: var(--font-mono);
   font-size: var(--fs-label);
   letter-spacing: 0.08em;
@@ -1954,23 +2138,26 @@ a.lab-card:hover {
   height: 100%;
   object-fit: cover;
 }
-/* Stack slides; only the first is visible until hover. */
+/* Slides sit side by side on a track that LabSection moves one picture at a
+   time (hover with a mouse; on its own on touch screens). */
+.lab-card-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s var(--ease);
+}
 .lab-card-media--slider .lab-card-photo {
-  position: absolute;
-  inset: 0;
+  flex: 0 0 100%;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.55s var(--ease);
+  object-position: 50% 0%;
 }
-.lab-card-media--slider .lab-card-photo + .lab-card-photo {
-  transform: translateX(100%);
-}
-.lab-card-media--slider:hover .lab-card-photo:first-child {
-  transform: translateX(-100%);
-}
-.lab-card-media--slider:hover .lab-card-photo:nth-child(2) {
-  transform: translateX(0);
+/* Diagrams stay whole, on a white sheet like the diagram's own ground. */
+.lab-card-photo--contain {
+  object-fit: contain !important;
+  object-position: 50% 50% !important;
+  background: var(--card);
 }
 .lab-card-slider-ui {
   position: absolute;
@@ -2012,21 +2199,13 @@ a.lab-card:hover {
   background: var(--seal);
   transform: scale(1.15);
 }
-.lab-card-media--slider:hover .lab-card-slider-dot.is-active {
-  background: color-mix(in srgb, var(--paper) 55%, transparent);
-  transform: scale(1);
-}
-.lab-card-media--slider:hover .lab-card-slider-dot:not(.is-active) {
-  background: var(--seal);
-  transform: scale(1.15);
-}
 @media (hover: none) {
   .lab-card-slider-hint {
     display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lab-card-media--slider .lab-card-photo {
+  .lab-card-track {
     transition: none;
   }
 }
@@ -2222,47 +2401,13 @@ a.lab-card:hover {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: clamp(20px, 3vw, 38px);
 }
-.path-col-title {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  font-size: clamp(2rem, 4.4vw, 3.1rem);
-  line-height: 1.04;
-  color: var(--ink);
-  margin: 0 0 30px;
-}
-.edu-item {
-  border-top: 1px solid var(--line);
-  padding: clamp(26px, 3vw, 38px) 0;
-}
-.edu-item:last-of-type {
-  border-bottom: 1px solid var(--line);
-}
-.edu-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: baseline;
-}
-.edu-degree {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: var(--ink);
-}
-.edu-period {
-  font-family: var(--font-mono);
-  font-size: var(--fs-meta);
-  color: var(--ink2);
-  white-space: nowrap;
-}
 .edu-school {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  font-size: 0.95rem;
+  gap: 10px;
+  font-size: 0.9375rem;
   color: var(--ink2);
-  margin-top: 6px;
 }
 .edu-logo {
   width: 22px;
@@ -2277,18 +2422,7 @@ a.lab-card:hover {
   font-size: var(--fs-read);
   line-height: 1.6;
   color: var(--text-body);
-  margin-top: 10px;
-  max-width: var(--measure);
-}
-.path-recognition {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--ink2);
-  margin-top: 20px;
-}
-.path-recognition::before {
-  content: '◇ ';
-  color: var(--seal);
+  max-width: 34em;
 }
 .skills {
   display: flex;
@@ -2340,30 +2474,25 @@ a.lab-card:hover {
 }
 
 .footer {
-  border-top: 1px solid var(--separator);
-  padding: 28px 0;
+  padding: 0 0 28px;
 }
-.footer-inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+/* The sign-off sits above the rule, centred. */
+.footer-credit {
+  margin: 0;
+  padding: 0 var(--gutter) 24px;
+  text-align: center;
   font-size: 12.5px;
   color: var(--text-2);
 }
-.footer-links {
-  display: flex;
-  gap: 20px;
-}
-.footer-links a {
-  transition: color var(--t-fast) var(--ease);
-}
-.footer-links a:hover {
-  color: var(--text);
+/* The rule, then the copyright centred under it. */
+.footer-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 24px var(--gutter) 0;
+  border-top: 1px solid var(--separator);
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-2);
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -3243,204 +3372,663 @@ button.img-slot {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   ABOUT · STATS · RECOGNITION · CERTIFICATIONS
-   Content added in the content pass. Built from the patterns already on
-   the page — hairline rows, mono kickers, pill tags — so the new sections
-   read as part of the same document rather than bolted on.
+   ABOUT · FIGURES · RECOGNITION · CERTIFICATIONS
+   About: a portrait stamped with the seal, a statement hung from a large
+   serif quote mark, and a two-column glance grid. Figures: one way of
+   showing a number site-wide, set in ink under a rule, never boxed.
    ════════════════════════════════════════════════════════════════ */
 
-.about-grid {
+.about-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
-  gap: clamp(36px, 6vw, 90px);
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: clamp(64px, 10vw, 144px);
   align-items: start;
-  margin-top: clamp(18px, 3vw, 34px);
 }
-/* The whole section is one short statement in giant quote marks. It used to
-   be five paragraphs repeating what the sections below already prove, which
-   is a lot of words to skim past on the way to the evidence. */
-.about-quote {
-  position: relative;
+
+/* ── Portrait ── */
+.about-portrait {
+  align-self: center;
+}
+.portrait {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin: 0;
-  /* No padding on top: the first line starts level with the table's top rule
-     beside it. The right padding keeps the closing mark clear of the last
-     line, whatever width the text wraps at. */
-  padding: 0 clamp(38px, 4.6vw, 58px) clamp(22px, 2.6vw, 30px) clamp(26px, 3.4vw, 40px);
-  /* Narrow enough to wrap into a block rather than run as a wide ribbon. */
-  max-width: 17.5em;
-  font-size: clamp(1.4rem, 3vw, 2.35rem);
-  font-weight: 500;
-  line-height: 1.38;
-  letter-spacing: -0.018em;
+}
+/* The portrait is a cut-out (transparent background), always in colour: no
+   frame or box, the figure stands on a hairline the way a print sits on a
+   mount. The frame is taller than the square photo, so the headroom above
+   it takes the hover lift without clipping the hair.
+   On hover the figure is "suspended": it lifts off the baseline and grows
+   slightly, with a soft shadow in its own shape behind it. */
+.portrait-frame {
+  position: relative;
+  aspect-ratio: 1 / 1.12;
+  border-bottom: 1px solid var(--hairline-strong);
+}
+.portrait-figure {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+  transition: transform 0.8s var(--ease), filter 0.8s var(--ease);
+}
+.portrait-figure picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+}
+/* The lower edge where the photo is cut: tinted toward the ink colour, so it
+   darkens on light paper and lightens on dark. Masked to the figure. */
+.portrait-tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 72%,
+    color-mix(in srgb, var(--ink) 45%, transparent) 100%
+  );
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: 50% 100%;
+  mask-position: 50% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+/* On dark paper a light tint washes the suit out, so dark mode keeps it to
+   a faint lift at the very edge. */
+[data-theme='dark'] .portrait-tint {
+  background: linear-gradient(
+    to bottom,
+    transparent 88%,
+    color-mix(in srgb, var(--ink) 14%, transparent) 100%
+  );
+}
+/* Only where hover is real: on touch the effect would stick after a tap. */
+@media (hover: hover) {
+  [data-theme='dark'] .portrait-frame:hover .portrait-figure {
+    transform: translateY(-10px) scale(1.03);
+    filter: drop-shadow(0 18px 24px color-mix(in srgb, var(--paper-3) 85%, transparent));
+  }
+  .portrait-frame:hover .portrait-figure {
+    transform: translateY(-10px) scale(1.03);
+    filter: drop-shadow(0 18px 24px color-mix(in srgb, var(--ink) 20%, transparent));
+  }
+}
+/* The ribbon pinned over the portrait's top-left corner. Its shades come
+   from the seal, so it follows the theme. */
+.portrait-ribbon {
+  position: absolute;
+  top: 0;
+  left: -34px;
+  z-index: 2;
+  width: 130px;
+  height: auto;
+  /* drawn running left to right; turned a quarter anticlockwise */
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+@media (max-width: 560px) {
+  .portrait-ribbon {
+    left: -8px;
+    width: 120px;
+  }
+}
+.portrait-seal {
+  position: absolute;
+  left: -22px;
+  bottom: -22px;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  background: var(--seal);
+  color: var(--seal-ink);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  transform: rotate(-5deg);
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+.portrait-caption {
+  padding-top: 8px;
+  text-align: right;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+/* ── Statement ── */
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+.about-kicker {
+  margin-bottom: 22px;
+  font-weight: 400;
+}
+.about-statement {
+  position: relative;
+  padding-top: 28px;
+}
+.about-mark {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--seal);
+  pointer-events: none;
+}
+.about-mark--open {
+  position: absolute;
+  left: -6px;
+  top: -18px;
+  font-size: 96px;
+  line-height: 1;
+}
+.about-mark--close {
+  margin-left: 2px;
+}
+/* The degrees line: a quieter aside in the quote marks' own serif. */
+.about-quote-note {
+  margin: 14px 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+  line-height: 1.4;
   color: var(--ink);
   text-wrap: pretty;
 }
-/* The marks sit at opposite corners, hung outside the text, so the statement
-   reads as something said rather than as another paragraph. */
-.about-quote::before,
-.about-quote::after {
-  position: absolute;
-  font-family: var(--font-serif);
-  font-size: clamp(3.6rem, 7.4vw, 5.4rem);
-  line-height: 1;
-  color: var(--seal);
-  opacity: 0.2;
-  pointer-events: none;
-}
-.about-quote::before {
-  content: '\201C';
-  left: 0;
-  top: 0;
-}
-.about-quote::after {
-  content: '\201D';
-  right: 0;
-  bottom: 0;
-  transform: translateY(0.34em);
+.about-quote {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
+  line-height: 1.34;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: pretty;
 }
 
-/* The green dot from the hero, reused on the one row people scan for. */
-.glance-value .status-led {
-  margin-right: 8px;
-  vertical-align: baseline;
-  display: inline-block;
-}
-
+/* ── Glance grid ── */
 .glance {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 40px;
+  margin: 0;
+}
+.glance-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 0;
   border-top: 1px solid var(--line);
 }
-/* Reference, not the headline: the rows stay tight so the statement beside
-   them keeps the weight. */
-.glance-row {
-  display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  gap: 14px;
-  padding: 10px 0;
+/* The bottom row closes the grid. */
+.glance-item:nth-last-child(-n + 2) {
   border-bottom: 1px solid var(--line);
 }
 .glance-label {
-  font-family: var(--font-mono);
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--ink2);
-  padding-top: 3px;
 }
 .glance-value {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-size: var(--fs-read-lg);
+  line-height: 1.45;
   color: var(--ink);
 }
+/* What Kamlesh wants next leads: a strong rule, the label in the seal. */
+.glance-item--lead {
+  border-top-color: var(--rule);
+}
+.glance-item--lead .glance-label {
+  color: var(--seal);
+}
+.glance-item--lead .glance-value {
+  font-weight: 600;
+}
+.glance-value .status-led {
+  width: 8px;
+  height: 8px;
+}
+/* A white flag needs an edge to exist on near-white paper. */
+.glance-flag {
+  flex-shrink: 0;
+  width: 22px;
+  height: 18px;
+  overflow: visible;
+  /* Sit the cloth on the text line; the pole runs on below it. */
+  transform: translateY(3px);
+}
+.glance-flag-pole {
+  fill: var(--ink2);
+}
+/* A white flag needs an edge to exist on near-white paper. */
+.glance-flag-cloth {
+  stroke: var(--hairline-strong);
+  stroke-width: 0.6;
+  paint-order: stroke;
+}
 
-/* Figures pulled out of the prose. A number buried mid-sentence is read as
-   prose; the same number on its own line is read as evidence. */
-/* Wide screens: tiles in one natural row, sized to their content (equal
-   heights come free from the flex row). Phones get their own grid below. */
-.stat-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 18px 0 20px;
-}
-/* A boxed figure is read as data; the same figure inside a sentence is read as
-   prose and skimmed past. Applies everywhere stats appear — roles, degrees,
-   recognition. */
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  min-width: 8rem;
-  padding: 14px 16px 13px;
-  border: 1px solid var(--stat-border);
-  border-radius: var(--r-sm);
-  background: var(--stat-bg);
-  box-shadow: var(--stat-shadow);
-  text-align: center;
-}
-/* The figure is the highlight: large, bold, and in the accent — the same red
-   the 01/02/03 role numbers use, so on this site red numerals already mean
-   "look here". Tabular figures keep digits evenly spaced. */
-.stat-value {
-  font-size: 1.3rem;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
-  text-wrap: balance;
-}
-.stat-label {
-  font-family: var(--font-mono);
+/* A quiet pointer onward: the detail behind this summary starts below. */
+.about-scroll {
+  grid-column: 1 / -1;
+  justify-self: end;
+  /* Sit just under the grid, not a full layout gap below it. */
+  margin-top: calc(32px - clamp(64px, 10vw, 144px));
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--seal);
+  text-decoration: none;
+}
+.about-scroll:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .about-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 56px;
+  }
+  .about-portrait {
+    width: 100%;
+    max-width: 320px;
+  }
+  .about-scroll {
+    margin-top: -24px;
+  }
+}
+@media (max-width: 560px) {
+  .glance {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .glance-item:nth-last-child(2) {
+    border-bottom: 0;
+  }
+  /* Inset, so the stamp never pushes past the screen edge. */
+  .portrait-seal {
+    left: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait-frame:hover .portrait-figure {
+    transform: none;
+  }
+}
+
+/* ── Figures ── */
+.figures {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.figure {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.figure-value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.figure-label {
+  font-size: var(--fs-label);
   text-transform: uppercase;
   color: var(--ink2);
 }
 
-.honour {
+/* A figure that links to its proof (e.g. merged PRs). */
+.figure-link {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.figure-link .figure-value {
+  color: var(--seal);
+}
+.figure-link:hover .figure-label {
+  text-decoration: underline;
+}
+
+/* Ledger: a row of figures, each under the strong rule. */
+.figures--ledger {
   display: grid;
-  grid-template-columns: 108px minmax(0, 1fr);
-  gap: clamp(18px, 4vw, 56px);
-  padding: clamp(28px, 4vw, 46px) clamp(10px, 2vw, 22px);
+  grid-template-columns: repeat(var(--figures-n, 4), minmax(0, 1fr));
+  gap: 28px;
+  margin: 18px 0 22px;
+}
+.figures--ledger .figure {
+  gap: 7px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+.figures--ledger .figure-value {
+  font-size: 1.75rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.figures--ledger .figure-label {
+  letter-spacing: var(--track-label);
+  line-height: 1.4;
+}
+
+/* Margin: stacked notes in the Experience rail. */
+.figures--margin {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.figures--margin .figure {
+  gap: 4px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--hairline-strong);
+}
+.figures--margin .figure-value {
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+/* The role's lead figure is set in the seal; the rest stay in ink. */
+.figures--margin .figure:first-child .figure-value {
+  color: var(--seal);
+}
+.figures--margin .figure-label {
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+}
+
+@media (max-width: 640px) {
+  .figures--ledger {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 24px;
+  }
+  /* Half a phone is narrow: a worded figure ("Deep learning · retinal images")
+     would otherwise stack three lines deep. */
+  .figures--ledger .figure-value {
+    font-size: 1.375rem;
+  }
+}
+
+/* ── Transcript slips (Education, Recognition) ──
+   The story on the left; the figures on a "Record" slip on the right, read
+   like a transcript: label, dotted leader, value. */
+.slip-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 56px;
+  padding: 44px 0;
   border-top: 1px solid var(--line);
   align-items: start;
 }
-.honour-kind {
-  font-family: var(--font-mono);
+.slip-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+/* No figures, no slip: the story takes both tracks. */
+.slip-item--solo .slip-main {
+  grid-column: 1 / -1;
+}
+.slip-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.slip-main > .work-points,
+.slip-main > .proof-links {
+  margin: 0;
+}
+.slip-period {
+  font-size: var(--fs-meta);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+.slip-kicker {
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--seal);
 }
-.honour-period {
-  font-family: var(--font-mono);
-  font-size: var(--fs-meta);
-  letter-spacing: 0.16em;
-  color: var(--ink2);
-  margin-top: 8px;
-}
-.honour-title {
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  font-weight: 650;
-  line-height: 1.2;
+.slip-title {
+  font-size: clamp(1.5rem, 2.9vw, 2rem);
+  font-weight: 600;
+  line-height: 1.15;
   letter-spacing: -0.015em;
   color: var(--ink);
 }
-.honour-org {
-  font-family: var(--font-mono);
+.slip-title--honour {
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+  font-weight: 650;
+  line-height: 1.2;
+}
+.slip-org {
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--ink2);
-  margin: 8px 0 14px;
 }
-.honour-summary {
+.slip-summary {
   font-size: var(--fs-read-lg);
   line-height: 1.65;
   color: var(--text-body);
-  max-width: var(--measure);
-  margin-bottom: 18px;
+  max-width: 34em;
+  margin: 6px 0 4px;
+}
+.slip-main .chip {
+  white-space: nowrap;
+}
+.edu-courses {
+  margin-top: 8px;
+}
+
+/* The slip: a clean sheet laid on the page (the card surface, a firm
+   hairline, a soft lift), the same object as the certification cards. A
+   tinted fill here sat badly next to the page colour. */
+.record {
+  padding: 26px 28px 22px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-md);
+  background: var(--card);
+  box-shadow: var(--cert-shadow);
+}
+.record-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.record-title {
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--seal);
+}
+.record-link {
+  position: relative;
+  font-size: var(--fs-meta);
+  color: var(--seal);
+  text-decoration: none;
+}
+.record-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.record-rows {
+  margin: 0;
+}
+.record-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.record-label {
+  max-width: 46%;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+.record-leader {
+  flex: 1;
+  min-width: 12px;
+  border-bottom: 1px dotted var(--hairline-strong);
+  transform: translateY(-4px);
+}
+.record-value {
+  max-width: 50%;
+  margin: 0;
+  font-size: var(--fs-read-lg);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink);
+}
+/* A fingertip-sized target for the slip's link, without changing its look. */
+@media (pointer: coarse) {
+  .record-link::after {
+    content: '';
+    position: absolute;
+    inset: -14px -10px;
+  }
+}
+@media (max-width: 900px) {
+  .slip-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    padding: 36px 0;
+  }
+  .record {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 8px;
+  }
+}
+@media (max-width: 560px) {
+  .record {
+    padding: 20px;
+  }
+  .record-label {
+    max-width: 50%;
+  }
+}
+
+/* Paged grid (Certifications): pages of two by two sit side by side on a
+   track that slides; line indicators below pick the page. */
+.paged-viewport {
+  overflow: hidden;
+  /* room for the cards' shadows, which the clip would otherwise cut */
+  margin: -12px;
+  padding: 12px;
+  touch-action: pan-y;
+}
+.paged-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  transition: transform 0.6s var(--ease);
+}
+.paged-grid {
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  align-content: start;
+  gap: clamp(14px, 2vw, 22px);
+  box-sizing: border-box;
+  padding: 0 1px;
+}
+@media (max-width: 760px) {
+  .paged-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+  }
+}
+.paged-lines {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: clamp(20px, 3vw, 30px);
+}
+/* A 44px-tall hit area around a 3px line. */
+.paged-line {
+  position: relative;
+  width: 28px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: width 0.45s var(--ease);
+}
+.paged-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+  transition: background 0.3s var(--ease);
+}
+.paged-line:hover::before {
+  background: color-mix(in srgb, var(--ink) 40%, transparent);
+}
+.paged-line.is-active {
+  width: 56px;
+}
+.paged-line.is-active::before {
+  background: var(--seal);
+}
+@media (prefers-reduced-motion: reduce) {
+  .paged-track,
+  .paged-line {
+    transition: none;
+  }
 }
 
 /* Certifications: cards on the same raised surface as the stat tiles, so
    every piece of evidence on the page reads as the same kind of object. */
-.cert-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-  gap: clamp(14px, 2vw, 22px);
-}
 .cert {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 16px;
   align-items: start;
   padding: clamp(18px, 2.4vw, 24px);
-  border: 1px solid var(--stat-border);
+  border: 1px solid var(--hairline-strong);
   border-radius: var(--r-md);
-  background: var(--stat-bg);
-  box-shadow: var(--stat-shadow);
+  background: var(--cert-bg);
+  box-shadow: var(--cert-shadow);
 }
 /* the course's own mark, on a small tile */
 .cert-mark {
@@ -3456,9 +4044,26 @@ button.img-slot {
   width: 22px;
   height: 22px;
 }
+/* The link sits at the foot of every card, so links line up across a row
+   whatever the length of the text above. */
+.cert {
+  align-items: stretch;
+}
+.cert-mark {
+  align-self: start;
+}
+.cert-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
 .cert-link {
   display: inline-block;
-  margin-top: 14px;
+  align-self: flex-start;
+  margin-top: auto;
+}
+.cert-detail {
+  margin-bottom: 14px;
 }
 .cert-head {
   display: flex;
@@ -3531,38 +4136,6 @@ button.img-slot {
     gap: 24px 20px;
   }
 }
-.edu-points {
-  margin-top: 14px;
-}
-
-/* Education gained a focus line and named coursework. */
-.edu-focus {
-  font-size: var(--fs-read);
-  line-height: 1.6;
-  color: var(--ink);
-  margin-top: 12px;
-  max-width: var(--measure);
-}
-.edu-courses {
-  margin-top: 14px;
-}
-
-@media (max-width: 900px) {
-  .about-grid,
-  .honour {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(22px, 5vw, 36px);
-  }
-  .honour-aside {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-  }
-  .honour-period {
-    margin-top: 0;
-  }
-}
-
 /* Paragraphs avoid a single orphaned word on the last line; headings split
    into lines of similar length instead of a long line over a short one. */
 p,
@@ -3574,27 +4147,6 @@ h1,
 h2,
 h3 {
   text-wrap: balance;
-}
-
-/* Phones: an explicit two-column set, so figures line up in a 2x2 grid.
-   Content-sized tiles landed one per line here (their uppercase labels are
-   wide), which read as a ragged list rather than a set of figures. */
-@media (max-width: 640px) {
-  .stat-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .stat {
-    min-width: 0;
-    padding: 12px 10px 11px;
-  }
-  .stat-value {
-    font-size: 1.12rem;
-  }
-  /* an odd one out spans the row instead of sitting at half width */
-  .stat:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-  }
 }
 
 /* Skill logos. Each mark's colour arrives per theme as --icon-light /

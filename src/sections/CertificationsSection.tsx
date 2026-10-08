@@ -1,3 +1,4 @@
+import { PagedGrid } from '../components/PagedGrid'
 import { SkillIcon } from '../components/SkillIcon'
 import { Reveal } from '../components/ui/Reveal'
 import { credentials } from '../data/credentials'
@@ -14,35 +15,42 @@ export function CertificationsSection() {
         <Reveal>
           <div className="section-head">
             <div>
-              <div className="section-kicker">証 — Certifications</div>
-              <h2 className="section-title">Certified courses</h2>
+              <h2 className="section-title section-title--marked">
+                <span className="section-mark" aria-hidden="true">
+                  証
+                </span>
+                Certifications
+              </h2>
             </div>
           </div>
         </Reveal>
 
-        <Reveal stagger className="cert-grid">
-          {credentials.map((cert) => (
-            <article className="cert" key={cert.title}>
-              {cert.icon ? (
-                <div className="cert-mark">
-                  <SkillIcon name={cert.icon} />
-                </div>
-              ) : null}
-              <div className="cert-body">
-                <div className="cert-head">
-                  <h3 className="cert-title">{cert.title}</h3>
-                  <span className="cert-year">{cert.year}</span>
-                </div>
-                <div className="cert-issuer">{cert.issuer}</div>
-                <p className="cert-detail">{cert.detail}</p>
-                {cert.href ? (
-                  <a className="proof-link cert-link" href={cert.href} target="_blank" rel="noopener noreferrer">
-                    {cert.linkLabel ?? 'Certificate'} ↗
-                  </a>
+        <Reveal>
+          <PagedGrid
+            noun="courses"
+            items={credentials.map((cert) => (
+              <article className="cert" key={cert.title}>
+                {cert.icon ? (
+                  <div className="cert-mark">
+                    <SkillIcon name={cert.icon} />
+                  </div>
                 ) : null}
-              </div>
-            </article>
-          ))}
+                <div className="cert-body">
+                  <div className="cert-head">
+                    <h3 className="cert-title">{cert.title}</h3>
+                    <span className="cert-year">{cert.year}</span>
+                  </div>
+                  <div className="cert-issuer">{cert.issuer}</div>
+                  <p className="cert-detail">{cert.detail}</p>
+                  {cert.href ? (
+                    <a className="proof-link cert-link" href={cert.href} target="_blank" rel="noopener noreferrer">
+                      {cert.linkLabel ?? 'Certificate'} ↗
+                    </a>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          />
         </Reveal>
       </div>
     </section>

@@ -30,13 +30,14 @@ export const education: Education[] = [
       'Study track: Software Engineering — scalable systems, full-stack development, ML/deep learning and MLOps.',
     points: [
       'Awarded a 100% scholarship on academic merit.',
-      'Master’s thesis in healthcare AI and deep learning, running since January 2026.',
-      'Expected graduation: March 2027.',
+      'Master’s thesis: a deep learning algorithm for detecting hypertensive retinopathy in cats from retinal fundus images, part of Optomed Oy’s veterinary AI project.',
+      'The thesis is funded by an AI Thesis Grant from the Technology Industries of Finland Centennial Foundation (2026).',
+      'Expected graduation: May 2027.',
     ],
     stats: [
       { value: '4.9 / 5', label: 'Grade' },
       { value: '85 / 90 ECTS', label: 'Coursework completed' },
-      { value: 'Healthcare AI · deep learning', label: 'Master’s thesis · 30 ECTS · ongoing' },
+      { value: 'Deep learning · retinal images', label: 'Master’s thesis · 30 ECTS · ongoing' },
       { value: '100%', label: 'Scholarship · merit-based' },
     ],
     courses: [
@@ -52,7 +53,7 @@ export const education: Education[] = [
     links: [
       {
         label: 'Transcript',
-        href: 'https://drive.google.com/file/d/1hbIjksV2ktIPD2UaGc4uwFDCTquNz2K0/view?usp=sharing',
+        href: 'https://drive.google.com/file/d/1wKcTWc5bp_OL3i7F3ANYalVgW1f-oRul/view?usp=drive_link',
       },
     ],
   },

@@ -156,7 +156,7 @@ export function KoiPondSection() {
 
       <div className="scene-overlay">
         <div className="scene-titleblock">
-          <span className="scene-eyebrow">鯉 — a moment at the pond</span>
+          <span className="scene-eyebrow">鯉 — Take some rest!! </span>
           <h2 className="scene-title">
             Feed my <em>pets</em>, koi!
           </h2>

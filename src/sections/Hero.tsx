@@ -37,13 +37,12 @@ export function Hero() {
         <div className="hero-id">
           <span className="scene-eyebrow">
             <span className="status-led" />
-            {profile.location} · open to roles
+            {profile.location}
           </span>
           <h1 className="hero-name">
             Kamlesh <em>Kumar</em>
           </h1>
           <p className="hero-role">{profile.title}</p>
-          <p className="hero-tagline">{profile.headline}</p>
           {/* Split-flap highlights board — parked, not finished. To switch it
               back on, uncomment the import above and this line. The component
               is src/components/FlapBoard.tsx, its lines are

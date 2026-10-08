@@ -20,7 +20,8 @@ When these pull in different directions, the visitor wins: clarity first, then c
 - Apple-level finish on controls: the system font (SF Pro on Apple devices), glass materials, feedback on press, clear focus rings.
 - Light mode is the default, and dark mode must be just as good.
 - Writing that is simple, human and brief. When Kamlesh gives exact wording, use it, fix only the grammar, and say what you fixed.
-- Figures go in stat tiles, not inside sentences. Proof sits next to the claim it supports: transcripts, certificates, repos.
+- Figures are pulled out of sentences and shown with the `Figures` component (ledger or margin notes): ink on a rule, never in boxes. Proof sits next to the claim it supports: transcripts, certificates, repos.
+- 2026-10-06: About, Experience, Education and Recognition redesigned from a Claude Design handoff (portrait with seal, margin figures, ledger figures). Boxed stat tiles are retired.
 
 ## Scope: improvise without overreaching
 
@@ -35,7 +36,7 @@ A request about text changes the text, not the layout. A request about one secti
 
 - One idea per section, with a heading that states the takeaway when it can. "Owned in production" says something; "Personal projects" only labels.
 - Every fact appears once, in the place it belongs. A tile, a bullet and a date range that all say the same thing are noise.
-- The same kind of thing looks the same everywhere: figures are stat tiles, proof links end in ↗, technologies are pills, kickers are a kanji and one English word.
+- The same kind of thing looks the same everywhere: figures use the Figures component, proof links end in ↗, technologies are pills, kickers are a kanji and one English word.
 - Hierarchy visible from across the room: one h1 (the name), then section titles, then role titles. At most two font weights in one block.
 - Reading comfort: body text at 16 to 17px, lines no longer than about 70 characters (`--measure`), nothing under 12px, and contrast of at least 4.5:1 in both themes.
 - Motion serves meaning: the ink bloom reveals content, and the hero ink answers the pointer. No motion that hides content, delays reading or traps the scroll, and always a reduced-motion path.
@@ -66,3 +67,10 @@ Don't bring these back without asking first.
 - 2026-09: Webfonts (Newsreader, IBM Plex). The site uses the system font now.
 - 2026-07: Dark mode as the default. Light is the default.
 - 2026-06: A multi-page "dossier" with one route per chapter, and the "Meniscus" glass-and-water look. The site went back to one page plus /startups. The old plan is kept for reference in `.claude/brain/archive/`.
+- 2026-10-06: Plain words over gimmicky ones. The hero line "Hand me the part that has to work. I'll own it end to end." was cut for that reason. About is a quick summary of who Kamlesh is: a high-agency full-stack engineer, the BSc, the MSc status, and where he has worked. Keep it that way.
+- 2026-10-06: In the About statement, keep one type size and colour and the small closing quote mark. A smaller grey second line and a giant closing mark were tried and read as cluttered.
+- 2026-10-06: The degrees line under the About quote is a small serif italic aside in ink, outside the quote marks. The portrait caption stays in the label style ("こんにちは — Hello"); a plain "Hello 👋🏻" didn't fit the design.
+- 2026-10-07: Big tagline titles under the kicker ("Owned in production", "Degrees", "Chosen, and trusted to lead"). Experience, Education and Recognition use a marked title instead: the word at section-title size with its kanji before it as a smaller vermilion mark ("選 Experience"). A label-sized heading was too small (2026-10-07).
+- 2026-10-07: The sage band colour as a box fill (the Record card) sitting on the plain page. The sage works only as full-width alternating bands; cards on the page use the white card surface.
+- 2026-10-08: The hero ink must lay an even trail at any pointer speed. A quick flick used to end in a mushroom of two ink rings (the jet rolling up into a vortex pair once the pointer stopped), which read as a glitch. The push the pointer hands the water now saturates past `maxStep` in `inkConfig` (a smooth tanh, not a hard cut): speed decides how far the ink is carried, not how hard the water is hit. Ink deposit is untouched, so strokes stay consistent; at a wall the stroke spreads a little instead of splitting into two rings.
+- 2026-10-08: Rings again, round two. Capping the push alone (2026-10-08 above) shrank the rings but did not remove them: the end curl comes from the jet's own momentum, not from the swirl boost, and capping that boost changed nothing (tried, reverted). What works is the push saturating sooner (`maxStep` 0.014), spreading wider than the ink band so the shearing edges roll up outside the ink (`pushSpread` 2.4), and the water settling sooner (`velocityDissipation` 1.7). Dropping `curl` to 2 also removes rings but flattens strokes into marker-pen lines, which is the look that was rejected before. Ink retention was slowed by 1.8 at the same time (`densityDissipation` 0.061, `volume.fade` 0.039).
