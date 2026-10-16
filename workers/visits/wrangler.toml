@@ -1,0 +1,9 @@
+name = "kamleshkumar-visits"
+main = "index.js"
+compatibility_date = "2026-10-16"
+
+# Created with: npx wrangler kv namespace create VISITS
+# Paste the id it prints below, then deploy. See README.md in this folder.
+[[kv_namespaces]]
+binding = "VISITS"
+id = "d566beacae63491ab56b72a1f26f6cbd"

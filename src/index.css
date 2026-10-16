@@ -2484,6 +2484,15 @@ a.lab-card:hover {
   font-size: 12.5px;
   color: var(--text-2);
 }
+/* The visit count sits beside the copyright, in the same quiet grey, with a
+   middot between them. It appears only once the number has arrived, so the
+   line never reserves space for something that may not come. */
+.footer-visits::before {
+  content: '·';
+  margin: 0 8px;
+  opacity: 0.6;
+}
+
 /* The rule, then the copyright centred under it. */
 .footer-inner {
   max-width: var(--maxw);

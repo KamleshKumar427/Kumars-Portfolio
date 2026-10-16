@@ -78,3 +78,4 @@ The header of `index.css` says it plainly. The nav, hero, testimonials, contact,
 - Visible focus (a 2px vermilion outline), everything reachable by keyboard, alt text on images, headings in order.
 - No sideways scroll, no text under 12px, contrast of at least 4.5:1.
 - Heavy code loaded lazily (`React.lazy`), no layout shift, 60fps.
+- `.footer-visits`: the visit count beside the copyright, same 12.5px grey, a middot before it. Rendered only once the number arrives, so the line never holds space for something that may not come.

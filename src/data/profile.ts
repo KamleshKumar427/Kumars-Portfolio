@@ -9,7 +9,7 @@ export const profile = {
    *  a gist: the roles, degrees and projects below are the detail, so saying
    *  it twice only made people skim. Set in giant quote marks (AboutSection). */
   about:
-    'A high-agency full-stack software engineer, with 2.5 years of production work experience on a PCI DSS Level 1 payment gateway, a recruitment platform, and open‑source database tooling.',
+    'A proactive full-stack software engineer, with 2.5 years of production work experience on a PCI DSS Level 1 payment gateway, a recruitment platform, and open‑source database tooling.',
   /** Second line of the statement: smaller, in serif italic. */
   aboutNote: 'I hold a BSc in Computer Science and MSc completing soon.',
   /** Caption at the portrait's corner. */
