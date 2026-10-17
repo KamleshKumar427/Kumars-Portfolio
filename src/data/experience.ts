@@ -1,4 +1,4 @@
-// Selected Work: the three roles, word for word from Kamlesh's CV (2026-10-07).
+// Selected Work: the three roles, word for word from Kamlesh's CV (2026-10-17).
 export type Experience = {
   /** display index, e.g. "01" */
   n: string
@@ -54,11 +54,12 @@ export const experience: Experience[] = [
     summary:
       'PCI DSS Level 1 payment gateway, with 25+ years legacy code, processing tens of millions of euros in 20+ currencies. Worked with teams in Ireland, Cyprus, and Pakistan.',
     points: [
-      'Cut end-to-end payment processing time by **11%**: optimized slow SQL queries and indexes, made log writes and transaction status updates asynchronous so payments no longer waited on them, and removed legacy VBScript.',
-      'Built the core gateway’s **Google Pay** integration end to end, from the payment API and token handling to the transaction flow and webhooks, and worked with Google’s technical teams to qualify it as a participating processor.',
+      'Migrated an in-house MSSQL server database to a **managed YugabyteDB service on Azure**, moving millions of rows with multi-tenant database isolation.',
+      'Cut end-to-end payment processing time by **11%** by optimizing slow SQL queries and indexes, and making transaction status updates asynchronous.',
+      'Built the end-to-end **Google Pay** integration (APIs, token handling, and webhooks) and collaborated with Google tech team to qualify as an official participating processor.',
       'Helped complete the **Apple Pay integration** in the core gateway.',
-      'Designed and built **PCI-compliant REST APIs** secured with JWT, so the mobile app could connect directly to the core gateway. This improved data consistency and unified the experience across platforms.',
-      '**Worked directly with gateway customers** on their white-label setups, each isolated in its own database: diagnosed notification, webhook, risk rule, and performance issues, and shipped the fixes to production.',
+      'Worked directly with **gateway customers** to resolve technical issues (webhooks, risk rules, performance) and ship fixes to production.',
+      'Improved data consistency and user experience across platforms by designing PCI-compliant, JWT-secured **REST APIs** for direct mobile integration.',
     ],
     stats: [
       { value: '11%', label: 'faster payment processing' },
@@ -66,7 +67,7 @@ export const experience: Experience[] = [
       { value: '€10M+', label: 'PROCESSED ANNUALLY' },
     ],
     tech: ['TypeScript', 'React', 'Python', 'Java', 'Spring Boot', 'MSSQL', 'YugabyteDB (database-per-tenant)', 'Azure', 'Docker'],
-    href: 'https://pbt.com.cy/',
+    href: 'https://pbtgateway.com/',
   },
   {
     n: '03',
@@ -76,9 +77,10 @@ export const experience: Experience[] = [
     summary:
       'Contributed 11 merged pull requests to **Apache AGE**, an open-source graph database extension for PostgreSQL.',
     points: [
-      'Worked on high availability for AGE through Pgpool-II (load balancing, read/write splitting): implemented Cypher function extraction and added regression tests for Cypher load balancing, in C.',
-      'Wrote REST APIs, routing, and sessions in Go for AgeViewer-Go, the desktop app for managing AGE databases: connecting and disconnecting databases, reading graph metadata, and returning query results.',
-      'Built AgeDB-Cloud, a web app for using AGE in the browser without installing it, on a DigitalOcean VM.',
+      'Made AGE’s Cypher queries to work with **Pgpool-II** (Load balancing tool for PostgreSQL).',
+      'Wrote C code that lets Pgpool-II parse each cypher query and route it: sending reads to replica servers and writes to the main server. Covered the change with **regression tests**.',
+      'Built the Go backend for a desktop app for managing AGE databases. Wrote the REST APIs, routing, and sessions that let users connect to a database, run queries and visualize query results.',
+      'Contributed to AgeDB-Cloud, a web app for using AGE in the browser without installing it. Set up automatic deployment to a **DigitalOcean** VM with **GitHub Actions**.',
     ],
     stats: [
       {
@@ -86,7 +88,7 @@ export const experience: Experience[] = [
         label: 'merged into Apache AGE\u00a0↗',
         href: 'https://github.com/apache/age/pulls?q=is:pr+author:KamleshKumar427+is:merged',
       },
-      { value: '5k', label: 'Github Stars ⭐' },
+      { value: '4.9k', label: 'Github Stars ⭐' },
     ],
     tech: ['C', 'Go', 'PostgreSQL', 'Pgpool-II', 'React', 'Node.js', 'MongoDB', 'PM2'],
     href: 'https://github.com/apache/age',
